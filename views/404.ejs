@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <section class="page-hero" style="min-height:60vh; display:flex; align-items:center;">
+    <div class="hero-grid"></div>
+    <div class="page-hero-content">
+      <h1 style="font-size:clamp(64px,10vw,120px); opacity:.15; margin-bottom:16px;">404</h1>
+      <h2 style="font-size:var(--fs-h2); font-weight:800; margin-bottom:16px;">Page Not Found</h2>
+      <p style="margin-bottom:32px;">The page you're looking for doesn't exist or has been moved.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="/" class="btn btn-white">Back to Home <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="/contact" class="btn btn-ghost">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

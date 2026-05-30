@@ -1,0 +1,647 @@
+/* ═══════════════════════════════════════════════════
+   SRP International — Services Hub (UI/UX Pro Max)
+   ═══════════════════════════════════════════════════ */
+
+/* Tab bar */
+.services-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 44px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.tab-btn {
+  padding: 10px 22px;
+  min-height: 40px;               /* P2: touch target */
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-full);
+  background: var(--white);
+  font-family: var(--font-family);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-mid);
+  cursor: pointer;
+  touch-action: manipulation;     /* P2 */
+  transition: all var(--dur-base) var(--ease-out);
+  letter-spacing: .01em;
+}
+.tab-btn:hover { border-color: var(--navy); color: var(--navy); background: rgba(6,30,117,.03); }
+.tab-btn.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(6,30,117,.25);
+}
+
+.services-hub-grid .card-service { text-decoration: none; display: block; }
+
+/* Service feature tags */
+.svc-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 22px;
+}
+.svc-features span {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  color: var(--navy);
+  background: rgba(6,30,117,.07);
+  border: 1px solid rgba(6,30,117,.1);
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  letter-spacing: .01em;
+}
+
+/* Who We Serve */
+.serve-card {
+  text-align: center;
+  padding: 36px 28px;
+  background: var(--white);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--dur-slow) var(--ease-out),
+              box-shadow var(--dur-slow) var(--ease-out),
+              border-color var(--dur-slow);
+}
+.serve-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(6,30,117,.08);
+}
+.serve-icon {
+  width: 60px; height: 60px;
+  background: var(--surface-muted);
+  border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  border: 1px solid var(--border-subtle);
+  transition: background var(--dur-base) var(--ease-out), border-color var(--dur-base);
+}
+.serve-card:hover .serve-icon { background: var(--navy); border-color: var(--navy); }
+.serve-icon svg {
+  width: 26px; height: 26px;
+  stroke: var(--navy);
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke var(--dur-base);
+}
+.serve-card:hover .serve-icon svg { stroke: var(--white); }
+.serve-card h4 {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  letter-spacing: -.01em;
+}
+.serve-card p {
+  font-size: var(--fs-body-sm);
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-family: var(--font-body);
+}
+
+/* Comparison section */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 840px;
+  margin: 0 auto;
+}
+.comparison-col {
+  border-radius: var(--radius-xl);
+  padding: 40px;
+}
+.comparison-col h3 {
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-bold);
+  margin-bottom: 28px;
+  letter-spacing: -.01em;
+}
+.comparison-col ul { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+.comparison-col li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--fs-body-sm);
+  font-family: var(--font-body);
+}
+.comparison-col svg { width: 18px; height: 18px; stroke-width: 2.5; fill: none; flex-shrink: 0; }
+
+.comparison-traditional {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-default);
+}
+.comparison-traditional h3 { color: var(--text-mid); }
+.comparison-traditional li { color: var(--text-mid); }
+.comparison-traditional svg { stroke: #dc2626; }
+
+.comparison-srp {
+  background: linear-gradient(150deg, var(--navy-dark), #0A21A0);
+  color: var(--white);
+  box-shadow: 0 16px 48px rgba(6,30,117,.3);
+}
+.comparison-srp h3 { color: var(--white); }
+.comparison-srp li { color: rgba(255,255,255,.82); }
+.comparison-srp svg { stroke: var(--gold); }
+
+@media (max-width: 768px) {
+  .services-hub-grid { grid-template-columns: 1fr; }
+  .comparison-grid { grid-template-columns: 1fr; }
+  .serve-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL SERVICE PORTFOLIO — /services (standalone)
+═══════════════════════════════════════════════════ */
+
+/* Hero h1 — loosen letter-spacing so the long phrase
+   "Our Global Service Portfolio" reads cleanly.        */
+.gs-hero-h1 {
+  letter-spacing: -.005em;
+}
+
+/* Centered single-CTA row on the hero */
+.gs-hero-ctas {
+  margin-top: 28px;
+  display: flex;
+  justify-content: center;
+}
+
+.gs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 40px;
+}
+
+/* ─── Card shell — contextual image background + navy outline
+   The bgImage is set inline on the article. A dark gradient
+   overlay sits over the lower portion so the white title block
+   stays legible no matter what the photo contains.            */
+.gs-card {
+  position: relative;
+  aspect-ratio: 5 / 7;
+  min-height: 440px;
+  border-radius: 0;
+  overflow: hidden;
+  background-color: var(--navy-dark);          /* fallback if image fails */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+  isolation: isolate;
+}
+.gs-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(6, 30, 117, 0.22);
+}
+
+/* Dark gradient over the lower half of the card so the title
+   sits cleanly against any photo region.                      */
+.gs-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+    rgba(2, 6, 27, 0.0)  0%,
+    rgba(2, 6, 27, 0.20) 35%,
+    rgba(2, 6, 27, 0.78) 90%,
+    rgba(2, 6, 27, 0.92) 100%);
+  pointer-events: none;
+  z-index: 0;
+  display: block;
+}
+
+/* ─── DEFAULT FACE — bottom-aligned title block ── */
+.gs-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;            /* bottom-align */
+  align-items: flex-start;              /* left-align */
+  padding: 30px 28px 32px;
+  z-index: 1;
+  transition: opacity .35s var(--ease-out), transform .35s var(--ease-out);
+}
+
+/* Hide everything except title + gold rule in the default state.
+   The icon, "Part 0X" string, and tease all live in the EJS for
+   semantic completeness — CSS just suppresses them per spec.    */
+.gs-card-icon,
+.gs-card-part,
+.gs-card-fade,
+.gs-card-tease { display: none; }
+
+.gs-card-info { position: relative; }
+
+.gs-card-h3 {
+  font-family: var(--font-family);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -.015em;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Gold rule under the title — matches the wireframe accent. */
+.gs-card-rule {
+  width: 64px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 2px;
+  margin-top: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
+}
+
+/* ─── HOVER DETAIL PANEL ──────────────────────
+   Glassmorphism — semi-transparent navy with
+   backdrop blur, slides up from below on hover. */
+.gs-card-detail {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px 22px;
+  /* Transparent frosted glass — the service photo behind the card
+     blurs through, with just enough dark tint to keep white text
+     legible. Heavy backdrop blur + saturation pop for the glassy
+     premium feel.                                                  */
+  background:
+    linear-gradient(180deg, rgba(3, 16, 63, 0.28) 0%, rgba(2, 6, 27, 0.42) 100%);
+  -webkit-backdrop-filter: blur(22px) saturate(180%);
+          backdrop-filter: blur(22px) saturate(180%);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  /* Subtle inset highlight on the top edge — sells the glass effect */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition:
+    opacity .35s var(--ease-out),
+    transform .35s var(--ease-out);
+}
+.gs-card:hover .gs-card-detail {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.gs-card:hover .gs-card-face { opacity: 0; transform: translateY(-8px); }
+
+.gs-detail-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.gs-detail-h3 {
+  font-family: var(--font-family);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -.005em;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+  /* Soft drop shadow so the title stays legible over the frosted
+     glass against varied photo regions.                           */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+.gs-detail-body {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.40);
+  font-family: var(--font-body);
+  margin: 0;
+  /* No line clamp — full overview shown on hover. Body takes the
+     available vertical space between the title and the flags+CTA;
+     if the text overflows on shorter cards it scrolls in place.   */
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  /* Slim, subtle scrollbar so it doesn't dominate the panel. */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.25) transparent;
+}
+.gs-detail-body::-webkit-scrollbar { width: 4px; }
+.gs-detail-body::-webkit-scrollbar-track { background: transparent; }
+.gs-detail-body::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.20);
+  border-radius: 2px;
+}
+
+/* Core metrics row */
+.gs-detail-metrics {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+.gs-metric { min-width: 0; }
+.gs-metric-num {
+  font-family: var(--font-family);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -.02em;
+  color: #fff;
+  line-height: 1;
+}
+.gs-metric-num span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-left: 2px;
+}
+.gs-metric-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+  margin-top: 4px;
+}
+.gs-metric-bar .gs-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+.gs-metric-bar .gs-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold) 0%, #DBBF8A 100%);
+  border-radius: 2px;
+}
+
+/* Country flags row inside the detail panel */
+.gs-detail-flags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Learn More CTA — gold pill */
+.gs-detail-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  background: var(--gold);
+  color: var(--navy-dark);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  margin-top: auto;
+  transition: background .2s, transform .2s;
+}
+.gs-detail-cta svg {
+  stroke: var(--navy-dark);
+  stroke-width: 2.4; fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.gs-detail-cta:hover {
+  background: #DBBF8A;
+  transform: translateX(2px);
+}
+
+/* ─── Circular flag chip ───────────────────── */
+.gs-chip {
+  position: relative;
+  display: inline-flex;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  text-decoration: none;
+  background: #fff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30);
+  overflow: hidden;
+  transition: transform .2s var(--ease-out);
+}
+.gs-chip:hover {
+  transform: translateY(-2px);
+}
+.gs-chip-flag {
+  width: 100%; height: 100%;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.gs-chip.is-soon { opacity: .85; }
+.gs-chip-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 9px; height: 9px;
+  background: var(--gold);
+  border: 1.5px solid rgba(2, 6, 27, 0.95);
+  border-radius: 50%;
+}
+.gs-chip-flag-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  border-radius: 50%;
+}
+
+/* ─── Responsive ────────────────────────────── */
+@media (max-width: 1100px) {
+  .gs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .gs-grid { grid-template-columns: 1fr; }
+  .gs-card { aspect-ratio: auto; min-height: 380px; }
+  /* On touch devices the hover trick doesn't work — show detail by default */
+  .gs-card-face { opacity: 0; }
+  .gs-card-detail { opacity: 1; transform: none; pointer-events: auto; }
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL PRESENCE — photo-panel directory
+   Google Arts & Culture style: 4 tall vertical photo
+   panels side by side, each with eyebrow / big country
+   name / gold rule / tagline overlay. Hover deepens
+   the active panel slightly.
+═══════════════════════════════════════════════════ */
+.gp-panels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  height: clamp(520px, 78vh, 740px);
+  margin-top: 24px;
+}
+
+.gp-panel {
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: #fff;
+  background-color: #02061B;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: block;
+  transition: flex .35s var(--ease-out);
+}
+
+/* Dark gradient overlay so the centred text reads against any photo
+   region; deeper at top + bottom, slightly translucent in the middle */
+.gp-panel-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(2, 6, 27, 0.55) 0%,
+      rgba(2, 6, 27, 0.22) 35%,
+      rgba(2, 6, 27, 0.35) 65%,
+      rgba(2, 6, 27, 0.78) 100%);
+  transition: background var(--dur-base) var(--ease-out);
+  pointer-events: none;
+}
+.gp-panel:hover .gp-panel-overlay {
+  background:
+    linear-gradient(180deg,
+      rgba(2, 6, 27, 0.40) 0%,
+      rgba(2, 6, 27, 0.08) 35%,
+      rgba(2, 6, 27, 0.18) 65%,
+      rgba(2, 6, 27, 0.65) 100%);
+}
+
+/* Subtle hairline between panels */
+/* Dividers between panels removed — cards sit flush. */
+
+/* Center the title block vertically */
+/* Inner layout — headline area grows to fill the panel and
+   centres the country name on BOTH axes; contact details pin
+   to the bottom edge.                                        */
+.gp-panel-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 28px 36px;
+  z-index: 1;
+}
+
+/* Headline area — takes all available vertical space but anchors
+   the country name to a CONSISTENT top baseline across all panels
+   regardless of how many lines the country name wraps to.        */
+.gp-panel-headline {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;        /* top-anchor */
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-top: clamp(70px, 12vh, 130px);
+}
+
+.gp-panel-title {
+  font-family: var(--font-family);
+  font-size: clamp(34px, 3.6vw, 56px);
+  font-weight: 800;
+  letter-spacing: -.015em;
+  color: #fff;
+  text-transform: uppercase;
+  line-height: 1.02;
+  margin: 0;
+  text-shadow: 0 4px 28px rgba(0, 0, 0, 0.60);
+  max-width: 92%;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.gp-panel:hover .gp-panel-title { transform: translateY(-3px); }
+
+/* Slim gold rule under the country title */
+.gp-panel-rule {
+  width: 56px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+/* Contact block — pinned to the bottom layout wrapper, bigger
+   typography, brighter icons.                                  */
+.gp-panel-details {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 320px;
+  align-self: center;        /* horizontally centre the column */
+}
+.gp-panel-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: var(--font-body);
+  font-size: 14px;             /* up from 12.5 */
+  font-weight: 500;
+  line-height: 1.55;
+  color: #fff;                 /* up from 92% opacity */
+  text-align: left;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+}
+
+/* Icon chips — bigger, more contrasted ring, gold stroke at
+   higher weight so they pop against any photo region.        */
+.gp-panel-icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  margin-top: 1px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.gp-panel-icon svg {
+  width: 15px; height: 15px;
+  stroke: var(--gold);
+  stroke-width: 2.4;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+
+.gp-panel.is-soon { opacity: .92; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .gp-panels { grid-template-columns: 1fr 1fr; height: auto; }
+  .gp-panel { aspect-ratio: 3 / 4; }
+}
+@media (max-width: 540px) {
+  .gp-panels { grid-template-columns: 1fr; }
+  .gp-panel { aspect-ratio: 16 / 11; }
+}

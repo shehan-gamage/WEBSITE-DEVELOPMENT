@@ -1,0 +1,388 @@
+/* ═══════════════════════════════════════════════════
+   SRP International — Split Hero (Unified Background)
+   The 4 country cityscapes span the ENTIRE hero width.
+   Left pane has a horizontal gradient veil so brand text
+   stays readable while the photo still bleeds through.
+═══════════════════════════════════════════════════ */
+
+.cinematic-fx {
+  /* Token defaults */
+  --fx-text:     rgba(248,248,248,0.98);
+  --fx-text-dim: rgba(248,248,248,0.55);
+  --fx-stage:    #060815;
+  --fx-accent:   var(--gold, #CEAF71);
+  --fx-font:     var(--font-family, 'Poppins', system-ui, sans-serif);
+  --fx-nav-h:    var(--nav-height, 76px);
+
+  /* Unified navy-blue overlay — same alpha used across all 4
+     country cards so the hero reads as one consistent mood.
+     Calibrated to the UK card (the visual reference).         */
+  --fx-overlay:  linear-gradient(150deg,
+                  rgba(3,  16, 63,  0.55) 0%,    /* navy-dark, top-left */
+                  rgba(6,  30, 117, 0.42) 50%,   /* navy, mid */
+                  rgba(14, 42, 159, 0.48) 100%); /* navy-light, bottom-right */
+
+  width: 100%;
+  background: var(--fx-stage);
+  color: var(--fx-text);
+  font-family: var(--fx-font);
+  letter-spacing: -.01em;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 4 sections × 100vh of pinned scroll */
+.fx-fixed-section { position: relative; height: 400vh; }
+.fx-fixed {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: var(--fx-stage);
+}
+
+/* ─────────────────────────────────────────────────
+   FULL-WIDTH CITYSCAPE BACKGROUNDS
+   Now sits at z-index 1 behind BOTH panes.
+───────────────────────────────────────────────── */
+.fx-bgs {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--fx-stage);
+}
+.fx-bg { position: absolute; inset: 0; }
+/* Original photos — no colour grading. Each cityscape is shown
+   as-is so it keeps its native lighting and atmosphere.        */
+.fx-bg-img {
+  position: absolute;
+  inset: -6% 0;
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+  object-position: center center;
+  filter: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.fx-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--fx-overlay);
+  pointer-events: none;
+}
+
+/* Per-country overlay calibration. UK is the baseline (100%);
+   the other three reduce the navy alpha by the requested amount
+   so their photos read more clearly while retaining the navy mood. */
+
+/* Sri Lanka — overlay effectively off, photo shows natively */
+.fx-bgs .fx-bg:nth-child(1) .fx-bg-overlay {
+  background: transparent;
+}
+
+/* Singapore — barely-there hint of navy */
+.fx-bgs .fx-bg:nth-child(2) .fx-bg-overlay {
+  background: linear-gradient(150deg,
+    rgba(3,  16, 63,  0.06) 0%,
+    rgba(6,  30, 117, 0.04) 50%,
+    rgba(14, 42, 159, 0.05) 100%);
+}
+
+/* UAE — overlay reduced by 25% (×0.75 of baseline) */
+.fx-bgs .fx-bg:nth-child(3) .fx-bg-overlay {
+  background: linear-gradient(150deg,
+    rgba(3,  16, 63,  0.41) 0%,
+    rgba(6,  30, 117, 0.32) 50%,
+    rgba(14, 42, 159, 0.36) 100%);
+}
+
+/* UK — baseline (uses default --fx-overlay). No override. */
+/* Soft vignette across the whole hero */
+.fx-bgs::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 130% 100% at 50% 50%, transparent 60%, rgba(0,0,0,.32) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ═══════════════════════════════════════════════════
+   SPLIT CONTENT LAYER  (over the cityscape)
+═══════════════════════════════════════════════════ */
+.hero-split {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: minmax(440px, 0.95fr) 1.15fr;
+  height: 100%;
+}
+
+/* ── LEFT PANE: NO own background — uses unified hero overlay.
+   A soft radial glow sits behind the text only, giving legibility
+   without creating a visible vertical seam against the right pane. ── */
+.hero-text-pane {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+.hero-text-pane::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Soft brand-navy elliptical darkening centred on the text block,
+     fading smoothly to zero before the pane edges — matches the
+     subtle blue gradient applied to the cityscape backgrounds.    */
+  background: radial-gradient(ellipse 75% 80% at 35% 50%,
+    rgba(3, 16, 63, 0.55) 0%,
+    rgba(3, 16, 63, 0.30) 45%,
+    rgba(3, 16, 63, 0.0)  85%);
+}
+
+.hero-pane-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 620px;
+  margin-left: auto;
+  padding: calc(var(--fx-nav-h) + 28px) clamp(28px, 4vw, 56px) clamp(32px, 5vh, 56px);
+}
+
+/* Brand eyebrow pill */
+.hero-text-pane .hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: var(--radius-full, 100px);
+  padding: 7px 16px;
+  font-size: var(--fs-kicker, 11px);
+  font-weight: var(--fw-semibold, 600);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.92);
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+.hero-text-pane .pulse-dot {
+  width: 7px; height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 0 rgba(74,222,128,.4);
+  animation: fxPulse 2.4s cubic-bezier(.4,0,.6,1) infinite;
+}
+@keyframes fxPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,.4); }
+  50%      { box-shadow: 0 0 0 5px rgba(74,222,128,0); }
+}
+
+.hero-pane-title {
+  font-family: var(--fx-font);
+  font-size: clamp(36px, 4.4vw, 60px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  color: #FFFFFF;
+  margin: 0 0 22px;
+  /* Subtle shadow so title reads against any cityscape brightness */
+  text-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+.hero-pane-title em {
+  font-style: normal;
+  background: linear-gradient(130deg, #E8C97A 0%, var(--gold, #CEAF71) 50%, #D4A84B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-pane-text {
+  font-size: 16px;
+  line-height: 1.75;
+  color: rgba(255,255,255,.78);
+  max-width: 480px;
+  margin: 0 0 38px;
+  font-family: var(--font-body, 'Open Sans', sans-serif);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+}
+
+.hero-pane-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ── RIGHT PANE: country name + labels, no own bg ── */
+.hero-fx-pane {
+  position: relative;
+}
+
+.hero-fx-pane .fx-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: calc(var(--fx-nav-h) + 24px) clamp(24px, 3vw, 56px) clamp(24px, 3vh, 36px);
+}
+
+.hero-fx-pane .fx-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  justify-items: center;
+  position: relative;
+  gap: clamp(16px, 2vw, 32px);
+  min-height: 0;
+}
+
+/* ── Centre: HUGE country title + region beneath ─── */
+.fx-center {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  height: 50vh;
+  max-height: 380px;
+  width: 100%;
+  position: relative;
+}
+.fx-featured {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Tightened so the region label sits closer beneath the country title. */
+  gap: clamp(2px, 0.6vh, 8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.fx-featured.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Region label beneath the country title — doubled font size
+   for prominence and improved legibility.                      */
+.fx-featured-region {
+  font-family: var(--fx-font);
+  font-size: clamp(22px, 2vw, 28px);
+  font-weight: 700;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--fx-accent);
+  text-shadow: 0 2px 12px rgba(0,0,0,.6);
+  position: relative;
+  padding: 0 48px;
+  white-space: nowrap;
+}
+.fx-featured-region::before,
+.fx-featured-region::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 32px;
+  height: 1.5px;
+  background: var(--fx-accent);
+  opacity: .65;
+  transform: translateY(-50%);
+}
+.fx-featured-region::before { left: 0; }
+.fx-featured-region::after  { right: 0; }
+.fx-featured-title {
+  margin: 0;
+  font-family: var(--fx-font);
+  font-weight: 800;
+  font-size: clamp(36px, 5vw, 88px);
+  letter-spacing: -.03em;
+  /* Looser line-height so descenders (g, p, y) aren't clipped
+     by the .fx-word-mask overflow box.                          */
+  line-height: 1.15;
+  color: var(--fx-text);
+  /* Transparent background — text only. A very subtle drop
+     shadow keeps legibility on bright photos without painting
+     a visible dark halo behind the word.                       */
+  background: transparent;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 .2em;
+  padding: 0 .04em;
+}
+.fx-word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+  /* Mask needs vertical room for ascenders + descenders
+     so glyphs like K, g, p don't get cropped.                   */
+  line-height: 1.25;
+  padding-bottom: .08em;
+  background: transparent;
+}
+.fx-word {
+  display: inline-block;
+  background: transparent;
+  will-change: transform, opacity;
+}
+
+/* Progress bar removed per design update */
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+
+/* Tablet & smaller — stack vertically.
+   Cityscape still spans the full visible area. */
+@media (max-width: 1024px) {
+  .hero-split {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  .hero-text-pane {
+    min-height: 56vh;
+    background: transparent;
+  }
+  .hero-text-pane::before {
+    /* When stacked, soften from the top instead of the side */
+    background: radial-gradient(ellipse 95% 80% at 50% 35%,
+      rgba(3, 16, 63, 0.55) 0%,
+      rgba(3, 16, 63, 0.30) 55%,
+      rgba(3, 16, 63, 0.0)  90%);
+  }
+  .hero-pane-content {
+    margin: 0 auto;
+    max-width: 720px;
+    padding: calc(var(--fx-nav-h) + 24px) clamp(20px, 4vw, 40px) clamp(24px, 4vh, 36px);
+  }
+  .hero-fx-pane .fx-grid {
+    padding: clamp(20px, 3vh, 32px) clamp(20px, 4vw, 40px);
+  }
+  .fx-center { height: auto; max-height: none; min-height: 42vh; }
+  .fx-content { gap: clamp(8px, 2vw, 24px); }
+}
+
+@media (max-width: 640px) {
+  .hero-pane-title { font-size: clamp(32px, 9vw, 44px); }
+  .hero-pane-text  { font-size: 15px; margin-bottom: 28px; }
+  .fx-featured-title { font-size: clamp(30px, 11vw, 48px); }
+  .fx-featured-region { font-size: clamp(16px, 4vw, 20px); letter-spacing: .28em; padding: 0 32px; }
+  .fx-featured-region::before,
+  .fx-featured-region::after { width: 20px; }
+}
+@media (max-width: 540px) {
+  .hero-pane-ctas .btn-ghost { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot { animation: none; }
+  .fx-bg-img, .fx-word { transition: none !important; }
+}

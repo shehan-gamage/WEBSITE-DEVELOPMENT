@@ -1,0 +1,17 @@
+{
+  "name": "srp-international-website",
+  "version": "1.0.0",
+  "description": "SRP International landing page with Claude-powered AI chatbot",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.54.0",
+    "dotenv": "^16.4.5",
+    "ejs": "^5.0.2",
+    "express": "^4.19.2"
+  }
+}

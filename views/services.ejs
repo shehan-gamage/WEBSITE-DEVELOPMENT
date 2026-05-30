@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ PAGE HERO ═══════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Services</span>
+      </div>
+      <h1 class="gs-hero-h1">Our Global Service Portfolio</h1>
+      <p>Four service categories, calibrated to each market we operate in. Choose your region for jurisdiction-specific scope and pricing.</p>
+      <div class="gs-hero-ctas">
+        <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ GLOBAL SERVICE PORTFOLIO ═════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">What We Do</div>
+        <h2 class="heading">Integrated Corporate Services Across Four Categories</h2>
+        <p class="subheading">SRP International operates as one coordinated partner across South Asia, South-East Asia, the Middle East, and Europe. The four service categories below are delivered out of our regional offices — click any region chip for jurisdiction-specific scope and pricing.</p>
+      </div>
+
+      <div class="gs-grid">
+        <% globalServices.forEach(function(svc, idx) {
+          const partNum = String(idx + 1).padStart(2, '0');
+          const totalRegions = svc.regions.length;
+          const reach = Math.round((totalRegions / offices.length) * 100);
+          /* "Learn More" lands on the first region's service page that
+             actually exists in the catalog — usually Sri Lanka.        */
+          const firstRegion = svc.regions[0];
+          const learnMoreHref = firstRegion ? `/${firstRegion.slug}/${firstRegion.linkSlug}` : '/global-presence';
+        %>
+          <article class="gs-card reveal" data-part="<%= partNum %>"<% if (svc.bgImage) { %> style="background-image: url('<%= svc.bgImage %>')"<% } %>>
+
+            <!-- ── DEFAULT face — visible by default, mockup-style ── -->
+            <div class="gs-card-face">
+              <div class="gs-card-icon">
+                <% if (svc.icon === 'file-text') { %>
+                  <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <% } else if (svc.icon === 'dollar-sign') { %>
+                  <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <% } else if (svc.icon === 'users') { %>
+                  <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <% } else if (svc.icon === 'search') { %>
+                  <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <% } %>
+              </div>
+              <div class="gs-card-fade"></div>
+              <div class="gs-card-info">
+                <div class="gs-card-part">Part <%= partNum %></div>
+                <h3 class="gs-card-h3"><%= svc.title %></h3>
+                <div class="gs-card-rule" aria-hidden="true"></div>
+                <p class="gs-card-tease"><%= svc.overview.split('.')[0] %>.</p>
+              </div>
+            </div>
+
+            <!-- ── HOVER detail panel — slides up over the default face ── -->
+            <div class="gs-card-detail" aria-hidden="true">
+              <h3 class="gs-detail-h3"><%= svc.title %></h3>
+              <p class="gs-detail-body"><%= svc.overview %></p>
+
+              <!-- Country availability flags -->
+              <div class="gs-detail-flags">
+                <% svc.regions.forEach(function(r) {
+                  const office = offices.find(o => o.slug === r.slug);
+                  if (!office) return; %>
+                  <%
+                    /* UAE uses the circle-flags library (pre-cropped circular SVG).
+                       All other countries continue to use the original flagcdn.com source. */
+                    const flagSrc = office.flag === 'ae'
+                      ? `https://cdn.jsdelivr.net/gh/hatscripts/circle-flags@latest/flags/${office.flag}.svg`
+                      : `https://flagcdn.com/${office.flag}.svg`;
+                  %>
+                  <a href="/<%= r.slug %>/<%= r.linkSlug %>" class="gs-chip<%= r.comingSoon ? ' is-soon' : '' %>" aria-label="<%= office.label %><%= r.comingSoon ? ' (opening 2026)' : '' %>">
+                    <img class="gs-chip-flag"
+                         src="<%= flagSrc %>"
+                         alt=""
+                         loading="lazy"
+                         onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'gs-chip-flag-fallback',textContent:'<%= office.flag.toUpperCase() %>'}))">
+                    <% if (r.comingSoon) { %><span class="gs-chip-dot" aria-hidden="true"></span><% } %>
+                  </a>
+                <% }); %>
+              </div>
+
+              <a href="<%= learnMoreHref %>" class="gs-detail-cta">
+                Learn More
+                <svg viewBox="0 0 24 24" width="14" height="14"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA — bridge to Global Presence ══════════════ -->
+  <section class="cta-band">
+    <h2>Pricing &amp; scope are region-specific</h2>
+    <p>Our service catalogs adapt to each market's regulatory framework. Pick your region for jurisdiction-specific detail.</p>
+    <div class="cta-band-btns" style="justify-content:center;">
+      <a href="/global-presence" class="btn btn-white">View Global Presence <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

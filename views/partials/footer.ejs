@@ -1,0 +1,52 @@
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="/images/logo/srp-international-logo.png" alt="SRP International">
+      <p>Your trusted partner for outsourced corporate services and business support.</p>
+      <div class="footer-socials">
+        <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><circle cx="12" cy="12" r="5" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1.5" fill="rgba(255,255,255,.7)" stroke="none"/></svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/services">Our Services</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/portal">Client Portal</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Services</h5>
+      <ul>
+        <% offices.forEach(function(o) { %>
+          <li><a href="/<%= o.slug %>">SRP International <%= o.label %><%= o.comingSoon ? ' — Opening 2026' : '' %></a></li>
+        <% }); %>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li>Level 4, 35 Edward Lane,<br>Colombo 03</li>
+        <li><a href="tel:+94112590665">(+94) 112 590 665</a></li>
+        <li><a href="mailto:info@srpitl.com">info@srpitl.com</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>&copy; SRP International. All Rights Reserved.</span>
+  </div>
+</footer>

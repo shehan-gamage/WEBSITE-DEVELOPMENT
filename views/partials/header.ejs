@@ -1,0 +1,69 @@
+<!-- Skip to main content — P1: keyboard navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav id="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="SRP International home">
+      <img src="/images/logo/srp-international-logo.png" alt="SRP International">
+    </a>
+
+    <ul class="nav-center">
+      <li><a href="/" <% if (typeof activePage !== 'undefined' && activePage === 'home') { %>class="active"<% } %>>Home</a></li>
+      <li><a href="/about" <% if (typeof activePage !== 'undefined' && activePage === 'about') { %>class="active"<% } %>>About Us</a></li>
+      <li><a href="/services" <% if (typeof activePage !== 'undefined' && activePage === 'services') { %>class="active"<% } %>>Services</a></li>
+      <li class="nav-services-wrap">
+        <a href="/global-presence" <% if (typeof activePage !== 'undefined' && (activePage === 'global-presence' || activePage === 'regions')) { %>class="active"<% } %>>Global Presence
+          <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-left:4px;vertical-align:middle;"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="mega-menu">
+          <div class="mega-menu-grid">
+            <% offices.forEach(function(o) { %>
+              <%
+                /* UAE uses the circle-flags library (pre-cropped circular SVG).
+                   All other countries use the flagcdn.com source.            */
+                const flagSrc = o.flag === 'ae'
+                  ? `https://cdn.jsdelivr.net/gh/hatscripts/circle-flags@latest/flags/${o.flag}.svg`
+                  : `https://flagcdn.com/${o.flag}.svg`;
+              %>
+              <a href="/<%= o.slug %>" class="mega-menu-item">
+                <span class="mega-menu-flag-img" aria-hidden="true">
+                  <img src="<%= flagSrc %>" alt=""
+                       onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mega-menu-flag-fallback',textContent:'<%= o.flag.toUpperCase() %>'}))">
+                </span>
+                <div class="mega-menu-title"><%= o.label %></div>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+      </li>
+      <li><a href="/contact" <% if (typeof activePage !== 'undefined' && activePage === 'contact') { %>class="active"<% } %>>Contact Us</a></li>
+    </ul>
+
+    <div class="nav-cta-group">
+      <a href="/contact" class="btn btn-outline btn-sm">Schedule a Consultation</a>
+      <a href="/portal" class="btn btn-portal btn-sm">Client Portal</a>
+    </div>
+
+    <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNav">
+      <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Navigation -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="/" <% if (typeof activePage !== 'undefined' && activePage === 'home') { %>class="active"<% } %>>Home</a>
+  <a href="/about" <% if (typeof activePage !== 'undefined' && activePage === 'about') { %>class="active"<% } %>>About Us</a>
+  <a href="/services" <% if (typeof activePage !== 'undefined' && activePage === 'services') { %>class="active"<% } %>>Services</a>
+  <a href="/global-presence" <% if (typeof activePage !== 'undefined' && (activePage === 'global-presence' || activePage === 'regions')) { %>class="active"<% } %>>Global Presence</a>
+  <div class="mobile-mega-section">
+    <% offices.forEach(function(o) { %>
+      <a href="/<%= o.slug %>"><%= o.label %><% if (o.isHQ) { %> · Hub<% } %><% if (o.comingSoon) { %> · Opening 2026<% } %></a>
+    <% }); %>
+  </div>
+  <a href="/contact" <% if (typeof activePage !== 'undefined' && activePage === 'contact') { %>class="active"<% } %>>Contact Us</a>
+  <div class="mobile-nav-ctas">
+    <a href="/contact" class="btn btn-outline">Schedule a Consultation</a>
+    <a href="/portal" class="btn btn-portal">Client Portal</a>
+  </div>
+</div>

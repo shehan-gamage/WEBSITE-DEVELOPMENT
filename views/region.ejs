@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ PAGE HERO ═══════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <span><%= office.label %></span>
+      </div>
+      <h1>SRP International in <%= office.label %></h1>
+      <p>Corporate services tailored to <%= office.label %>'s regulatory landscape — backed by SRP's wider regional group.<% if (office.comingSoon) { %> Our <%= office.city %> office opens in 2026; existing SRP clients can register interest now for priority onboarding.<% } %></p>
+      <div style="margin-top:28px; display:flex; justify-content:center;">
+        <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SERVICES IN THIS REGION ═════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Services in <%= office.label %></div>
+        <h2 class="heading">What We Deliver Here</h2>
+        <p class="subheading">A focused service catalog calibrated to <%= office.label %>'s regulatory environment. Pricing available on request.</p>
+      </div>
+
+      <div class="grid-2 services-hub-grid">
+        <% regionServices.forEach(function(svc) { %>
+          <a href="/<%= office.slug %>/<%= svc.slug %>" class="card card-service reveal<%= svc.comingSoon ? ' is-coming-soon' : '' %>">
+            <div class="svc-icon">
+              <% if (svc.icon === 'briefcase') { %>
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <% } else if (svc.icon === 'file-text') { %>
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <% } else if (svc.icon === 'dollar-sign') { %>
+                <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <% } else if (svc.icon === 'search') { %>
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <% } else { %>
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+              <% } %>
+            </div>
+            <h3 class="svc-title"><%= svc.title %><% if (svc.comingSoon) { %> <span class="svc-pill">Opening 2026</span><% } %></h3>
+            <p class="svc-body"><%= svc.overview.substring(0, 180) %>…</p>
+            <span class="svc-link">
+              Learn More
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+          </a>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PRICING TEASER — single CTA to an advisor ══ -->
+  <section class="section section-alt region-pricing-teaser">
+    <div class="container">
+      <div class="region-pricing-card reveal">
+        <div class="region-pricing-copy">
+          <div class="kicker">Pricing</div>
+          <h2>Transparent pricing, tailored to your scope</h2>
+          <p>SRP <%= office.label %> uses a clear, tiered pricing framework — incorporation, ongoing governance, and accounting all priced separately so you only pay for what you need. Final scope, client profile, and authority charges apply; we'll send the full breakdown after a short scoping conversation.</p>
+          <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
+            <a class="btn btn-primary" href="/contact">Speak to an Advisor <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+        <ul class="region-pricing-bullets" aria-label="Pricing principles">
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>One-time + annual fees clearly separated</li>
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Tiered bookkeeping by transaction volume</li>
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Add-ons charged only when used</li>
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>USD-denominated, transparent terms</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ OFFICE INFO CARD ═══════════════════════════ -->
+  <section class="section region-office-section">
+    <div class="container">
+      <div class="region-office-card reveal" id="<%= office.slug %>">
+        <div class="region-office-head">
+          <span class="region-office-flag" aria-hidden="true"><%= office.flag.toUpperCase() %></span>
+          <div>
+            <div class="region-office-city"><%= office.city %></div>
+            <div class="region-office-country"><%= office.label %></div>
+          </div>
+          <% if (office.isHQ) { %><span class="office-pill office-pill--hq">Operational Hub</span><% } %>
+          <% if (office.comingSoon) { %><span class="office-pill office-pill--soon">Opening 2026</span><% } %>
+        </div>
+        <div class="region-office-grid">
+          <div class="region-office-block">
+            <div class="region-office-label">Address</div>
+            <div class="region-office-val"><%= office.address.line1 %><br><%= office.address.line2 %></div>
+          </div>
+          <% if (office.phone) { %>
+            <div class="region-office-block">
+              <div class="region-office-label">Phone</div>
+              <div class="region-office-val"><a href="tel:<%= office.phoneHref %>"><%= office.phone %></a></div>
+            </div>
+          <% } %>
+          <div class="region-office-block">
+            <div class="region-office-label">Email</div>
+            <div class="region-office-val"><a href="mailto:<%= office.email %>"><%= office.email %></a></div>
+          </div>
+          <% if (office.hours) { %>
+            <div class="region-office-block">
+              <div class="region-office-label">Hours</div>
+              <div class="region-office-val"><%= office.hours %></div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ═════════════════════════════════════════ -->
+  <section class="cta-band">
+    <h2>Ready to set up in <%= office.label %>?</h2>
+    <p>Talk to our <%= office.city %> team about incorporation, governance, and accounting — calibrated to your scope.</p>
+    <div class="cta-band-btns" style="justify-content:center;">
+      <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

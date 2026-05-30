@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ SERVICE HERO ════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/<%= office.slug %>"><%= office.label %></a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <span><%= service.shortTitle %><% if (service.comingSoon) { %> · Opening 2026<% } %></span>
+      </div>
+      <h1><%= service.title %></h1>
+      <p><%= service.overview.substring(0, 160) %>...</p>
+      <div style="margin-top:28px;">
+        <a href="/contact" class="btn btn-white">Get Started <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ OVERVIEW ════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="sd-overview reveal">
+        <div class="kicker">Overview</div>
+        <h2 class="heading" style="text-align:left;"><%= service.title %></h2>
+        <p class="sd-overview-text"><%= service.overview %></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ KEY BENEFITS ════════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Key Benefits</div>
+        <h2 class="heading">Why Choose This Service</h2>
+      </div>
+      <div class="grid-2 sd-benefits-grid">
+        <% service.benefits.forEach(function(benefit, i) { %>
+        <div class="card reveal <%= i > 0 ? 'reveal-delay-' + Math.min(i, 3) : '' %>">
+          <div class="sd-benefit-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="svc-title"><%= benefit.title %></h3>
+          <p class="svc-body"><%= benefit.desc %></p>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ WHAT'S INCLUDED ═════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="sd-included-grid">
+        <div class="reveal">
+          <div class="kicker">What's Included</div>
+          <h2 class="heading" style="text-align:left;">Service Scope</h2>
+          <p style="font-size:15px; color:var(--text-mid); line-height:1.8; margin-bottom:32px;">Everything included in our <%= service.shortTitle %> service:</p>
+        </div>
+        <div class="sd-checklist reveal">
+          <% service.included.forEach(function(item) { %>
+          <div class="sd-check-item">
+            <div class="sd-check-bullet">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span><%= item %></span>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PROCESS ═════════════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Our Process</div>
+        <h2 class="heading">How We Deliver This Service</h2>
+      </div>
+      <div class="sd-process reveal">
+        <% service.process.forEach(function(step) { %>
+        <div class="sd-process-step">
+          <div class="sd-process-num"><%= step.step %></div>
+          <h4><%= step.title %></h4>
+          <p><%= step.desc %></p>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ RELATED SERVICES ════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Related Services</div>
+        <h2 class="heading">Other Services You May Need</h2>
+      </div>
+      <div class="grid-3">
+        <% relatedServices.forEach(function(rel, i) { %>
+        <a href="/<%= office.slug %>/<%= rel.slug %>" class="card card-service reveal <%= i > 0 ? 'reveal-delay-' + i : '' %>" style="text-decoration:none; display:block;">
+          <h3 class="svc-title"><%= rel.title %></h3>
+          <p class="svc-body"><%= rel.overview.substring(0, 120) %>...</p>
+          <span class="svc-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FAQS ════════════════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">FAQs</div>
+        <h2 class="heading">Frequently Asked Questions</h2>
+      </div>
+      <div class="sd-faqs reveal">
+        <% service.faqs.forEach(function(faq) { %>
+        <details class="sd-faq">
+          <summary>
+            <span><%= faq.q %></span>
+            <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="sd-faq-body"><%= faq.a %></div>
+        </details>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FINAL CTA ═══════════════════════════════════ -->
+  <section class="cta-band">
+    <h2>Need Support With <%= service.shortTitle %>?</h2>
+    <p>Contact SRP International to discuss how we can support your business with professional <%= service.shortTitle.toLowerCase() %> services.</p>
+    <div class="cta-band-btns">
+      <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <a href="/services" class="btn btn-ghost">View All Services</a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

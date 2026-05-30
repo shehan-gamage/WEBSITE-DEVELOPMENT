@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SRP International | Your Corporate Services Partner</title>
+  <meta name="description" content="SRP International delivers expert Company Secretarial, Financial Services, Research & Business Planning, and Human Resource Management solutions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #061E75;
+      --navy-dark:   #03103F;
+      --navy-light:  #0D2B9E;
+      --blue-mid:    #4A90D9;
+      --white:       #FFFFFF;
+      --off-white:   #F4F7FC;
+      --gray-light:  #E2E8F0;
+      --gray-mid:    #94A3B8;
+      --text-dark:   #0F172A;
+      --text-mid:    #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVIGATION ────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 72px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-light);
+      z-index: 1000;
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(6,30,117,.08); }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 28px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo img { height: 38px; display: block; }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-mid);
+      letter-spacing: .02em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-links .btn-nav {
+      background: var(--navy);
+      color: var(--white) !important;
+      padding: 9px 20px;
+      border-radius: 7px;
+      transition: background .2s, transform .15s !important;
+    }
+    .nav-links .btn-nav:hover {
+      background: var(--navy-light) !important;
+      transform: translateY(-1px);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--text-dark);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── HERO ──────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      padding-top: 72px;
+      background: linear-gradient(145deg, #020D3A 0%, #061E75 45%, #0D2B9E 100%);
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: -10%; right: -15%;
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(74,144,217,.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 28px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow span {
+      width: 6px; height: 6px;
+      background: #4ade80;
+      border-radius: 50%;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -.025em;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+    .hero-text h1 em {
+      font-style: normal;
+      color: #7BAEE8;
+    }
+
+    .hero-text p {
+      font-size: 17px;
+      line-height: 1.75;
+      color: rgba(255,255,255,.7);
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-white {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      color: var(--navy);
+      padding: 14px 26px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: .01em;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .btn-white:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+    }
+    .btn-white svg { flex-shrink: 0; }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--white);
+      padding: 14px 26px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,.35);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,.7);
+      background: rgba(255,255,255,.07);
+    }
+
+    .hero-stats {
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .stat-num {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--white);
+      line-height: 1;
+    }
+    .stat-label {
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+    }
+
+    /* Hero visual panel */
+    .hero-visual { position: relative; }
+
+    .vis-card {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.13);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 28px;
+      color: var(--white);
+    }
+
+    .vis-main {
+      margin-bottom: 20px;
+    }
+    .vis-main-icon {
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,.12);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+    .vis-main-icon svg { width: 24px; height: 24px; stroke: white; stroke-width: 1.8; fill: none; }
+    .vis-main h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+    .vis-main p { font-size: 13px; color: rgba(255,255,255,.65); line-height: 1.6; }
+
+    .vis-services {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .vis-service {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,.8);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .vis-service-dot {
+      width: 6px; height: 6px;
+      background: #7BAEE8;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ─── SHARED LAYOUT ─────────────────────────────── */
+    .section { padding: 96px 28px; }
+    .section-alt { background: var(--off-white); }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    .section-head { text-align: center; margin-bottom: 64px; }
+
+    .kicker {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    .heading {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+
+    .subheading {
+      font-size: 16px;
+      color: var(--text-mid);
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    /* ─── SERVICES ──────────────────────────────────── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .service-card {
+      background: var(--white);
+      border: 1.5px solid var(--gray-light);
+      border-radius: 16px;
+      padding: 40px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--navy);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 56px rgba(6,30,117,.1);
+      border-color: transparent;
+    }
+    .service-card:hover::after { transform: scaleX(1); }
+
+    .svc-icon {
+      width: 54px; height: 54px;
+      background: var(--off-white);
+      border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 22px;
+      transition: background .3s;
+    }
+    .service-card:hover .svc-icon { background: var(--navy); }
+    .svc-icon svg {
+      width: 26px; height: 26px;
+      stroke: var(--navy);
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .3s;
+    }
+    .service-card:hover .svc-icon svg { stroke: white; }
+
+    .svc-title {
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-dark);
+    }
+    .svc-body {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 22px;
+    }
+    .svc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      text-decoration: none;
+      transition: gap .2s;
+    }
+    .svc-link:hover { gap: 10px; }
+    .svc-link svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2.2; fill: none; }
+
+    /* ─── ABOUT ─────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-copy .kicker,
+    .about-copy .heading { text-align: left; }
+
+    .about-copy p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 18px;
+    }
+
+    .about-checks {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .check-bullet {
+      width: 22px; height: 22px;
+      background: var(--navy);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .check-bullet svg {
+      width: 12px; height: 12px;
+      stroke: white;
+      stroke-width: 2.5;
+      fill: none;
+    }
+    .check-label strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 3px;
+    }
+    .check-label span {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .about-panel {
+      background: linear-gradient(140deg, var(--navy) 0%, #253e96 100%);
+      border-radius: 20px;
+      padding: 44px;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-panel::before {
+      content: '';
+      position: absolute;
+      top: -30%; right: -20%;
+      width: 60%; height: 60%;
+      background: radial-gradient(circle, rgba(255,255,255,.07) 0%, transparent 70%);
+    }
+
+    .values-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      position: relative;
+    }
+    .value-tile {
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 22px;
+    }
+    .value-tile-icon {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,.12);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .value-tile-icon svg {
+      width: 20px; height: 20px;
+      stroke: white;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .value-tile h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 6px;
+    }
+    .value-tile p {
+      font-size: 12px;
+      color: rgba(255,255,255,.65);
+      line-height: 1.55;
+    }
+
+    /* ─── CONTACT ───────────────────────────────────── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-info .heading { text-align: left; }
+    .contact-info > p {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+
+    .contact-items { display: flex; flex-direction: column; gap: 22px; }
+    .contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .contact-ico {
+      width: 42px; height: 42px;
+      background: var(--off-white);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-ico svg {
+      width: 18px; height: 18px;
+      stroke: var(--navy);
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .contact-row-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .contact-row-val {
+      font-size: 14px;
+      color: var(--text-mid);
+    }
+
+    /* Form */
+    .contact-form {
+      background: var(--off-white);
+      border-radius: 18px;
+      padding: 44px;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px 15px;
+      border: 1.5px solid #D1D9E8;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--navy);
+      box-shadow: 0 0 0 3px rgba(6,30,117,.08);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+
+    .form-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .form-btn:hover { background: var(--navy-light); transform: translateY(-1px); }
+    .form-btn.sent { background: #16a34a; }
+
+    /* ─── FOOTER ────────────────────────────────────── */
+    footer {
+      background: var(--navy-dark);
+      color: white;
+      padding: 64px 28px 32px;
+    }
+
+    .footer-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .footer-brand img {
+      height: 34px;
+      filter: brightness(0) invert(1);
+      margin-bottom: 16px;
+      display: block;
+    }
+    .footer-brand p {
+      font-size: 13px;
+      color: rgba(255,255,255,.5);
+      line-height: 1.7;
+      max-width: 240px;
+    }
+
+    .footer-col h5 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a {
+      font-size: 13px;
+      color: rgba(255,255,255,.6);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-col a:hover { color: white; }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 28px auto 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: rgba(255,255,255,.35);
+    }
+
+    /* ─── CHATBOT ───────────────────────────────────── */
+    .chat-fab { position: fixed; bottom: 28px; right: 28px; z-index: 900; }
+
+    .chat-toggle-btn {
+      width: 58px; height: 58px;
+      background: var(--navy);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 28px rgba(6,30,117,.4);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .chat-toggle-btn:hover {
+      transform: scale(1.08);
+      box-shadow: 0 12px 36px rgba(6,30,117,.5);
+    }
+    .chat-toggle-btn svg {
+      width: 26px; height: 26px;
+      stroke: white;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .chat-toggle-btn .icon-close { display: none; }
+
+    .chat-panel {
+      position: absolute;
+      bottom: 72px; right: 0;
+      width: 370px;
+      height: 510px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: bottom right;
+      transform: scale(.85) translateY(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+    }
+    .chat-panel.open {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .chat-head {
+      background: var(--navy);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .chat-head-left { display: flex; align-items: center; gap: 12px; }
+    .chat-avatar {
+      width: 38px; height: 38px;
+      background: rgba(255,255,255,.15);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-avatar svg {
+      width: 20px; height: 20px;
+      stroke: white; stroke-width: 1.8; fill: none;
+    }
+    .chat-head-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+    }
+    .chat-head-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: rgba(255,255,255,.65);
+      margin-top: 2px;
+    }
+    .online-dot {
+      width: 7px; height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+    }
+    .chat-close-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,.6);
+      padding: 4px;
+      transition: color .2s;
+    }
+    .chat-close-btn:hover { color: white; }
+    .chat-close-btn svg {
+      width: 18px; height: 18px;
+      stroke: currentColor; stroke-width: 2; fill: none;
+    }
+
+    .chat-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .chat-body::-webkit-scrollbar { width: 4px; }
+    .chat-body::-webkit-scrollbar-thumb { background: var(--gray-light); border-radius: 4px; }
+
+    .msg { max-width: 82%; animation: msgIn .25s ease; }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .msg.bot { align-self: flex-start; }
+    .msg.user { align-self: flex-end; }
+
+    .msg-bubble {
+      padding: 11px 15px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+    .msg.bot .msg-bubble {
+      background: var(--off-white);
+      color: var(--text-dark);
+      border-bottom-left-radius: 4px;
+    }
+    .msg.user .msg-bubble {
+      background: var(--navy);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .typing-bubble {
+      background: var(--off-white);
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 4px;
+      width: fit-content;
+    }
+    .typing-dot {
+      width: 7px; height: 7px;
+      background: var(--gray-mid);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: .18s; }
+    .typing-dot:nth-child(3) { animation-delay: .36s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    .chat-footer {
+      padding: 12px 14px;
+      border-top: 1px solid var(--gray-light);
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .chat-input {
+      flex: 1;
+      padding: 9px 14px;
+      border: 1.5px solid var(--gray-light);
+      border-radius: 22px;
+      font-size: 13.5px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .chat-input:focus { border-color: var(--navy); }
+    .chat-send-btn {
+      width: 38px; height: 38px;
+      background: var(--navy);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .2s;
+    }
+    .chat-send-btn:hover { background: var(--navy-light); }
+    .chat-send-btn svg {
+      width: 16px; height: 16px;
+      stroke: white; stroke-width: 2.2; fill: none;
+    }
+
+    /* ─── SCROLL REVEAL ─────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .55s ease, transform .55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 48px; }
+      .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 72px; left: 0; right: 0;
+        background: white;
+        padding: 20px 28px 28px;
+        border-bottom: 1px solid var(--gray-light);
+        box-shadow: 0 8px 24px rgba(0,0,0,.08);
+        gap: 18px;
+      }
+      .hamburger { display: flex; }
+    }
+
+    @media (max-width: 540px) {
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+      .chat-panel { width: calc(100vw - 28px); }
+      .hero-stats { grid-template-columns: 1fr; gap: 16px; }
+      .values-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVIGATION ══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" aria-label="SRP International home">
+        <img src="BRAND_ASSETS/srp-international-logo.png" alt="SRP International">
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#contact" class="btn-nav">Get in Touch</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="hero" id="home">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-eyebrow">
+          <span></span>Professional Corporate Services
+        </div>
+        <h1>Your <em>Corporate Services</em> Partner</h1>
+        <p>SRP International gives your enterprise a secure, compliant, and well-structured foundation — from incorporation through to day-to-day financial and HR operations.</p>
+        <div class="hero-ctas">
+          <a href="#services" class="btn-white">
+            Explore Services
+            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#contact" class="btn-ghost">Contact Us</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">4</div>
+            <div class="stat-label">Core Services</div>
+          </div>
+          <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Compliance Focus</div>
+          </div>
+          <div>
+            <div class="stat-num">Expert</div>
+            <div class="stat-label">Advisory Team</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="vis-card">
+          <div class="vis-main">
+            <div class="vis-main-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3>Integrated Corporate Solutions</h3>
+            <p>From compliance and financial reporting to HR management and strategic planning — we handle every pillar of your corporate infrastructure.</p>
+          </div>
+          <div class="vis-services">
+            <div class="vis-service"><span class="vis-service-dot"></span>Company Secretarial</div>
+            <div class="vis-service"><span class="vis-service-dot"></span>Financial Services</div>
+            <div class="vis-service"><span class="vis-service-dot"></span>Research & Planning</div>
+            <div class="vis-service"><span class="vis-service-dot"></span>HR Management</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SERVICES ════════════════════════════════════════ -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">What We Offer</div>
+        <h2 class="heading">Comprehensive Corporate Services</h2>
+        <p class="subheading">We provide the expert support your business needs to grow confidently — compliant, informed, and well-managed at every stage.</p>
+      </div>
+      <div class="services-grid">
+
+        <!-- Company Secretarial -->
+        <div class="service-card reveal">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3 class="svc-title">Company Secretarial</h3>
+          <p class="svc-body">Ensure your company is correctly structured and compliant with all local laws. From managing the incorporation process to ensuring ongoing compliance with regulations, our professional Company Secretaries provide a secure base for your operations.</p>
+          <a href="#contact" class="svc-link">
+            Enquire now
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Financial Services -->
+        <div class="service-card reveal">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3 class="svc-title">Financial Services</h3>
+          <p class="svc-body">Using the latest online financial systems, we offer monthly management accounting, invoicing, cash management, and annual financial statement preparation. We work closely with independent auditors and expert tax advisors to ensure the best possible guidance.</p>
+          <a href="#contact" class="svc-link">
+            Enquire now
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Research & Business Planning -->
+        <div class="service-card reveal">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3 class="svc-title">Research & Business Planning</h3>
+          <p class="svc-body">Gain valuable insight into new ventures and effectively track existing investments. We deliver thorough feasibility studies, structured business plans, lead generation, forensic evaluations, and bespoke equity research reports for your specific portfolio.</p>
+          <a href="#contact" class="svc-link">
+            Enquire now
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+        <!-- Human Resource Management -->
+        <div class="service-card reveal">
+          <div class="svc-icon">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="svc-title">Human Resource Management</h3>
+          <p class="svc-body">Handle your staff effectively with support in recruitment, documentation, reviews, and payroll. We assist with HR contracts and policies, payroll services, KPI and personal development plan reviews, and the handling of industrial disputes.</p>
+          <a href="#contact" class="svc-link">
+            Enquire now
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ABOUT ════════════════════════════════════════════ -->
+  <section class="section section-alt" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-copy reveal">
+          <div class="kicker">About SRP International</div>
+          <h2 class="heading">Your Trusted Partner for Corporate Excellence</h2>
+          <p>SRP International is a professional services firm dedicated to helping companies structure, manage, and grow with confidence. We bring together expertise in corporate law, finance, research, and human resources under one roof.</p>
+          <p>Whether you are establishing a new enterprise or optimising an existing one, our team provides specialist knowledge and hands-on support to operate efficiently and compliantly in today's dynamic business environment.</p>
+          <div class="about-checks">
+            <div class="check-item">
+              <div class="check-bullet">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="check-label">
+                <strong>Full Regulatory Compliance</strong>
+                <span>We ensure your company meets all local laws and regulations, giving you peace of mind at every stage.</span>
+              </div>
+            </div>
+            <div class="check-item">
+              <div class="check-bullet">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="check-label">
+                <strong>Expert Advisory Network</strong>
+                <span>We collaborate with top independent auditors, tax advisors, and legal professionals on your behalf.</span>
+              </div>
+            </div>
+            <div class="check-item">
+              <div class="check-bullet">
+                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="check-label">
+                <strong>Tailored to Your Business</strong>
+                <span>Every solution is customised to your specific needs, scale, and business objectives.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-panel reveal">
+          <div class="values-grid">
+            <div class="value-tile">
+              <div class="value-tile-icon">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <h4>Compliance</h4>
+              <p>Structuring companies for full legal compliance at every step of their lifecycle.</p>
+            </div>
+            <div class="value-tile">
+              <div class="value-tile-icon">
+                <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              </div>
+              <h4>Financial Clarity</h4>
+              <p>Real-time financial insight enabling you to make well-informed investment decisions.</p>
+            </div>
+            <div class="value-tile">
+              <div class="value-tile-icon">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <h4>Research</h4>
+              <p>In-depth analysis of markets, opportunities, and risks to inform your strategy.</p>
+            </div>
+            <div class="value-tile">
+              <div class="value-tile-icon">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <h4>People</h4>
+              <p>Building and managing the teams that bring your business vision to life.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT ══════════════════════════════════════════ -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Get in Touch</div>
+        <h2 class="heading">Let's Work Together</h2>
+        <p class="subheading">Ready to take your business to the next level? Our expert team is ready to help you find the right services for your needs.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info reveal">
+          <p>Whether you're starting a new venture or streamlining your existing operations, we're here to provide tailored corporate services that make a real difference.</p>
+          <div class="contact-items">
+            <div class="contact-row">
+              <div class="contact-ico">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="contact-row-label">Email</div>
+                <div class="contact-row-val">shehan@srpitl.com</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-ico">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div>
+                <div class="contact-row-label">Business Hours</div>
+                <div class="contact-row-val">Monday – Friday, 9:00 AM – 6:00 PM</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-ico">
+                <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <div class="contact-row-label">SRP International</div>
+                <div class="contact-row-val">Contact us for office address details</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form reveal">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fName">First Name</label>
+              <input type="text" id="fName" placeholder="John" autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label for="lName">Last Name</label>
+              <input type="text" id="lName" placeholder="Smith" autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="fEmail">Email Address</label>
+            <input type="email" id="fEmail" placeholder="john@company.com" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="fCompany">Company Name</label>
+            <input type="text" id="fCompany" placeholder="Your company" autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label for="fService">Service of Interest</label>
+            <select id="fService">
+              <option value="">Select a service...</option>
+              <option>Company Secretarial</option>
+              <option>Financial Services</option>
+              <option>Research &amp; Business Planning</option>
+              <option>Human Resource Management</option>
+              <option>Multiple Services</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fMsg">Message</label>
+            <textarea id="fMsg" placeholder="Tell us about your needs..."></textarea>
+          </div>
+          <button class="form-btn" id="formBtn">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ═══════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="BRAND_ASSETS/srp-international-logo.png" alt="SRP International">
+        <p>Your trusted corporate services partner — helping businesses operate compliantly, efficiently, and with confidence.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">Company Secretarial</a></li>
+          <li><a href="#services">Financial Services</a></li>
+          <li><a href="#services">Research &amp; Planning</a></li>
+          <li><a href="#services">HR Management</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:shehan@srpitl.com">shehan@srpitl.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2025 SRP International. All rights reserved.</span>
+      <span>Your Corporate Services Partner</span>
+    </div>
+  </footer>
+
+  <!-- ══ CHATBOT ══════════════════════════════════════════ -->
+  <div class="chat-fab">
+    <div class="chat-panel" id="chatPanel" role="dialog" aria-label="SRP Assistant">
+      <div class="chat-head">
+        <div class="chat-head-left">
+          <div class="chat-avatar">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+          </div>
+          <div>
+            <div class="chat-head-name">SRP Assistant</div>
+            <div class="chat-head-status"><span class="online-dot"></span>Online</div>
+          </div>
+        </div>
+        <button class="chat-close-btn" id="chatClose" aria-label="Close chat">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="chat-body" id="chatBody">
+        <div class="msg bot">
+          <div class="msg-bubble">Hello! I'm the SRP International assistant. I can answer questions about our Company Secretarial, Financial Services, Research &amp; Business Planning, and HR Management services. How can I help you today?</div>
+        </div>
+      </div>
+
+      <div class="chat-footer">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Ask about our services..." autocomplete="off">
+        <button class="chat-send-btn" id="chatSend" aria-label="Send message">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat assistant">
+      <svg class="icon-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  <script>
+    // ── Nav scroll shadow ─────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    // ── Mobile hamburger ──────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', false);
+      });
+    });
+
+    // ── Contact form ──────────────────────────────────────
+    const formBtn = document.getElementById('formBtn');
+    formBtn.addEventListener('click', () => {
+      const name  = document.getElementById('fName').value.trim();
+      const email = document.getElementById('fEmail').value.trim();
+      const msg   = document.getElementById('fMsg').value.trim();
+      if (!name || !email || !msg) {
+        alert('Please fill in your name, email address, and message.');
+        return;
+      }
+      formBtn.textContent = 'Message Sent!';
+      formBtn.classList.add('sent');
+      formBtn.disabled = true;
+      setTimeout(() => {
+        formBtn.textContent = 'Send Message';
+        formBtn.classList.remove('sent');
+        formBtn.disabled = false;
+      }, 4000);
+    });
+
+    // ── Chatbot ───────────────────────────────────────────
+    const chatToggle = document.getElementById('chatToggle');
+    const chatPanel  = document.getElementById('chatPanel');
+    const chatClose  = document.getElementById('chatClose');
+    const chatBody   = document.getElementById('chatBody');
+    const chatInput  = document.getElementById('chatInput');
+    const chatSend   = document.getElementById('chatSend');
+
+    let chatOpen = false;
+
+    function openChat() {
+      chatOpen = true;
+      chatPanel.classList.add('open');
+      chatToggle.querySelector('.icon-chat').style.display = 'none';
+      chatToggle.querySelector('.icon-close').style.display = 'block';
+      chatInput.focus();
+    }
+    function closeChat() {
+      chatOpen = false;
+      chatPanel.classList.remove('open');
+      chatToggle.querySelector('.icon-chat').style.display = 'block';
+      chatToggle.querySelector('.icon-close').style.display = 'none';
+    }
+
+    chatToggle.addEventListener('click', () => chatOpen ? closeChat() : openChat());
+    chatClose.addEventListener('click', closeChat);
+
+    function appendMsg(text, type) {
+      const div = document.createElement('div');
+      div.className = `msg ${type}`;
+      div.innerHTML = `<div class="msg-bubble">${text}</div>`;
+      chatBody.appendChild(div);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function showTyping() {
+      const t = document.createElement('div');
+      t.id = 'typingIndicator';
+      t.className = 'msg bot';
+      t.innerHTML = `<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+      chatBody.appendChild(t);
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    function removeTyping() {
+      const t = document.getElementById('typingIndicator');
+      if (t) t.remove();
+    }
+
+    async function sendChat() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      chatInput.value = '';
+      chatInput.disabled = true;
+      chatSend.disabled = true;
+      appendMsg(text, 'user');
+      showTyping();
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        removeTyping();
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        appendMsg(data.reply, 'bot');
+      } catch {
+        removeTyping();
+        appendMsg('I\'m sorry, I\'m unable to respond right now. Please <a href="#contact" style="color:var(--navy);font-weight:600">contact our team directly</a> and we\'ll be happy to help.', 'bot');
+      } finally {
+        chatInput.disabled = false;
+        chatSend.disabled  = false;
+        chatInput.focus();
+      }
+    }
+
+    chatSend.addEventListener('click', sendChat);
+    chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendChat(); });
+
+    // ── Scroll reveal ─────────────────────────────────────
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>

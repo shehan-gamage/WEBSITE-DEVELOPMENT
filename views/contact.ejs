@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ PAGE HERO ═══════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Contact Us</span>
+      </div>
+      <h1>Let's Discuss How SRP Can Support Your Business</h1>
+      <p>Contact our team to learn how SRP International can support your company with corporate services, compliance, finance, HR, research, and business planning.</p>
+    </div>
+  </section>
+
+
+  <!-- ══ CONTACT FORM ════════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-info reveal">
+          <h2 class="heading" style="text-align:left;">Get in Touch</h2>
+          <p class="contact-intro">Whether you're starting a new venture or streamlining your existing operations, we're here to provide tailored corporate services that make a real difference. Send us an enquiry and we'll route it to the right regional team.</p>
+
+          <div class="contact-items">
+            <div class="contact-row">
+              <div class="contact-ico">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <div class="contact-row-label">Email</div>
+                <div class="contact-row-val"><a href="mailto:info@srpitl.com">info@srpitl.com</a></div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-ico">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div>
+                <div class="contact-row-label">Response Time</div>
+                <div class="contact-row-val">Within 24 hours, Mon–Fri</div>
+              </div>
+            </div>
+            <div class="contact-row">
+              <div class="contact-ico">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              </div>
+              <div>
+                <div class="contact-row-label">Regional Offices</div>
+                <div class="contact-row-val">
+                  <a href="#sri-lanka">Sri Lanka</a> ·
+                  <a href="#singapore">Singapore</a> ·
+                  <a href="#uae">UAE</a> ·
+                  <a href="#uk">UK</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-card reveal">
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:24px;">Send Us an Enquiry</h3>
+          <form id="contactForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fName">Full Name *</label>
+                <input type="text" id="fName" name="name" placeholder="Your full name" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="fEmail">Email Address *</label>
+                <input type="email" id="fEmail" name="email" placeholder="you@company.com" required autocomplete="email">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fPhone">Contact Number</label>
+                <input type="tel" id="fPhone" name="phone" placeholder="+94 XX XXX XXXX" autocomplete="tel">
+              </div>
+              <div class="form-group">
+                <label for="fCompany">Company Name</label>
+                <input type="text" id="fCompany" name="company" placeholder="Your company" autocomplete="organization">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fService">Service Interest</label>
+                <select id="fService" name="service">
+                  <option value="">Select a service...</option>
+                  <option>Company Incorporation & Governance</option>
+                  <option>Financial Services</option>
+                  <option>Research & Business Planning</option>
+                  <option>Human Resource Management</option>
+                  <option>Multiple Services</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="fSubject">Subject</label>
+                <input type="text" id="fSubject" name="subject" placeholder="How can we help?">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fMsg">Message *</label>
+              <textarea id="fMsg" name="message" placeholder="Tell us about your business needs..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" id="contactBtn" style="width:100%; justify-content:center;">Submit Enquiry</button>
+            <p class="form-note">Enquiries are usually processed within 24 hours.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══ MEETING CTA ═════════════════════════════════ -->
+  <section class="section">
+    <div class="container" style="text-align:center; max-width:600px;">
+      <div class="kicker">Prefer to Talk?</div>
+      <h2 class="heading">Prefer to Speak With Us Directly?</h2>
+      <p class="subheading" style="margin-bottom:32px;">Schedule a meeting with one of our corporate services advisors to discuss your business needs in detail.</p>
+      <a href="mailto:info@srpitl.com?subject=Meeting%20Request" class="btn btn-primary btn-lg">Schedule a Meeting <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <!-- ══ FINAL CTA ═══════════════════════════════════ -->
+  <section class="cta-band">
+    <h2>Ready to Simplify Your Corporate Operations?</h2>
+    <p>Partner with SRP International for reliable corporate services, business support, and technology-enabled client management.</p>
+    <div class="cta-band-btns" style="justify-content:center;">
+      <a href="/services" class="btn btn-white">Explore Services <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= typeof title !== 'undefined' ? title : 'SRP International | Global Corporate Services' %></title>
+<meta name="description" content="<%= typeof description !== 'undefined' ? description : 'SRP International delivers expert corporate services including Company Incorporation, Financial Services, Research & Business Planning, and Human Resource Management.' %>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/global.css">
+<% if (typeof pageCss !== 'undefined' && pageCss) { %>
+<link rel="stylesheet" href="/css/<%= pageCss %>">
+<% } %>

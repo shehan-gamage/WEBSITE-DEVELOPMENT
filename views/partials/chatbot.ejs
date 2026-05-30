@@ -1,0 +1,36 @@
+<div class="chat-fab">
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="SRP Assistant">
+    <div class="chat-head">
+      <div class="chat-head-left">
+        <div class="chat-avatar">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+        </div>
+        <div>
+          <div class="chat-head-name">SRP Assistant</div>
+          <div class="chat-head-status"><span class="online-dot"></span>Online</div>
+        </div>
+      </div>
+      <button class="chat-close-btn" id="chatClose" aria-label="Close chat">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="chat-body" id="chatBody">
+      <div class="msg bot">
+        <div class="msg-bubble">Hello! I'm the SRP International assistant. I can answer questions about our corporate services including Company Incorporation, Financial Services, Research &amp; Business Planning, and HR Management. How can I help you today?</div>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <input class="chat-input" id="chatInput" type="text" placeholder="Ask about our services..." autocomplete="off">
+      <button class="chat-send-btn" id="chatSend" aria-label="Send message">
+        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button class="chat-toggle-btn" id="chatToggle" aria-label="Open chat assistant">
+    <svg class="icon-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>

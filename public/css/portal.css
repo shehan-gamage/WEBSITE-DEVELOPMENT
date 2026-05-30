@@ -1,0 +1,126 @@
+/* ═══════════════════════════════════════════════════
+   SRP International — Client Portal (UI/UX Pro Max)
+   ═══════════════════════════════════════════════════ */
+
+/* Login Section */
+.portal-login-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-height) + 48px) var(--gutter) 64px;
+  position: relative;
+  overflow: hidden;
+}
+.portal-login-bg {
+  position: absolute; inset: 0;
+  /* Cityscape backdrop — corporate skyscrapers */
+  background-image: url('/images/portal/portal-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* Navy darkening overlay between the photo and the glass card —
+   keeps the card legible even where the sky goes bright.        */
+.portal-login-grid {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg,
+    rgba(2, 8, 30, 0.45) 0%,
+    rgba(2, 8, 30, 0.58) 100%);
+}
+.portal-login-glow {
+  position: absolute;
+  top: -20%; right: -10%;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,.10) 0%, transparent 65%);
+  pointer-events: none;
+}
+.portal-login-container {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+}
+/* ── Glassmorphism login card ──
+   Semi-transparent white, backdrop-filter blur, subtle white
+   border, soft deep shadow. Text colours flipped to white so
+   they read against the frosted glass over the cityscape.     */
+.portal-login-card {
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-2xl);
+  padding: 52px 44px;
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  text-align: center;
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+          backdrop-filter: blur(22px) saturate(150%);
+  color: #fff;
+}
+.portal-login-card h1 {
+  font-size: 28px;
+  font-weight: var(--fw-extrabold);
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: -.025em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+.portal-login-subtitle {
+  font-size: var(--fs-body-sm);
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 36px;
+  font-family: var(--font-body);
+}
+/* Form fields — frosted, white-on-glass */
+.portal-login-form .form-group { text-align: left; }
+.portal-login-form .form-group label {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: var(--fw-medium);
+}
+.portal-login-form .form-group input {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+}
+.portal-login-form .form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+.portal-login-form .form-group input:focus {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.55);
+  outline: none;
+}
+.portal-login-form .btn-primary {
+  width: 100%;
+  justify-content: center;
+  margin-top: 8px;
+}
+.portal-login-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+.portal-login-links a {
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.portal-login-links a:hover { color: var(--gold); text-decoration: underline; }
+.portal-security-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+.portal-security-note svg { width: 15px; height: 15px; stroke: var(--gold); stroke-width: 2; fill: none; flex-shrink: 0; }
+.portal-security-note span { font-size: 11px; color: rgba(255, 255, 255, 0.68); line-height: 1.5; font-family: var(--font-body); }
+
