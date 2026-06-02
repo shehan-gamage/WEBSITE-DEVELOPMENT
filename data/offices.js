@@ -90,7 +90,7 @@ export const offices = [
     email:     'info@srpitl.com',
     hours:     'Mon–Fri, 9:00 AM – 5:00 PM (GMT/BST)',
     lead: {
-      name: 'Jo Kitcat',
+      name: 'Jonathan Kitcat',
       role: 'Managing Director, SRP International United Kingdom',
     },
   },
