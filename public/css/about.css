@@ -359,6 +359,7 @@
   content: '';
   position: absolute;
   pointer-events: none;
+  z-index: 0;                  /* background decor sits below the portraits */
 }
 /* Warm rim-light glow top-right — subtle gold */
 .team-section::before {
@@ -387,6 +388,8 @@
   height: 540px;
   margin: 56px auto 0;
   max-width: 100%;
+  position: relative;
+  z-index: 10;                       /* lift portraits above background decor for 100% face visibility */
 }
 
 .tg-tile {
