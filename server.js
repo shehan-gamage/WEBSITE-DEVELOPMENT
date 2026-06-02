@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import express from 'express';
+import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import 'dotenv/config';
@@ -25,6 +26,26 @@ app.use((req, res, next) => {
 });
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+/* ── Email (enquiry notifications) ──
+   Uses Google Workspace SMTP (smtp.gmail.com) by default since srpitl.com
+   runs on Google Workspace. Authenticate with a Workspace mailbox + a
+   16-char App Password (2-Step Verification must be enabled on that account).
+   Set SMTP_USER / SMTP_PASS in .env. Enquiries are delivered to ENQUIRY_TO. */
+const ENQUIRY_TO    = process.env.ENQUIRY_TO || 'clientrelations@srpitl.com';
+const mailConfigured = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
+const mailer = mailConfigured
+  ? nodemailer.createTransport({
+      host:   process.env.SMTP_HOST || 'smtp.gmail.com',
+      port:   Number(process.env.SMTP_PORT) || 465,
+      secure: (process.env.SMTP_SECURE || 'true') !== 'false', // true for port 465
+      auth:   { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    })
+  : null;
+
+if (!mailConfigured) {
+  console.warn('[contact] SMTP_USER/SMTP_PASS not set — enquiries will be logged but NOT emailed. See .env.example.');
+}
 
 const SYSTEM = `You are a helpful assistant for SRP International, a professional corporate services firm.
 Your role is to help website visitors understand SRP International's services and guide them to get in touch.
@@ -217,13 +238,59 @@ app.post('/api/chat', async (req, res) => {
 });
 
 // ── Contact Form API ──────────────────────────────
-app.post('/api/contact', (req, res) => {
+app.post('/api/contact', async (req, res) => {
   const { name, email, phone, company, service, subject, message } = req.body;
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Name, email, and message are required.' });
   }
-  console.log('Contact form submission:', { name, email, phone, company, service, subject, message });
-  res.json({ success: true, message: 'Thank you for your enquiry. We will respond within 24 hours.' });
+
+  const submission = { name, email, phone, company, service, subject, message };
+
+  // No SMTP credentials yet → log so nothing is lost, but keep the form working.
+  if (!mailer) {
+    console.warn('[contact] Email not configured — enquiry logged only:', submission);
+    return res.json({ success: true, message: 'Thank you for your enquiry. We will respond within 24 hours.' });
+  }
+
+  const lines = [
+    `Name:    ${name}`,
+    `Email:   ${email}`,
+    phone   ? `Phone:   ${phone}`     : null,
+    company ? `Company: ${company}`   : null,
+    service ? `Service: ${service}`   : null,
+    subject ? `Subject: ${subject}`   : null,
+    '',
+    'Message:',
+    message,
+  ].filter(Boolean);
+
+  const esc = (s) => String(s ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+  const html = `
+    <h2 style="margin:0 0 12px">New website enquiry</h2>
+    <table cellpadding="6" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">
+      <tr><td><strong>Name</strong></td><td>${esc(name)}</td></tr>
+      <tr><td><strong>Email</strong></td><td>${esc(email)}</td></tr>
+      ${phone   ? `<tr><td><strong>Phone</strong></td><td>${esc(phone)}</td></tr>` : ''}
+      ${company ? `<tr><td><strong>Company</strong></td><td>${esc(company)}</td></tr>` : ''}
+      ${service ? `<tr><td><strong>Service</strong></td><td>${esc(service)}</td></tr>` : ''}
+      ${subject ? `<tr><td><strong>Subject</strong></td><td>${esc(subject)}</td></tr>` : ''}
+    </table>
+    <p style="font-family:Arial,sans-serif;font-size:14px;white-space:pre-wrap;margin-top:16px"><strong>Message:</strong><br>${esc(message)}</p>`;
+
+  try {
+    await mailer.sendMail({
+      from:    `"SRP International Website" <${process.env.SMTP_USER}>`,
+      to:      ENQUIRY_TO,
+      replyTo: `"${name}" <${email}>`,        // replies go straight to the client
+      subject: subject ? `Website enquiry: ${subject}` : `New website enquiry from ${name}`,
+      text:    lines.join('\n'),
+      html,
+    });
+    res.json({ success: true, message: 'Thank you for your enquiry. We will respond within 24 hours.' });
+  } catch (err) {
+    console.error('[contact] Failed to send enquiry email:', err);
+    res.status(502).json({ error: 'Sorry, we could not send your enquiry right now. Please email clientrelations@srpitl.com directly.' });
+  }
 });
 
 // ── 404 Handler ───────────────────────────────────
