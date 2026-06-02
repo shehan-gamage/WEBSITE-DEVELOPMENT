@@ -278,6 +278,7 @@ app.post('/api/contact', async (req, res) => {
     <p style="font-family:Arial,sans-serif;font-size:14px;white-space:pre-wrap;margin-top:16px"><strong>Message:</strong><br>${esc(message)}</p>`;
 
   try {
+    // 1) Primary: notify the team. Must succeed for the form to report success.
     await mailer.sendMail({
       from:    `"SRP International Website" <${process.env.SMTP_USER}>`,
       to:      ENQUIRY_TO,
@@ -286,6 +287,39 @@ app.post('/api/contact', async (req, res) => {
       text:    lines.join('\n'),
       html,
     });
+
+    // 2) Secondary: auto-reply confirmation to the client for their records.
+    //    Best-effort — if it fails the team still has the enquiry, so don't error.
+    try {
+      const confirmText = [
+        'Hi there,',
+        '',
+        'Thank you for reaching out to us. We have successfully received your inquiry and a member of our team will get back to you as soon as possible.',
+        '',
+        'Best regards,',
+        'SRP International',
+        'Client Relationship Management Team',
+      ].join('\n');
+      const confirmHtml = `
+        <div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#1a1a22">
+          <p>Hi there,</p>
+          <p>Thank you for reaching out to us. We have successfully received your inquiry and a member of our team will get back to you as soon as possible.</p>
+          <p style="margin-bottom:0">Best regards,<br>
+          <strong>SRP International</strong><br>
+          Client Relationship Management Team</p>
+        </div>`;
+      await mailer.sendMail({
+        from:    `"SRP International" <${process.env.SMTP_USER}>`,
+        to:      `"${name}" <${email}>`,
+        replyTo: ENQUIRY_TO,                  // client replies reach the team group
+        subject: 'We’ve received your inquiry!',
+        text:    confirmText,
+        html:    confirmHtml,
+      });
+    } catch (confErr) {
+      console.error('[contact] Enquiry delivered, but client confirmation failed:', confErr);
+    }
+
     res.json({ success: true, message: 'Thank you for your enquiry. We will respond within 24 hours.' });
   } catch (err) {
     console.error('[contact] Failed to send enquiry email:', err);
