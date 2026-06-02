@@ -203,7 +203,7 @@
     </div>
   </section>
 
-  <!-- ══ TEAM — cinematic accordion gallery ═════════ -->
+  <!-- ══ TEAM — Uniform Portrait Grid ════════════════ -->
   <section class="section section-dark team-section">
     <div class="container">
       <div class="section-head">
@@ -211,6 +211,7 @@
         <h2 class="heading">Leadership &amp; Management</h2>
         <p class="subheading">Our experienced leadership team brings deep expertise across corporate law, finance, research, and human resources.</p>
       </div>
+
     </div>
 
     <!-- Accordion gallery: hover expands · click opens lightbox -->
@@ -222,7 +223,7 @@
               type="button">
 
         <% if (m.photo) { %>
-          <img class="tg-img"
+          <img class="tg-img tg-img--<%= m.firstName.toLowerCase() %>"
                src="<%= m.photo %>"
                alt="<%= m.name %>"
                loading="lazy">
@@ -232,14 +233,9 @@
           </div>
         <% } %>
 
-        <!-- Dim overlay (fades to transparent on hover) -->
         <span class="tg-veil" aria-hidden="true"></span>
-
-        <!-- Vertical name on collapsed state -->
         <span class="tg-side-label" aria-hidden="true"><%= m.firstName %></span>
 
-        <!-- Bottom info block — shown when expanded
-             Layout: [in icon] [ name / role ]  (horizontal) -->
         <span class="tg-info">
           <a class="tg-linkedin"
              href="<%= m.linkedin %>"

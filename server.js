@@ -74,6 +74,8 @@ app.get('/', (req, res) => {
    Update `linkedin` with each member's profile URL. */
 const team = [
   { firstName:'Aaron',    name:'Aaron Russell-Davison', role:'Managing Director',                              photo:'/images/team/Aaron.png',    linkedin:'#' },
+  { firstName:'Charles',  name:'Charles Harbottle',     role:'Managing Director — Singapore',                  photo:'/images/team/Charles.png',  linkedin:'#' },
+  { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.png', linkedin:'#' },
   { firstName:'Madushini', name:'Madushini Fernando',    role:'Director',                                       photo:'/images/team/Madushini.png',linkedin:'#' },
   { firstName:'Shehan',   name:'Shehan Gamage',         role:'Chief Operating Officer',                        photo:'/images/team/Shehan.png',   linkedin:'#' },
   { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.png',    linkedin:'#' },
