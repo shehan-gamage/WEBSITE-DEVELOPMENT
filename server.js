@@ -107,6 +107,12 @@ const team = [
   { firstName:'Ramesh',   name:'Ramesh Kumarage',       role:'Head of HR Services',                            photo:'/images/team/Ramesh.png',   linkedin:'https://www.linkedin.com/in/rameshkumarage' },
 ];
 
+/* Cache-busting version for team portraits. Bump whenever a photo file is
+   replaced so browsers fetch the new image instead of a stale cached copy
+   (early deploys 404'd these paths and some browsers cached the miss).      */
+const PORTRAIT_VER = '2';
+team.forEach(m => { if (m.photo) m.photo += `?v=${PORTRAIT_VER}`; });
+
 app.get('/about', (req, res) => {
   res.render('about', {
     activePage: 'about',
