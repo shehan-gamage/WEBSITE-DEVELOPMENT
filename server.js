@@ -94,17 +94,17 @@ app.get('/', (req, res) => {
    Order = display order in the accordion gallery.
    Update `linkedin` with each member's profile URL. */
 const team = [
-  { firstName:'Aaron',    name:'Aaron Russell-Davison', role:'Managing Director',                              photo:'/images/team/Aaron.png',    linkedin:'#' },
-  { firstName:'Charles',  name:'Charles Harbottle',     role:'Managing Director — Singapore',                  photo:'/images/team/Charles.png',  linkedin:'#' },
-  { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.png', linkedin:'#' },
-  { firstName:'Madushini', name:'Madushini Fernando',    role:'Director',                                       photo:'/images/team/Madushini.png',linkedin:'#' },
-  { firstName:'Shehan',   name:'Shehan Gamage',         role:'Chief Operating Officer',                        photo:'/images/team/Shehan.png',   linkedin:'#' },
-  { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.png',    linkedin:'#' },
-  { firstName:'Rochelle', name:'Rochelle DonPaul',      role:'Head of International Business Development',     photo:'/images/team/Rochelle.png', linkedin:'#' },
-  { firstName:'Hadi',     name:'Mohamed Hadi',          role:'Head of Client Relationship Management',         photo:'/images/team/Hadi.png',     linkedin:'#' },
-  { firstName:'Shanika',  name:'Shanika Fernando',      role:'Head of Research and Business Development',      photo:'/images/team/Shanika.png',  linkedin:'#' },
-  { firstName:'Fiyaz',    name:'Ahmed Fiyaz',           role:'Head of Accounting Services',                    photo:'/images/team/Fiyaz.png',    linkedin:'#' },
-  { firstName:'Ramesh',   name:'Ramesh Kumarage',       role:'Head of HR Services',                            photo:'/images/team/Ramesh.png',   linkedin:'#' },
+  { firstName:'Aaron',    name:'Aaron Russell-Davison', role:'Managing Director',                              photo:'/images/team/Aaron.png',    linkedin:'https://www.linkedin.com/in/aaron-russell-davison-83a936211' },
+  { firstName:'Charles',  name:'Charles Harbottle',     role:'Managing Director — Singapore',                  photo:'/images/team/Charles.png',  linkedin:'https://www.linkedin.com/in/charles-harbottle-64868aa' },
+  { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.png', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
+  { firstName:'Madushini', name:'Madushini Fernando',    role:'Director',                                       photo:'/images/team/Madushini.png',linkedin:'https://www.linkedin.com/in/madushini-fernando-6722a7189' },
+  { firstName:'Shehan',   name:'Shehan Gamage',         role:'Chief Operating Officer',                        photo:'/images/team/Shehan.png',   linkedin:'https://www.linkedin.com/in/shehan-gamage-3987151a2' },
+  { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.png',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
+  { firstName:'Rochelle', name:'Rochelle DonPaul',      role:'Head of International Business Development',     photo:'/images/team/Rochelle.png', linkedin:'https://www.linkedin.com/in/rochelle-donpaul' },
+  { firstName:'Hadi',     name:'Mohamed Hadi',          role:'Head of Client Relationship Management',         photo:'/images/team/Hadi.png',     linkedin:'https://www.linkedin.com/in/mohamed-hadi-17ab43247' },
+  { firstName:'Shanika',  name:'Shanika Fernando',      role:'Head of Research and Business Development',      photo:'/images/team/Shanika.png',  linkedin:'https://www.linkedin.com/in/shanika-fernando-3a073a195' },
+  { firstName:'Fiyaz',    name:'Ahmed Fiyaz',           role:'Head of Accounting Services',                    photo:'/images/team/Fiyaz.png',    linkedin:'https://www.linkedin.com/in/fiyaz-hussain-b770837' },
+  { firstName:'Ramesh',   name:'Ramesh Kumarage',       role:'Head of HR Services',                            photo:'/images/team/Ramesh.png',   linkedin:'https://www.linkedin.com/in/rameshkumarage' },
 ];
 
 app.get('/about', (req, res) => {
