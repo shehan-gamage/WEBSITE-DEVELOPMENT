@@ -85,10 +85,52 @@ if (chatClose) {
   chatClose.addEventListener('click', closeChat);
 }
 
+// Conversation history sent to the API for context (real turns only;
+// the greeting bubble in the HTML is purely visual).
+const chatHistory = [];
+
+/* Render text safely WITHOUT innerHTML: build text + anchor nodes only, so
+   neither user input nor model output can inject markup. Auto-links URLs and
+   email addresses. */
+function renderText(text, parent) {
+  const re = /(https?:\/\/[^\s<>]+)|([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/g;
+  let last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) parent.appendChild(document.createTextNode(text.slice(last, m.index)));
+    const a = document.createElement('a');
+    if (m[1]) { a.href = m[1]; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    else { a.href = `mailto:${m[2]}`; }
+    a.textContent = m[0];
+    parent.appendChild(a);
+    last = re.lastIndex;
+  }
+  if (last < text.length) parent.appendChild(document.createTextNode(text.slice(last)));
+}
+
 function appendMsg(text, type) {
   const div = document.createElement('div');
   div.className = `msg ${type}`;
-  div.innerHTML = `<div class="msg-bubble">${text}</div>`;
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  renderText(text, bubble);
+  div.appendChild(bubble);
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Error bubble with a real /contact link (built from nodes, not innerHTML).
+function appendError() {
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.appendChild(document.createTextNode("I'm sorry, I'm unable to respond right now. Please "));
+  const a = document.createElement('a');
+  a.href = '/contact';
+  a.textContent = 'contact our team directly';
+  bubble.appendChild(a);
+  bubble.appendChild(document.createTextNode(" and we'll be happy to help."));
+  div.appendChild(bubble);
   chatBody.appendChild(div);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
@@ -113,20 +155,22 @@ async function sendChat() {
   chatInput.disabled = true;
   chatSend.disabled = true;
   appendMsg(text, 'user');
+  chatHistory.push({ role: 'user', content: text });
   showTyping();
   try {
     const res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text })
+      body: JSON.stringify({ messages: chatHistory.slice(-12) })
     });
     removeTyping();
     if (!res.ok) throw new Error();
     const data = await res.json();
     appendMsg(data.reply, 'bot');
+    chatHistory.push({ role: 'assistant', content: data.reply });
   } catch {
     removeTyping();
-    appendMsg('I\'m sorry, I\'m unable to respond right now. Please <a href="/contact" style="color:var(--navy);font-weight:600">contact our team directly</a> and we\'ll be happy to help.', 'bot');
+    appendError();
   } finally {
     chatInput.disabled = false;
     chatSend.disabled  = false;

@@ -71,12 +71,15 @@
   --nav-height:   76px;
   --gutter:       clamp(16px, 3vw, 32px);
 
-  /* Border Radius */
-  --radius-sm:    6px;
-  --radius-md:    10px;
-  --radius-lg:    14px;
-  --radius-xl:    18px;
-  --radius-2xl:   24px;
+  /* Border Radius — square card system: all rectangular radii are 0 so
+     every card/panel renders with crisp, sharp corners. --radius-full is
+     retained for pill components (chips, badges, CTAs); circular elements
+     (avatars, status dots, the WhatsApp button) keep their own 50%. */
+  --radius-sm:    0;
+  --radius-md:    0;
+  --radius-lg:    0;
+  --radius-xl:    0;
+  --radius-2xl:   0;
   --radius-full:  100px;
 
   /* Shadows — layered for depth P4 */
@@ -112,14 +115,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* No broken lines: text-wrap is inherited, so body copy avoids leaving a
+     single word stranded on the last line of a block (orphans). */
+  text-wrap: pretty;
 }
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family);
   line-height: 1.2;
   font-weight: var(--fw-bold);
+  /* Balanced headings: even out line lengths so no word hangs alone. */
+  text-wrap: balance;
 }
 img { max-width: 100%; display: block; }
 a { color: inherit; }
+/* Uniform, non-italic text rendering across the UI */
+em, i, cite, address, blockquote, dfn, var { font-style: normal; }
 
 /* ─── ACCESSIBILITY: FOCUS STATES P1 ─────────── */
 :focus { outline: none; }
@@ -217,8 +227,10 @@ a { color: inherit; }
   border: 2px solid transparent;
   cursor: pointer;                    /* P2 */
   touch-action: manipulation;         /* P2: removes 300ms tap delay */
-  /* Full pill shape — site-wide button vocabulary. */
-  border-radius: var(--radius-full);
+  /* Fully rounded pill — the single source of truth for every CTA button,
+     site-wide. Hardcoded to 9999px so no button can be squared by the zeroed
+     rectangular radius tokens of the square-card system. */
+  border-radius: 9999px;
   padding: 13px 28px;
   min-height: 44px;                   /* P2: touch target */
   letter-spacing: .025em;
@@ -315,50 +327,35 @@ a { color: inherit; }
 }
 .btn:hover svg { transform: translateX(2px); }
 
-/* ─── NAVIGATION — frosted glass ─────────────── */
+/* ─── NAVIGATION — solid brand navy ─────────────── */
 nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--nav-height);
-  /* Glass: semi-transparent + strong blur + saturation boost */
-  background: rgba(255, 255, 255, 0.60);
-  backdrop-filter: blur(28px) saturate(200%) brightness(1.04);
-  -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.04);
-  /* Bottom edge: subtle gradient line gives depth on glass */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow: 0 1px 0 rgba(6,30,117,.06),
-              0 4px 20px rgba(6,30,117,.04);
+  /* Solid brand header — deep navy (#03103F) in every state */
+  background: var(--navy-dark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.10);
   z-index: 1000;
   transition: background var(--dur-slow) var(--ease-out),
-              box-shadow var(--dur-slow) var(--ease-out),
-              border-color var(--dur-slow) var(--ease-out);
+              box-shadow var(--dur-slow) var(--ease-out);
 }
-/* On scroll: slightly more opaque so it stays readable over content */
+/* On scroll: deepen the navy and add a soft shadow for separation */
 nav.scrolled {
-  background: rgba(255, 255, 255, 0.80);
-  border-color: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 1px 0 rgba(6,30,117,.08),
-              0 8px 32px rgba(6,30,117,.08);
+  background: var(--navy-dark);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 30px rgba(3, 16, 63, 0.28);
 }
 
 /* ═══════════════════════════════════════════════════
-   FLOATING NAV — over every page's dark hero
-   Reference-image styling: fully transparent header,
-   white text, active item gets a soft pill highlight,
-   CTAs become ghost-white + solid-white pill. Once the
-   user scrolls past the hero, nav.scrolled engages and
-   the frosted-white treatment above takes over.
+   SOLID NAVY HEADER — white text in all states
+   The header is brand navy on every page, so links,
+   CTAs, caret, logo and hamburger are all light-on-dark
+   permanently (no scroll-state inversion needed).
 ═══════════════════════════════════════════════════ */
-nav:not(.scrolled) {
-  background: transparent;
-  -webkit-backdrop-filter: none;
-          backdrop-filter: none;
-  border-bottom-color: transparent;
-  box-shadow: none;
-}
 
 /* Nav links → white, with a soft pill on active/hover */
-nav:not(.scrolled) .nav-center a {
+.nav-center a {
   color: rgba(255, 255, 255, 0.82);
   padding: 9px 18px;
   border-radius: var(--radius-full, 100px);
@@ -366,57 +363,55 @@ nav:not(.scrolled) .nav-center a {
     color var(--dur-fast) var(--ease-out),
     background-color var(--dur-fast) var(--ease-out);
 }
-nav:not(.scrolled) .nav-center a:hover,
-nav:not(.scrolled) .nav-center a.active {
+.nav-center a:hover,
+.nav-center a.active {
   color: #fff;
   font-weight: var(--fw-medium);
   background: rgba(255, 255, 255, 0.12);
 }
-/* Kill the underline indicator on floating nav — pill replaces it */
-nav:not(.scrolled) .nav-center a::after { display: none; }
 
 /* Dropdown caret stays white */
-nav:not(.scrolled) .nav-services-wrap > a svg { stroke: #fff; }
+.nav-services-wrap > a svg { stroke: #fff; }
 
 /* CTA group — left button ghost-white, right button white pill */
-nav:not(.scrolled) .nav-cta-group .btn-outline {
+.nav-cta-group .btn-outline {
   background: transparent;
   color: #fff;
   border-color: rgba(255, 255, 255, 0.45);
 }
-nav:not(.scrolled) .nav-cta-group .btn-outline:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.75);
-  color: #fff;
+/* Invert on hover: the white-on-transparent outline becomes a solid white
+   fill with navy text (the base .btn transition animates it seamlessly). */
+.nav-cta-group .btn-outline:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--navy);
 }
-nav:not(.scrolled) .nav-cta-group .btn-portal {
+.nav-cta-group .btn-portal {
   background: #fff;
   color: var(--navy);
   border-color: #fff;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 }
-nav:not(.scrolled) .nav-cta-group .btn-portal:hover {
+.nav-cta-group .btn-portal:hover {
   background: var(--gold);
   border-color: var(--gold);
   color: var(--navy);
 }
 
-/* Hamburger bars → white when floating */
-nav:not(.scrolled) .hamburger span {
-  background: #fff;
-}
-
-/* (drop-shadow already applied inline in the nav-logo img filter rule above) */
+/* Hamburger bars → white on the navy header */
+.hamburger span { background: #fff; }
 
 .nav-inner {
-  max-width: var(--max-width);
+  /* Slightly wider than the 1200 content column so the brand + 6 links
+     + 2 CTAs fit on one row and stay symmetrically centered. */
+  max-width: 1340px;
   margin: 0 auto;
   padding: 0 var(--gutter);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 16px;
 }
 
 .nav-logo {
@@ -434,33 +429,28 @@ nav:not(.scrolled) .hamburger span {
   transition: filter var(--dur-slow) var(--ease-out);
 }
 
-/* Floating nav (over dark hero): invert the dark logo to pure white
-   so it stays visible against the cityscape. A single source file is
-   used in both states — no dependency on a separate white asset.    */
-nav:not(.scrolled) .nav-logo img {
+/* The header is always navy, so the dark logo is inverted to white in
+   every state. A single source file is used — no separate white asset. */
+.nav-logo img {
   filter: brightness(0) invert(1)
-          drop-shadow(0 2px 10px rgba(0, 0, 0, 0.35));
-}
-
-/* Scrolled (frosted white nav): show the original dark logo as-is. */
-nav.scrolled .nav-logo img {
-  filter: none;
+          drop-shadow(0 1px 6px rgba(0, 0, 0, 0.25));
 }
 
 .nav-center {
   display: flex;
   align-items: center;
-  gap: 32px;
+  /* Tuned so brand + 6 links + 2 CTAs fit the 1340 container with ~20px
+     slack; below 1340 the nav collapses to the hamburger (see breakpoint). */
+  gap: 20px;
   list-style: none;
 }
+/* Structural only — colour, padding, pill + active state are set by the
+   solid-navy header rules above. */
 .nav-center a {
   text-decoration: none;
   font-size: var(--fs-body-sm);
   font-weight: var(--fw-medium);
-  color: var(--text-mid);
   letter-spacing: .02em;
-  transition: color var(--dur-fast) var(--ease-out);
-  padding: 10px 2px;
   position: relative;
   min-height: 44px;             /* P2: touch target */
   display: flex;
@@ -468,21 +458,6 @@ nav.scrolled .nav-logo img {
   white-space: nowrap;          /* multi-word items must stay on one line */
 }
 .nav-center li { white-space: nowrap; }
-.nav-center a:hover,
-.nav-center a.active { color: var(--navy); font-weight: var(--fw-semibold); }
-.nav-center a::after {
-  content: '';
-  position: absolute;
-  bottom: 4px; left: 0; right: 0;
-  height: 2px;
-  background: var(--navy);
-  border-radius: 2px;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform var(--dur-base) var(--ease-out);
-}
-.nav-center a:hover::after,
-.nav-center a.active::after { transform: scaleX(1); }
 
 .nav-services-wrap { position: relative; }
 
@@ -492,7 +467,7 @@ nav.scrolled .nav-logo img {
   gap: 12px;
 }
 .nav-cta-group .btn {
-  padding: 10px 22px;
+  padding: 10px 18px;
   font-size: 13px;
   /* Full pill — matches the active nav-link highlight shape for a
      unified, soft floating-nav vocabulary.                        */
@@ -1320,9 +1295,77 @@ footer {
   font-size: 14px;
   color: rgba(255,255,255,.45);
 }
+.footer-legal {
+  display: flex;
+  gap: 22px;
+}
+.footer-legal a {
+  color: rgba(255,255,255,.55);
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-legal a:hover { color: var(--white); }
+
+/* ─── LEGAL PAGES (Privacy, Terms) ───────────── */
+.legal-content {
+  max-width: 820px;
+  margin: 0 auto;
+}
+.legal-content .legal-updated {
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 28px;
+}
+.legal-content h2 {
+  font-size: 22px;
+  font-weight: var(--fw-bold);
+  color: var(--text-dark);
+  margin: 34px 0 12px;
+  letter-spacing: -.01em;
+}
+.legal-content h3 {
+  font-size: 16px;
+  font-weight: var(--fw-semibold);
+  color: var(--text-dark);
+  margin: 22px 0 8px;
+}
+.legal-content p,
+.legal-content li {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-mid);
+}
+.legal-content p { margin-bottom: 14px; }
+.legal-content ul { margin: 0 0 16px 20px; }
+.legal-content li { margin-bottom: 8px; }
+.legal-content a {
+  color: var(--navy);
+  text-decoration: underline;
+}
 
 /* ─── CHATBOT ────────────────────────────────── */
 .chat-fab { position: fixed; bottom: 28px; right: 28px; z-index: 900; }
+
+/* Floating WhatsApp button — stacked just above the chat toggle.
+   z-index sits below the chat (.chat-fab) so the chat panel covers it
+   cleanly when opened. */
+.wa-fab {
+  position: fixed;
+  right: 28px;
+  bottom: 96px;
+  z-index: 899;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 24px rgba(37,211,102,.45);
+  transition: transform .25s, box-shadow .25s;
+}
+.wa-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 12px 32px rgba(37,211,102,.55);
+}
+.wa-fab svg { width: 30px; height: 30px; fill: #fff; }
 
 .chat-toggle-btn {
   width: 58px; height: 58px;
@@ -1351,7 +1394,9 @@ footer {
 .chat-panel {
   position: absolute;
   bottom: 72px; right: 0;
-  width: 370px;
+  /* Never wider than the viewport: the fab sits 28px from the right edge,
+     so cap at 100vw - 40px to keep the panel fully on-screen on phones. */
+  width: min(370px, calc(100vw - 40px));
   height: 510px;
   background: white;
   border-radius: 18px;
@@ -1435,6 +1480,8 @@ footer {
   border-radius: 14px;
   font-size: 13.5px;
   line-height: 1.6;
+  white-space: pre-wrap;        /* preserve the model's line breaks */
+  overflow-wrap: anywhere;      /* long URLs/words never overflow the bubble */
 }
 .msg.bot .msg-bubble {
   background: var(--off-white);
@@ -1446,6 +1493,8 @@ footer {
   color: white;
   border-bottom-right-radius: 4px;
 }
+.msg.bot .msg-bubble a { color: var(--navy); font-weight: 600; text-decoration: underline; }
+.msg.user .msg-bubble a { color: #fff; text-decoration: underline; }
 
 .typing-bubble {
   background: var(--off-white);
@@ -1562,13 +1611,26 @@ footer {
 }
 
 /* ─── RESPONSIVE — P5: breakpoints ───────────── */
-@media (max-width: 1024px) {
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+/* Below ~1340 the second CTA (Schedule a Consultation) is dropped so the
+   brand + 6 links + Client Portal still fit on one row — keeping the full
+   nav on laptops instead of collapsing to a near-empty hamburger bar.
+   (Schedule a Consultation stays in the mobile menu and the hero/footer.) */
+@media (max-width: 1340px) {
+  .nav-cta-group .btn-outline { display: none; }
+}
+
+/* Only when even the slimmed nav can't fit (~1100) do we collapse to the
+   hamburger menu, rather than at the general 1024 content breakpoint. */
+@media (max-width: 1100px) {
   .mega-menu { display: none; }
   .nav-center { display: none; }
   .nav-cta-group { display: none; }
   .hamburger { display: flex; }
+}
+
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 768px) {
@@ -1583,7 +1645,10 @@ footer {
   .form-row { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
-  .chat-panel { width: calc(100vw - 20px); right: 10px; }
+  /* The panel is positioned relative to the fab (which sits 28px in from
+     the screen edge), so right must be NEGATIVE to use the full viewport:
+     right edge lands 12px from the screen, width leaves 12px on the left. */
+  .chat-panel { width: calc(100vw - 24px); right: -16px; }
   .cta-band h2 { font-size: clamp(24px, 6vw, 36px); }
 }
 

@@ -401,7 +401,7 @@
   margin: 0;
   background: var(--navy-dark);
   border-radius: 0;                  /* hard edges */
-  cursor: pointer;
+  cursor: default;
   font: inherit;
   color: inherit;
   text-align: left;
@@ -413,8 +413,10 @@
   outline-offset: -3px;
 }
 
-.team-gallery:hover .tg-tile          { flex: 0.7; }
-.team-gallery:hover .tg-tile:hover    { flex: 3; }
+.team-gallery:hover .tg-tile          { flex: 0.8; }
+/* Expanded card kept narrower (was 3) so the portrait scales up less —
+   reduces the zoom-in and the vertical overflow that was cropping heads. */
+.team-gallery:hover .tg-tile:hover    { flex: 2.3; }
 
 /* Image — editorial B&W with strong contrast.
    Photos pre-cropped to 1122×1402 with face-attention so the
@@ -423,15 +425,23 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 28%;
+  /* Framed lower (was 28%) so when a card expands the crop hides far less
+     of the top — keeps the crown of the head inside the container. Note:
+     on collapsed cards the cover is height-constrained, so this Y only
+     affects the expanded card (no-op while collapsed). */
+  object-position: center 12%;
   display: block;
   transition: transform 7s ease-out, filter 0.5s ease;
   transform: scale(1);
   /* Heavy grayscale + contrast gives the cinematic poster mood */
   filter: grayscale(1) contrast(1.18) brightness(0.92);
 }
+
 .tg-tile:hover .tg-img {
-  transform: scale(1.06);
+  /* No scale on hover — scaling pushed the portrait past the tile edges
+     and cropped the face. Keep the image at 1:1 so the full portrait shows
+     when the strip expands; only the colour grade lifts for feedback. */
+  transform: scale(1);
   /* Hovered strip pops with full colour + extra contrast */
   filter: grayscale(0.35) contrast(1.22) brightness(1);
 }
@@ -456,6 +466,8 @@
 .tg-veil {
   position: absolute;
   inset: 0;
+  /* Neutral fade for the resting/collapsed cards (keeps the vertical name
+     legible). The brand-blue treatment is reserved for hover — see .tg-info. */
   background: linear-gradient(180deg, rgba(2,6,27,0.10) 0%, rgba(2,6,27,0.55) 100%);
   opacity: 1;
   pointer-events: none;
@@ -492,10 +504,30 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 24px 28px;
+  /* Padding sets the caption-bar height; the small top feather is on ::before. */
+  padding: 18px 30px 16px;
+  isolation: isolate;            /* contain the ::before gradient behind the text */
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+}
+/* Hover-only brand-blue band: HORIZONTAL gradient (deep blue → brighter blue),
+   masked to fade from transparent at the top to solid at the bottom so it backs
+   the name/role without covering the portrait. Only visible because .tg-info
+   itself only appears on hover. */
+.tg-info::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Frosted-glass caption bar: a translucent dark tint over a backdrop blur
+     so the portrait reads softly through the glass. A 1px top highlight gives
+     the crisp glass edge. */
+  background: rgba(18, 30, 58, 0.30);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+          backdrop-filter: blur(16px) saturate(140%);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  pointer-events: none;
 }
 .tg-tile:hover .tg-info {
   opacity: 1;
@@ -503,10 +535,10 @@
 }
 
 .tg-linkedin {
-  width: 38px; height: 38px;
+  width: 46px; height: 46px;
   flex-shrink: 0;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.06);
+  border: 1.5px solid rgba(255,255,255,0.75);
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -529,150 +561,20 @@
   color: var(--white);
   line-height: 1.2;
   letter-spacing: -.01em;
+  text-shadow: 0 1px 10px rgba(0,0,0,0.45);   /* legibility on the glass */
 }
 .tg-role {
   font-family: var(--font-body);
   font-size: 13px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.82);
   margin-top: 4px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
   line-height: 1.4;
 }
-
-/* ─── Lightbox modal ─── */
-.tg-lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(2,6,27,0.92);
-  -webkit-backdrop-filter: blur(20px);
-          backdrop-filter: blur(20px);
-  display: grid;
-  place-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  padding: 32px;
-}
-.tg-lightbox.is-open { opacity: 1; }
-.tg-lightbox[hidden] { display: none; }
-
-.tg-lb-close {
-  position: absolute;
-  top: 24px; right: 24px;
-  width: 48px; height: 48px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  color: var(--white);
-  display: grid;
-  place-items: center;
-  transition: background 0.2s, transform 0.2s;
-}
-.tg-lb-close:hover { background: rgba(255,255,255,.2); transform: scale(1.05); }
-.tg-lb-close svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.2; fill: none; stroke-linecap: round; }
-
-.tg-lb-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 56px; height: 56px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  color: var(--white);
-  display: grid;
-  place-items: center;
-  transition: background 0.2s;
-}
-.tg-lb-nav:hover { background: rgba(255,255,255,.2); }
-.tg-lb-prev { left: 32px; }
-.tg-lb-next { right: 32px; }
-.tg-lb-nav svg { width: 22px; height: 22px; stroke: currentColor; stroke-width: 2.4; fill: none; stroke-linecap: round; stroke-linejoin: round; }
-
-.tg-lb-counter {
-  position: absolute;
-  bottom: 32px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-family);
-  font-size: 14px;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: .08em;
-}
-
-.tg-lb-frame {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-  max-width: 1100px;
-  width: 100%;
-  max-height: 85vh;
-}
-
-.tg-lb-imgwrap {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  max-height: 75vh;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  background: var(--navy-dark);
-}
-.tg-lb-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.tg-lb-placeholder {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(140deg, var(--navy-dark), var(--navy));
-  display: grid;
-  place-items: center;
-}
-.tg-lb-placeholder span {
-  font-family: var(--font-family);
-  font-weight: var(--fw-extrabold);
-  font-size: 96px;
-  color: var(--gold);
-  letter-spacing: 4px;
-  opacity: 0.5;
-}
-
-.tg-lb-meta { color: var(--white); }
-.tg-lb-name {
-  font-family: var(--font-family);
-  font-weight: var(--fw-extrabold);
-  font-size: 36px;
-  letter-spacing: -.02em;
-  line-height: 1.15;
-}
-.tg-lb-role {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: rgba(255,255,255,0.7);
-  margin-top: 12px;
-  line-height: 1.5;
-}
-.tg-lb-linkedin {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 28px;
-  padding: 12px 24px;
-  background: rgba(255,255,255,0.1);
-  border-radius: var(--radius-full);
-  color: var(--white);
-  font-size: 13px;
-  font-weight: var(--fw-bold);
-  text-decoration: none;
-  transition: background var(--dur-base), transform var(--dur-base);
-}
-.tg-lb-linkedin:hover { background: var(--gold); color: var(--navy-dark); transform: translateY(-2px); }
-.tg-lb-linkedin svg { width: 18px; height: 18px; }
 
 /* Responsive */
 @media (max-width: 1100px) {
   .team-gallery { height: 440px; }
-  .tg-lb-frame { grid-template-columns: 1fr; gap: 24px; width: calc(100% - 120px); }
-  .tg-lb-imgwrap { max-height: 60vh; }
 }
 @media (max-width: 768px) {
   .team-gallery {
@@ -681,14 +583,15 @@
     gap: 8px;
   }
   .tg-tile { height: 120px; flex: 1; }
+  /* Wide-short mobile tiles are width-constrained, so the desktop 12%
+     focal point (tuned for the hover-expanded card) lands above the
+     faces here. Re-centre on the eyes for the 120px strip. */
+  .tg-img { object-position: center 30%; }
   .team-gallery:hover .tg-tile      { flex: 0.6; }
   .team-gallery:hover .tg-tile:hover{ flex: 2.5; }
   .tg-side-label { writing-mode: horizontal-tb; transform: none; left: 20px; bottom: 16px; }
   .tg-info { padding: 16px 20px; }
   .tg-name { font-size: 18px; }
-  .tg-lb-nav { width: 44px; height: 44px; }
-  .tg-lb-prev { left: 12px; }
-  .tg-lb-next { right: 12px; }
 }
 
 /* ─── Responsive — refined sections ──────────── */

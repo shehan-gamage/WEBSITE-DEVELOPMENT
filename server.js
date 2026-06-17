@@ -3,9 +3,12 @@ import express from 'express';
 import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { statSync } from 'fs';
 import 'dotenv/config';
 import { offices } from './data/offices.js';
 import { services, getService, getRegionServices, globalServices } from './data/services.js';
+import { posts, categories, getPost, categoryName, readingTime, categoryCounts } from './data/posts.js';
+import { reportsByYear, getEdition, reportView, latestEdition } from './data/reports.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -20,8 +23,46 @@ app.use(express.static(join(__dirname, 'public')));
 
 /* Make the offices list available to EVERY rendered view so partials
    (header, footer) can read it without each route having to pass it. */
+/* WhatsApp Business click-to-chat — defined once so footer, contact page,
+   and the floating button all share the same number + prefilled message. */
+const WHATSAPP = {
+  number: '94768050504',
+  display: '+94 768 050 504',
+  href: 'https://wa.me/94768050504?text=' +
+    encodeURIComponent("Hi SRP International, I'd like to ask about your services."),
+};
+
+/* Honour X-Forwarded-Proto from Vercel's proxy so req.protocol is https
+   in production (needed for absolute canonical/OG URLs). */
+app.set('trust proxy', 1);
+
+/* Returns the first complete sentence of a block of text — used for hero
+   teasers and card summaries so they read as full sentences instead of being
+   cut off mid-word. Falls back to the whole string if no sentence end is found. */
+function firstSentence(text) {
+  if (!text) return '';
+  const m = String(text).match(/[^.!?]*[.!?]/);
+  return (m ? m[0] : String(text)).trim();
+}
+
 app.use((req, res, next) => {
   res.locals.offices = offices;
+  res.locals.whatsapp = WHATSAPP;
+  res.locals.firstSentence = firstSentence;
+  /* Absolute URLs for canonical + Open Graph tags. Host-derived so they
+     follow the domain automatically (vercel.app now, custom domain later). */
+  res.locals.siteBase = `${req.protocol}://${req.get('host')}`;
+  res.locals.pageUrl = res.locals.siteBase + (req.originalUrl || '/').split('?')[0];
+  /* Date formatter for the blog (NA English: "June 12, 2026"). Anchored to
+     local midnight so the date never slips across a timezone boundary. */
+  res.locals.fmtDate = (iso) =>
+    new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  /* Cache-bust CSS links by file mtime so stylesheet edits show immediately
+     (no hard refresh) and never get served stale after a deploy. */
+  res.locals.cssVer = (file) => {
+    try { return Math.floor(statSync(join(__dirname, 'public', 'css', file)).mtimeMs); }
+    catch { return 0; }
+  };
   next();
 });
 
@@ -33,6 +74,12 @@ const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
    16-char App Password (2-Step Verification must be enabled on that account).
    Set SMTP_USER / SMTP_PASS in .env. Enquiries are delivered to ENQUIRY_TO. */
 const ENQUIRY_TO    = process.env.ENQUIRY_TO || 'clientrelations@srpitl.com';
+/* Visible From address. Decoupled from SMTP_USER so we can send AS a
+   noreply/brand address while still authenticating as a real mailbox.
+   NOTE: Gmail only honours this if the SMTP account is authorised to
+   "Send mail as" it (Gmail → Settings → Accounts), otherwise it rewrites
+   the From back to SMTP_USER. Defaults to SMTP_USER when unset. */
+const MAIL_FROM     = process.env.MAIL_FROM || process.env.SMTP_USER;
 const mailConfigured = Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
 const mailer = mailConfigured
   ? nodemailer.createTransport({
@@ -47,8 +94,47 @@ if (!mailConfigured) {
   console.warn('[contact] SMTP_USER/SMTP_PASS not set — enquiries will be logged but NOT emailed. See .env.example.');
 }
 
-const SYSTEM = `You are a helpful assistant for SRP International, a professional corporate services firm.
+/* Contact + locations are sourced from the offices data (single source of
+   truth) so the assistant never drifts from what the site shows. */
+const HQ = offices.find(o => o.isHQ) || offices[0];
+const LOCATIONS = offices
+  .map(o => (o.city && o.city !== o.label) ? `${o.label} (${o.city})` : o.label)
+  .join(', ');
+
+/* Build a compact, accurate market catalog from the real services + offices
+   data (single source of truth) so the assistant can answer jurisdiction-
+   specific questions without inventing anything. Pricing FIGURES are
+   deliberately omitted — the site gates fees behind a "Request a quote" CTA,
+   so the assistant describes scope/structure and routes pricing to the team.
+   Rebuilt at startup; static, so it is sent as a cacheable prompt block.   */
+function buildMarketCatalog() {
+  const out = [];
+  for (const office of offices) {
+    const svcMap = services[office.slug];
+    if (!svcMap) continue;
+    const lead = office.lead ? ` Regional lead: ${office.lead.name}, ${office.lead.role}.` : '';
+    const soon = office.comingSoon ? ' (office opening soon)' : '';
+    const hours = office.hours ? ` Hours: ${office.hours}.` : '';
+    out.push(`\n## ${office.label} — ${office.city}${soon}`);
+    out.push(`Office: ${office.address.line1}, ${office.address.line2}. Phone: ${office.phone}. Email: ${office.email}.${hours}${lead}`);
+    for (const svc of Object.values(svcMap)) {
+      out.push(`\n### ${svc.title}`);
+      if (svc.overview) out.push(svc.overview);
+      if (svc.included?.length) out.push(`Includes: ${svc.included.join('; ')}.`);
+      if (Array.isArray(svc.faqs)) {
+        for (const f of svc.faqs) out.push(`Q: ${f.q}\nA: ${f.a}`);
+      }
+      out.push('Pricing: shared via a tailored quote — do not state specific fees; route pricing questions to the team.');
+    }
+  }
+  return out.join('\n');
+}
+const MARKET_CATALOG = `=== SRP INTERNATIONAL — MARKET CATALOG (authoritative; answer only from this) ===
+${buildMarketCatalog()}`;
+
+const SYSTEM_INTRO = `You are the Client Relationship Manager for SRP International, a professional corporate services firm.
 Your role is to help website visitors understand SRP International's services and guide them to get in touch.
+If asked who you are, introduce yourself as SRP International's Client Relationship Manager.
 
 SRP International offers four core services:
 
@@ -65,17 +151,23 @@ SRP International offers four core services:
    KPI and personal development plan reviews, industrial dispute handling.
 
 Tagline: "Your trusted partner for outsourced corporate services and business support."
-Contact email: info@srpitl.com
-Phone: 0112 590 665
-Address: Level 4, 35 Edward Lane, Colombo 03
+Contact email: ${HQ.email}
+Phone: ${HQ.phone}
+Head office: ${HQ.address.line1}, ${HQ.address.line2}
 
-Locations: Sri Lanka (Colombo, Galle, Matara), Singapore, Dubai, United Kingdom
+Locations: ${LOCATIONS}
+
+A detailed MARKET CATALOG follows with each market's services, what's included, regulatory
+specifics (e.g. ACRA, Companies House, Companies Registry, IRD/FTA, GST/VAT, profits tax),
+typical timelines, regional leads, and office contacts. Use it to answer specific questions.
 
 Rules:
 - Be professional, warm, and concise (aim for under 120 words per reply)
-- Answer questions about the four services accurately using the information above
-- For pricing, quotes, or detailed consultations direct visitors to contact the team at info@srpitl.com
-- Do not invent information about team members or fees
+- Answer market-specific questions using the MARKET CATALOG; quote its facts accurately
+- Use the conversation history to stay in context and avoid repeating yourself
+- For the right office, give that market's phone/email/hours from the catalog
+- For pricing, quotes, or detailed consultations, direct visitors to contact the team at ${HQ.email} — never state specific fees
+- Do not invent anything not in the catalog — team members, pricing, fees, timelines, or services. If it's not covered, offer to connect them with the team
 - If asked about something unrelated to SRP International's services, politely redirect to how you can help`;
 
 
@@ -83,8 +175,8 @@ Rules:
 app.get('/', (req, res) => {
   res.render('home', {
     activePage: 'home',
-    title: 'SRP International | Global Corporate Services for Ambitious Businesses',
-    description: 'SRP International helps companies, entrepreneurs, and investors incorporate, manage, grow, and stay compliant with trusted corporate services and business support.',
+    title: 'SRP International | Corporate Services Built for the Long Term',
+    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across five markets.',
     pageCss: 'home.css',
     pageJs: 'home.js'
   });
@@ -94,34 +186,131 @@ app.get('/', (req, res) => {
    Order = display order in the accordion gallery.
    Update `linkedin` with each member's profile URL. */
 const team = [
-  { firstName:'Aaron',    name:'Aaron Russell-Davison', role:'Managing Director',                              photo:'/images/team/Aaron.png',    linkedin:'https://www.linkedin.com/in/aaron-russell-davison-83a936211' },
-  { firstName:'Charles',  name:'Charles Harbottle',     role:'Managing Director — Singapore',                  photo:'/images/team/Charles.png',  linkedin:'https://www.linkedin.com/in/charles-harbottle-64868aa' },
-  { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.png', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
-  { firstName:'Madushini', name:'Madushini Fernando',    role:'Director',                                       photo:'/images/team/Madushini.png',linkedin:'https://www.linkedin.com/in/madushini-fernando-6722a7189' },
-  { firstName:'Shehan',   name:'Shehan Gamage',         role:'Chief Operating Officer',                        photo:'/images/team/Shehan.png',   linkedin:'https://www.linkedin.com/in/shehan-gamage-3987151a2' },
-  { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.png',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
-  { firstName:'Rochelle', name:'Rochelle DonPaul',      role:'Head of International Business Development',     photo:'/images/team/Rochelle.png', linkedin:'https://www.linkedin.com/in/rochelle-donpaul' },
-  { firstName:'Hadi',     name:'Mohamed Hadi',          role:'Head of Client Relationship Management',         photo:'/images/team/Hadi.png',     linkedin:'https://www.linkedin.com/in/mohamed-hadi-17ab43247' },
-  { firstName:'Shanika',  name:'Shanika Fernando',      role:'Head of Research and Business Development',      photo:'/images/team/Shanika.png',  linkedin:'https://www.linkedin.com/in/shanika-fernando-3a073a195' },
-  { firstName:'Fiyaz',    name:'Ahmed Fiyaz',           role:'Head of Accounting Services',                    photo:'/images/team/Fiyaz.png',    linkedin:'https://www.linkedin.com/in/fiyaz-hussain-b770837' },
-  { firstName:'Ramesh',   name:'Ramesh Kumarage',       role:'Head of HR Services',                            photo:'/images/team/Ramesh.png',   linkedin:'https://www.linkedin.com/in/rameshkumarage' },
+  { firstName:'Aaron',    name:'Aaron Russell-Davison', role:'Managing Director',                              photo:'/images/team/Aaron.jpg',    linkedin:'https://www.linkedin.com/in/aaron-russell-davison-83a936211' },
+  { firstName:'Charles',  name:'Charles Harbottle',     role:'Managing Director — Singapore',                  photo:'/images/team/Charles.jpg',  linkedin:'https://www.linkedin.com/in/charles-harbottle-64868aa' },
+  { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.jpg', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
+  { firstName:'Greg',     name:'Greg Brutus',           role:'Managing Director — Hong Kong',                  photo:'/images/team/Greg.jpg',     linkedin:'https://www.linkedin.com/in/gregbrutushk/' },
+  { firstName:'Madushini', name:'Madushini Fernando',    role:'Director',                                       photo:'/images/team/Madushini.jpg',linkedin:'https://www.linkedin.com/in/madushini-fernando-6722a7189' },
+  { firstName:'Shehan',   name:'Shehan Gamage',         role:'Chief Operating Officer',                        photo:'/images/team/Shehan.jpg',   linkedin:'https://www.linkedin.com/in/shehan-gamage-3987151a2' },
+  { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.jpg',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
 ];
 
 /* Cache-busting version for team portraits. Bump whenever a photo file is
    replaced so browsers fetch the new image instead of a stale cached copy
    (early deploys 404'd these paths and some browsers cached the miss).      */
-const PORTRAIT_VER = '2';
+const PORTRAIT_VER = '5';
 team.forEach(m => { if (m.photo) m.photo += `?v=${PORTRAIT_VER}`; });
 
 app.get('/about', (req, res) => {
   res.render('about', {
     activePage: 'about',
     title: 'About Us | SRP International',
-    description: 'Learn about SRP International, a trusted corporate services partner supporting businesses with reliable, transparent, and efficient services since 2017.',
+    description: 'Get to know SRP International — a trusted corporate services partner supporting businesses with reliable, transparent, and dependable services since 2017.',
     pageCss: 'about.css',
-    pageJs: 'about.js',
+    pageJs: null,
     team
   });
+});
+
+/* ─── INSIGHTS (BLOG) ──────────────────────────────
+   /blog (index, optional ?category=slug filter) and /blog/:slug (article). */
+app.get('/blog', (req, res) => {
+  const active = categories.some(c => c.slug === req.query.category) ? req.query.category : null;
+  const sorted = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  let featured = null, secondary = [], gridPosts = [];
+  if (active) {
+    gridPosts = sorted.filter(p => p.category === active);
+  } else {
+    featured = sorted.find(p => p.featured) || sorted[0];
+    const rest = sorted.filter(p => p !== featured);
+    secondary = rest.slice(0, 2);
+    gridPosts = rest.slice(2);
+  }
+  const popularPosts = sorted.filter(p => p.popular).slice(0, 4);
+
+  res.render('blog', {
+    activePage: 'blog',
+    title: active
+      ? `${categoryName(active)} | SRP Insights`
+      : 'SRP Insights | Corporate Services Articles & Guidance',
+    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — from the SRP International team.',
+    pageCss: 'blog.css',
+    pageJs: null,
+    categories, active, featured, secondary, gridPosts, popularPosts,
+    counts: categoryCounts(),
+    categoryName, readingTime,
+    hasArticles: posts.length > 0,
+  });
+});
+
+app.get('/blog/:slug', (req, res, next) => {
+  const post = getPost(req.params.slug);
+  if (!post) return next();
+  const related = posts
+    .filter(p => p.slug !== post.slug && p.category === post.category)
+    .concat(posts.filter(p => p.slug !== post.slug && p.category !== post.category))
+    .slice(0, 3);
+
+  res.render('blog-post', {
+    activePage: 'blog',
+    title: `${post.title} | SRP Insights`,
+    description: post.excerpt,
+    ogType: 'article',
+    ogImage: res.locals.siteBase + post.image,
+    pageCss: 'blog.css',
+    pageJs: null,
+    post, related,
+    categoryName, readingTime,
+  });
+});
+
+/* Monthly Financial & Economic Analysis editions. Each registered edition
+   (data/reports.js) renders its own view; the archive sidebar lists them all. */
+app.get('/insights/:slug', (req, res, next) => {
+  const edition = getEdition(req.params.slug);
+  if (!edition) return next();
+  const view = reportView(edition);
+  res.render('analysis-report', {
+    activePage: 'blog',
+    title: `${edition.title} | SRP Insights`,
+    description: edition.description,
+    ogType: 'article',
+    pageCss: 'blog.css',
+    pageJs: null,
+    edition,
+    teaTable: view.teaTable,
+    arrTable: view.arrTable,
+    charts: view.charts,
+    reportGroups: reportsByYear(),
+    currentSlug: edition.slug,
+    latestSlug: latestEdition ? latestEdition.slug : null,
+  });
+});
+
+/* Newsletter subscribe — emails the address to the enquiry inbox when SMTP is
+   configured; otherwise logs it so nothing is lost. Mirrors the contact flow. */
+app.post('/api/subscribe', async (req, res) => {
+  const { email } = req.body;
+  if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'A valid email is required.' });
+  }
+  if (!mailer) {
+    console.warn('[subscribe] Email not configured — logged only:', email);
+    return res.json({ success: true });
+  }
+  try {
+    await mailer.sendMail({
+      from: process.env.MAIL_FROM || process.env.SMTP_USER,
+      to: ENQUIRY_TO,
+      subject: 'New SRP Insights subscriber',
+      text: `New newsletter subscriber: ${email}`,
+    });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[subscribe] send failed:', err.message);
+    res.status(500).json({ error: 'Could not subscribe right now.' });
+  }
 });
 
 /* ─── REGIONAL ROUTES ─────────────────────────────
@@ -150,8 +339,28 @@ app.get('/global-presence', (req, res) => {
   res.render('global-presence', {
     activePage: 'global-presence',
     title: 'Global Presence | SRP International',
-    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, and the United Kingdom — supporting clients across South Asia, South-East Asia, the Middle East, and Europe.',
+    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, and Hong Kong — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
     pageCss: 'services.css',
+    pageJs: null,
+  });
+});
+
+/* /privacy & /terms — legal pages. */
+app.get('/privacy', (req, res) => {
+  res.render('privacy', {
+    activePage: '',
+    title: 'Privacy Policy | SRP International',
+    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
+    pageCss: null,
+    pageJs: null,
+  });
+});
+app.get('/terms', (req, res) => {
+  res.render('terms', {
+    activePage: '',
+    title: 'Terms of Use | SRP International',
+    description: 'The terms that govern your use of the SRP International website.',
+    pageCss: null,
     pageJs: null,
   });
 });
@@ -191,7 +400,7 @@ app.get('/:region/:slug', (req, res, next) => {
     activePage: 'regions',
     activeRegion: region,
     title: `${service.title} — ${office.label} | SRP International`,
-    description: service.overview.substring(0, 160),
+    description: firstSentence(service.overview),
     pageCss: 'service-detail.css',
     pageJs: null,
     office,
@@ -204,9 +413,28 @@ app.get('/contact', (req, res) => {
   res.render('contact', {
     activePage: 'contact',
     title: 'Contact Us | SRP International',
-    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, and the UK.',
+    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, and Hong Kong.',
     pageCss: 'contact.css',
     pageJs: 'contact.js'
+  });
+});
+
+/* Post-submission destination for the contact form (the JS redirects here on
+   success, replacing the old auto-confirmation email). Shows the three latest
+   Insights articles + social links while the team follows up. */
+app.get('/thank-you', (req, res) => {
+  const recentPosts = [...posts]
+    .sort((a, b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 3);
+  res.render('thank-you', {
+    activePage: 'contact',
+    title: 'Thank You | SRP International',
+    description: 'Thank you for reaching out to SRP International. We have received your inquiry and a member of our team will respond within 24 hours.',
+    pageCss: 'thank-you.css',
+    pageJs: null,
+    recentPosts,
+    categoryName,
+    readingTime,
   });
 });
 
@@ -221,24 +449,99 @@ app.get('/portal', (req, res) => {
 });
 
 // ── Chat API ──────────────────────────────────────
+/* Lightweight in-memory per-IP rate limiter for the public AI endpoint.
+   NOTE: on serverless (Vercel) each warm instance keeps its own counters, so
+   this throttles abuse per-instance rather than globally. For hard global
+   limits, front it with a shared store (e.g. Upstash Redis). It still blocks
+   naive hammering and protects against an unbounded paid-API proxy. */
+const CHAT_RATE_LIMIT = 20;          // requests…
+const CHAT_RATE_WINDOW = 60_000;     // …per minute, per IP
+const rateHits = new Map();
+
+function rateLimited(ip) {
+  const now = Date.now();
+  let bucket = rateHits.get(ip);
+  if (!bucket || now > bucket.resetAt) {
+    bucket = { count: 0, resetAt: now + CHAT_RATE_WINDOW };
+    rateHits.set(ip, bucket);
+  }
+  bucket.count += 1;
+  if (rateHits.size > 5000) {                 // bound memory: drop expired buckets
+    for (const [k, v] of rateHits) if (now > v.resetAt) rateHits.delete(k);
+  }
+  return bucket.count > CHAT_RATE_LIMIT;
+}
+
+function clientIp(req) {
+  return (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
+    || req.socket?.remoteAddress
+    || 'unknown';
+}
+
 app.post('/api/chat', async (req, res) => {
-  const { message } = req.body;
-  if (!message || typeof message !== 'string') {
+  if (rateLimited(clientIp(req))) {
+    return res.status(429).json({ error: 'Too many messages. Please wait a moment and try again.' });
+  }
+
+  /* Accept a conversation: { messages: [{ role, content }, …] }.
+     Backward-compatible with a single { message } string. */
+  let { messages, message } = req.body;
+  if (!Array.isArray(messages)) {
+    messages = (message && typeof message === 'string') ? [{ role: 'user', content: message }] : null;
+  }
+  if (!messages || messages.length === 0) {
+    return res.status(400).json({ error: 'Invalid message' });
+  }
+
+  /* Sanitize + bound the history: only user/assistant turns, last 12,
+     each capped at 1000 chars, and it must start on a user turn and end
+     on a user turn (Claude requires the first message to be the user). */
+  const history = messages
+    .filter(m => m && (m.role === 'user' || m.role === 'assistant')
+              && typeof m.content === 'string' && m.content.trim())
+    .slice(-12)
+    .map(m => ({ role: m.role, content: m.content.slice(0, 1000) }));
+
+  while (history.length && history[0].role === 'assistant') history.shift();
+
+  if (history.length === 0 || history[history.length - 1].role !== 'user') {
     return res.status(400).json({ error: 'Invalid message' });
   }
 
   try {
-    const response = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 300,
-      system: SYSTEM,
-      messages: [{ role: 'user', content: message.slice(0, 1000) }],
+    /* Call the Anthropic REST API directly with native fetch — avoids the SDK,
+       which Vercel's function bundler mangles. The large static catalog is sent
+       as a cached (ephemeral) block so repeat messages reuse it cheaply. */
+    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        /* Strip any BOM/whitespace — some env-var tooling prepends a U+FEFF,
+           which is an invalid HTTP header byte and throws when fetch builds it. */
+        'x-api-key': (process.env.ANTHROPIC_API_KEY || '').replace(/^﻿/, '').trim(),
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 320,
+        system: [
+          { type: 'text', text: SYSTEM_INTRO },
+          { type: 'text', text: MARKET_CATALOG, cache_control: { type: 'ephemeral' } },
+        ],
+        messages: history,
+      }),
     });
 
-    const reply = response.content[0]?.text ?? 'Sorry, I could not generate a response.';
+    const data = await apiRes.json();
+    if (!apiRes.ok) {
+      console.error('Anthropic API error:', apiRes.status, data?.error?.type, data?.error?.message);
+      return res.status(502).json({ error: 'Failed to generate response' });
+    }
+
+    const reply = data?.content?.[0]?.text ?? 'Sorry, I could not generate a response.';
     res.json({ reply });
   } catch (err) {
-    console.error('Claude API error:', err.message);
+    console.error('Chat request failed:', err?.name, err?.message);
     res.status(500).json({ error: 'Failed to generate response' });
   }
 });
@@ -255,7 +558,7 @@ app.post('/api/contact', async (req, res) => {
   // No SMTP credentials yet → log so nothing is lost, but keep the form working.
   if (!mailer) {
     console.warn('[contact] Email not configured — enquiry logged only:', submission);
-    return res.json({ success: true, message: 'Thank you for your enquiry. We will respond within 24 hours.' });
+    return res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
   }
 
   const lines = [
@@ -272,7 +575,7 @@ app.post('/api/contact', async (req, res) => {
 
   const esc = (s) => String(s ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
   const html = `
-    <h2 style="margin:0 0 12px">New website enquiry</h2>
+    <h2 style="margin:0 0 12px">New website inquiry</h2>
     <table cellpadding="6" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">
       <tr><td><strong>Name</strong></td><td>${esc(name)}</td></tr>
       <tr><td><strong>Email</strong></td><td>${esc(email)}</td></tr>
@@ -286,51 +589,45 @@ app.post('/api/contact', async (req, res) => {
   try {
     // 1) Primary: notify the team. Must succeed for the form to report success.
     await mailer.sendMail({
-      from:    `"SRP International Website" <${process.env.SMTP_USER}>`,
+      from:    `"SRP International Website" <${MAIL_FROM}>`,
       to:      ENQUIRY_TO,
       replyTo: `"${name}" <${email}>`,        // replies go straight to the client
-      subject: subject ? `Website enquiry: ${subject}` : `New website enquiry from ${name}`,
+      subject: subject ? `Website inquiry: ${subject}` : `New website inquiry from ${name}`,
       text:    lines.join('\n'),
       html,
     });
 
-    // 2) Secondary: auto-reply confirmation to the client for their records.
-    //    Best-effort — if it fails the team still has the enquiry, so don't error.
-    try {
-      const confirmText = [
-        'Hi there,',
-        '',
-        'Thank you for reaching out to us. We have successfully received your inquiry and a member of our team will get back to you as soon as possible.',
-        '',
-        'Best regards,',
-        'SRP International',
-        'Client Relationship Management Team',
-      ].join('\n');
-      const confirmHtml = `
-        <div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#1a1a22">
-          <p>Hi there,</p>
-          <p>Thank you for reaching out to us. We have successfully received your inquiry and a member of our team will get back to you as soon as possible.</p>
-          <p style="margin-bottom:0">Best regards,<br>
-          <strong>SRP International</strong><br>
-          Client Relationship Management Team</p>
-        </div>`;
-      await mailer.sendMail({
-        from:    `"SRP International" <${process.env.SMTP_USER}>`,
-        to:      `"${name}" <${email}>`,
-        replyTo: ENQUIRY_TO,                  // client replies reach the team group
-        subject: 'We’ve received your inquiry!',
-        text:    confirmText,
-        html:    confirmHtml,
-      });
-    } catch (confErr) {
-      console.error('[contact] Enquiry delivered, but client confirmation failed:', confErr);
-    }
-
-    res.json({ success: true, message: 'Thank you for your enquiry. We will respond within 24 hours.' });
+    // The client no longer receives an auto-confirmation email — on success the
+    // browser redirects them to the /thank-you page instead (see public/js/contact.js).
+    res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
   } catch (err) {
     console.error('[contact] Failed to send enquiry email:', err);
-    res.status(502).json({ error: 'Sorry, we could not send your enquiry right now. Please email clientrelations@srpitl.com directly.' });
+    res.status(502).json({ error: 'Sorry, we could not send your inquiry right now. Please email clientrelations@srpitl.com directly.' });
   }
+});
+
+// ── SEO: robots.txt + sitemap.xml ─────────────────
+/* Both are host-derived (no hardcoded domain) so they automatically follow
+   the move from the vercel.app URL to the custom domain. */
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').send(
+    `User-agent: *\nAllow: /\n\nSitemap: ${res.locals.siteBase}/sitemap.xml\n`
+  );
+});
+
+app.get('/sitemap.xml', (req, res) => {
+  const staticPaths = ['/', '/about', '/services', '/global-presence', '/contact', '/blog', '/privacy', '/terms', '/portal'];
+  const regionPaths = offices.flatMap(o => [
+    `/${o.slug}`,
+    ...Object.keys(services[o.slug] || {}).map(s => `/${o.slug}/${s}`),
+  ]);
+  const blogPaths = posts.map(p => `/blog/${p.slug}`);
+  const urls = [...staticPaths, ...regionPaths, ...blogPaths]
+    .map(p => `  <url><loc>${res.locals.siteBase}${p}</loc></url>`)
+    .join('\n');
+  res.type('application/xml').send(
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+  );
 });
 
 // ── 404 Handler ───────────────────────────────────

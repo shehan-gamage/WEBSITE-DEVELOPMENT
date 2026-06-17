@@ -32,19 +32,17 @@ if (contactForm) {
       });
 
       if (res.ok) {
-        contactBtn.textContent = 'Enquiry Sent!';
+        // Redirect straight to the Thank You page on success.
+        contactBtn.textContent = 'Inquiry Sent!';
         contactBtn.style.background = '#16a34a';
-        contactForm.reset();
-        setTimeout(() => {
-          contactBtn.textContent = 'Submit Enquiry';
-          contactBtn.style.background = '';
-          contactBtn.disabled = false;
-        }, 4000);
+        let dest = '/thank-you';
+        try { const data = await res.json(); if (data && data.redirect) dest = data.redirect; } catch {}
+        window.location.assign(dest);
       } else {
         throw new Error();
       }
     } catch {
-      contactBtn.textContent = 'Submit Enquiry';
+      contactBtn.textContent = 'Submit Inquiry';
       contactBtn.disabled = false;
       alert('Something went wrong. Please try again or contact us directly at info@srpitl.com.');
     }

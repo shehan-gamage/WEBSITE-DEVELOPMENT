@@ -552,11 +552,37 @@
   letter-spacing: .08em;
   text-transform: uppercase;
 }
+/* Office description + badge — moved here from the old home location cards */
+.mtt-desc {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.5;
+  margin-top: 10px;
+}
+.mtt-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+  padding: 4px 11px;
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--navy);
+  background: rgba(6,30,117,.07);
+  border: 1px solid rgba(6,30,117,.12);
+  border-radius: var(--radius-full);
+}
+.mtt-tag--hq {
+  color: #9a7b33;
+  background: rgba(206,175,113,.16);
+  border-color: rgba(206,175,113,.34);
+}
 
 /* ─── LOCATION CARDS — revamped ─────────────────── */
 .loc-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
 }
 
@@ -876,26 +902,12 @@
   height: 560px;
   overflow: hidden;
   /* Fade cards in/out at top and bottom */
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 12%,
-    black 88%,
-    transparent 100%
-  );
+  mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
 }
 
-/* Each column scrolls upward at its own speed.
-   Cards are duplicated so the loop is seamless:
-   animation translates by exactly -50% of the
-   column's total height. */
+/* Each column scrolls upward at its own speed. Cards are duplicated so the
+   loop is seamless: the animation translates by exactly -50% of the column. */
 @keyframes tsScrollUp {
   from { transform: translateY(0); }
   to   { transform: translateY(-50%); }
@@ -912,13 +924,21 @@
 /* Pause all columns on hover for readability */
 .ts-outer:hover .ts-col { animation-play-state: paused; }
 
+/* Respect reduced-motion: stop the auto-scroll and show cards statically
+   (duplicates exist only for the scroll loop, so hide them). */
+@media (prefers-reduced-motion: reduce) {
+  .ts-col { animation: none; }
+  .ts-outer { height: auto; mask-image: none; -webkit-mask-image: none; }
+  .ts-card[aria-hidden="true"] { display: none; }
+}
+
 /* ── Individual card ──────────────────────────── */
 .ts-card {
   background: var(--white);
   border-radius: var(--radius-xl);
   padding: 24px;
+  margin: 0;                 /* reset <figure> default margin */
   box-shadow: 0 2px 12px rgba(6,30,117,.07), 0 1px 3px rgba(6,30,117,.04);
-  flex-shrink: 0;
   transition: box-shadow var(--dur-base) var(--ease-out),
               transform  var(--dur-base) var(--ease-out);
 }
@@ -961,7 +981,7 @@
   font-family: var(--font-body);
   color: var(--text-mid);
   line-height: 1.75;
-  margin-bottom: 14px;
+  margin: 0 0 14px;          /* reset <blockquote> default margin */
 }
 .ts-stars {
   font-size: 13px;
@@ -974,9 +994,21 @@
   .ts-outer { grid-template-columns: repeat(2, 1fr); height: 500px; }
   .ts-col:last-child { display: none; }
 }
+/* Phones: stop the auto-scroll and stack EVERY testimonial statically —
+   hiding columns here would hide real client endorsements from mobile
+   visitors. The duplicate cards (aria-hidden) exist only for the scroll
+   loop, so they're removed from the static layout. */
 @media (max-width: 640px) {
-  .ts-outer { grid-template-columns: 1fr; height: 440px; }
-  .ts-col:nth-child(2) { display: none; }
+  .ts-outer {
+    grid-template-columns: 1fr;
+    height: auto;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .ts-col,
+  .ts-col:last-child,
+  .ts-col:nth-child(2) { display: flex; animation: none; }
+  .ts-card[aria-hidden="true"] { display: none; }
 }
 
 /* ─── RESPONSIVE ────────────────────────────────── */

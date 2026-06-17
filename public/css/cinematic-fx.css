@@ -14,13 +14,15 @@
   --fx-font:     var(--font-family, 'Poppins', system-ui, sans-serif);
   --fx-nav-h:    var(--nav-height, 76px);
 
-  /* Unified navy-blue overlay — same alpha used across all 4
+  /* Unified navy-blue overlay — same alpha used across all
      country cards so the hero reads as one consistent mood.
-     Calibrated to the UK card (the visual reference).         */
+     Lightened from the original UK calibration so the cityscape
+     photos read more clearly; the left brand text keeps its own
+     legibility veil (.hero-text-pane::before), so it stays sharp. */
   --fx-overlay:  linear-gradient(150deg,
-                  rgba(3,  16, 63,  0.55) 0%,    /* navy-dark, top-left */
-                  rgba(6,  30, 117, 0.42) 50%,   /* navy, mid */
-                  rgba(14, 42, 159, 0.48) 100%); /* navy-light, bottom-right */
+                  rgba(3,  16, 63,  0.40) 0%,    /* navy-dark, top-left */
+                  rgba(6,  30, 117, 0.30) 50%,   /* navy, mid */
+                  rgba(14, 42, 159, 0.34) 100%); /* navy-light, bottom-right */
 
   width: 100%;
   background: var(--fx-stage);
@@ -90,12 +92,12 @@
     rgba(14, 42, 159, 0.05) 100%);
 }
 
-/* UAE — overlay reduced by 25% (×0.75 of baseline) */
+/* UAE — overlay reduced (×0.75 of the lightened baseline) */
 .fx-bgs .fx-bg:nth-child(3) .fx-bg-overlay {
   background: linear-gradient(150deg,
-    rgba(3,  16, 63,  0.41) 0%,
-    rgba(6,  30, 117, 0.32) 50%,
-    rgba(14, 42, 159, 0.36) 100%);
+    rgba(3,  16, 63,  0.30) 0%,
+    rgba(6,  30, 117, 0.23) 50%,
+    rgba(14, 42, 159, 0.26) 100%);
 }
 
 /* UK — baseline (uses default --fx-overlay). No override. */

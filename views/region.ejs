@@ -7,8 +7,8 @@
   <%- include('partials/header') %>
 
   <!-- ══ PAGE HERO ═══════════════════════════════════ -->
-  <section class="page-hero">
-    <div class="hero-grid"></div>
+  <section class="page-hero region-hero"<% if (office.cityImage) { %> style="background-image: url('<%= office.cityImage %>')"<% } %>>
+    <div class="region-hero-overlay" aria-hidden="true"></div>
     <div class="page-hero-content">
       <div class="breadcrumb">
         <a href="/">Home</a>
@@ -16,7 +16,7 @@
         <span><%= office.label %></span>
       </div>
       <h1>SRP International in <%= office.label %></h1>
-      <p>Corporate services tailored to <%= office.label %>'s regulatory landscape — backed by SRP's wider regional group.<% if (office.comingSoon) { %> Our <%= office.city %> office opens in 2026; existing SRP clients can register interest now for priority onboarding.<% } %></p>
+      <p>Corporate services tailored to <%= office.label %>'s regulations — backed by the strength and experience of SRP's wider regional group.<% if (office.comingSoon) { %> Our <%= office.city %> office opens in 2026; existing SRP clients can register interest now for priority onboarding.<% } %></p>
       <div style="margin-top:28px; display:flex; justify-content:center;">
         <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
@@ -29,7 +29,7 @@
       <div class="section-head reveal">
         <div class="kicker">Services in <%= office.label %></div>
         <h2 class="heading">What We Deliver Here</h2>
-        <p class="subheading">A focused service catalog calibrated to <%= office.label %>'s regulatory environment. Pricing available on request.</p>
+        <p class="subheading">A focused set of services, matched to <%= office.label %>'s regulatory environment. Pricing available on request.</p>
       </div>
 
       <div class="grid-2 services-hub-grid">
@@ -49,7 +49,7 @@
               <% } %>
             </div>
             <h3 class="svc-title"><%= svc.title %><% if (svc.comingSoon) { %> <span class="svc-pill">Opening 2026</span><% } %></h3>
-            <p class="svc-body"><%= svc.overview.substring(0, 180) %>…</p>
+            <p class="svc-body"><%= firstSentence(svc.overview) %></p>
             <span class="svc-link">
               Learn More
               <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -67,7 +67,7 @@
         <div class="region-pricing-copy">
           <div class="kicker">Pricing</div>
           <h2>Transparent pricing, tailored to your scope</h2>
-          <p>SRP <%= office.label %> uses a clear, tiered pricing framework — incorporation, ongoing governance, and accounting all priced separately so you only pay for what you need. Final scope, client profile, and authority charges apply; we'll send the full breakdown after a short scoping conversation.</p>
+          <p>SRP <%= office.label %> uses a clear, tiered pricing framework — incorporation, ongoing governance, and accounting are priced separately, so you only pay for what you actually need. Final scope, client profile, and authority charges apply; we'll send a full breakdown after a short scoping call.</p>
           <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
             <a class="btn btn-primary" href="/contact">Speak to an Advisor <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
           </div>

@@ -485,11 +485,39 @@
 ═══════════════════════════════════════════════════ */
 .gp-panels {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   width: 100%;
   height: clamp(520px, 78vh, 740px);
   margin-top: 24px;
 }
+
+/* ── Region (country) page hero ─────────────────────────────
+   Mirrors the home hero: the country's own cityscape behind the
+   same lightened navy-blue overlay branding. A vignette + soft
+   centre wash keep the centred breadcrumb/title/text readable. */
+.region-hero {
+  background-color: var(--navy-dark);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.region-hero .region-hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* gentle centre boost behind the text */
+    radial-gradient(ellipse 100% 90% at 50% 50%, rgba(3,16,63,0.28) 0%, rgba(3,16,63,0) 75%),
+    /* strong, even navy-blue wash — two notches deeper than the home baseline */
+    linear-gradient(150deg,
+      rgba(3,  16, 63,  0.70) 0%,
+      rgba(6,  30, 117, 0.62) 50%,
+      rgba(14, 42, 159, 0.65) 100%),
+    /* edge vignette — same as the home hero (.fx-bgs::after) */
+    radial-gradient(ellipse 130% 100% at 50% 50%, transparent 60%, rgba(0,0,0,0.32) 100%);
+}
+/* keep the text above the overlay */
+.region-hero .page-hero-content { z-index: 1; }
 
 .gp-panel {
   position: relative;
@@ -502,6 +530,10 @@
   background-repeat: no-repeat;
   display: block;
   transition: flex .35s var(--ease-out);
+  /* Make each panel a query container so the title scales to the PANEL
+     width (cqi), not the viewport — the only way to keep long single words
+     like "SINGAPORE" from overflowing the narrow column. */
+  container-type: inline-size;
 }
 
 /* Dark gradient overlay so the centred text reads against any photo
@@ -539,7 +571,7 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  padding: 32px 28px 36px;
+  padding: 32px 22px 36px;
   z-index: 1;
 }
 
@@ -559,15 +591,20 @@
 
 .gp-panel-title {
   font-family: var(--font-family);
-  font-size: clamp(34px, 3.6vw, 56px);
+  /* Sized off the PANEL width (cqi), with a viewport-independent floor/ceiling.
+     ~13% of the panel keeps even "SINGAPORE" inside a ~200px column. */
+  font-size: clamp(20px, 13cqi, 44px);
   font-weight: 800;
-  letter-spacing: -.015em;
+  letter-spacing: -.02em;
   color: #fff;
   text-transform: uppercase;
-  line-height: 1.02;
+  line-height: 1.04;
   margin: 0;
   text-shadow: 0 4px 28px rgba(0, 0, 0, 0.60);
-  max-width: 92%;
+  max-width: 100%;
+  /* Safety net: if a word still can't fit, wrap it rather than clip letters. */
+  overflow-wrap: break-word;
+  hyphens: none;
   transition: transform var(--dur-base) var(--ease-out);
 }
 .gp-panel:hover .gp-panel-title { transform: translateY(-3px); }
@@ -636,8 +673,10 @@
 
 .gp-panel.is-soon { opacity: .92; }
 
-/* ─── Responsive ─── */
-@media (max-width: 900px) {
+/* ─── Responsive ───
+   Drop to 2 columns well before the 5-up panels get narrow enough to
+   crush the country names (5-up stays only on genuinely wide screens). */
+@media (max-width: 1100px) {
   .gp-panels { grid-template-columns: 1fr 1fr; height: auto; }
   .gp-panel { aspect-ratio: 3 / 4; }
 }

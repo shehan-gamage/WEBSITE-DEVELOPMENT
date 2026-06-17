@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ HERO — light magazine layout ════════════════ -->
+  <section class="blog-hero2" id="main-content">
+    <div class="container blog-hero2-inner">
+      <div class="blog-hero2-text">
+        <span class="blog-hero2-kicker">SRP Insights</span>
+        <h1 class="blog-hero2-title">Insights for businesses building <em>across borders</em></h1>
+        <p class="blog-hero2-lead">Practical guidance on incorporation, tax, accounting, and global expansion — from the team that handles it every day, across five markets.</p>
+
+        <% if (hasArticles) { %>
+        <form class="blog-hero2-search" role="search" id="blogSearch" autocomplete="off" onsubmit="return false;">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="blogSearchInput" placeholder="Search insights — tax, incorporation, expansion…" aria-label="Search insights">
+        </form>
+        <% } %>
+
+        <div class="blog-hero2-stats">
+          <div class="blog-stat"><span class="blog-stat-num">5</span><span class="blog-stat-label">Markets covered</span></div>
+          <div class="blog-stat"><span class="blog-stat-num"><%= categories.length %></span><span class="blog-stat-label">Topics &amp; categories</span></div>
+          <div class="blog-stat"><span class="blog-stat-num">Monthly</span><span class="blog-stat-label">New insights</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CATEGORY FILTER — only when there are articles to filter ══ -->
+  <% if (hasArticles) { %>
+  <nav class="blog-filter" aria-label="Article categories">
+    <div class="container blog-filter-bar">
+      <button type="button" class="blog-filter-arrow blog-filter-arrow--prev" id="filterPrev" aria-label="Scroll categories left">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="blog-filter-viewport">
+        <div class="blog-filter-track" id="filterTrack">
+          <a class="blog-chip<%= !active ? ' is-active' : '' %>" href="/blog">All</a>
+          <% categories.forEach(function(c) { %>
+            <a class="blog-chip<%= active === c.slug ? ' is-active' : '' %>" href="/blog?category=<%= c.slug %>"><%= c.name %></a>
+          <% }); %>
+        </div>
+      </div>
+      <button type="button" class="blog-filter-arrow blog-filter-arrow--next" id="filterNext" aria-label="Scroll categories right">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </nav>
+  <% } %>
+
+  <!-- ══ EDITOR'S PICK — featured showcase (unfiltered only) ══ -->
+  <% if (!active && featured) { %>
+  <section class="section blog-showcase-section" id="editorialSection">
+    <div class="container">
+      <div class="blog-showcase-head">
+        <span class="blog-eyebrow">Editor&rsquo;s Pick</span>
+        <h2 class="blog-showcase-h2">Featured this month</h2>
+      </div>
+      <a class="blog-showcase" href="/blog/<%= featured.slug %>">
+        <div class="blog-showcase-media">
+          <img src="<%= featured.image %>" alt="" loading="eager">
+          <span class="blog-pill blog-pill--gold blog-showcase-tag">Featured</span>
+        </div>
+        <div class="blog-showcase-body">
+          <span class="blog-pill blog-pill--plain"><%= categoryName(featured.category) %></span>
+          <h3 class="blog-showcase-title"><%= featured.title %></h3>
+          <p class="blog-showcase-summary"><%= featured.excerpt %></p>
+          <div class="blog-meta">
+            <img class="blog-meta-avatar" src="<%= featured.author.avatar %>" alt="" loading="lazy" width="28" height="28">
+            <span class="blog-meta-author"><%= featured.author.name %></span>
+            <span class="blog-meta-dot" aria-hidden="true">·</span>
+            <span><%= fmtDate(featured.date) %></span>
+            <span class="blog-meta-dot" aria-hidden="true">·</span>
+            <span><%= readingTime(featured) %> min read</span>
+          </div>
+          <span class="blog-showcase-cta">Read More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- ══ MONTHLY FINANCIAL & ECONOMIC ANALYSIS ═══════ -->
+  <!-- Sits directly beneath Editor's Pick. CTA opens the full report page. -->
+  <section class="section blog-showcase-section blog-analysis-section" id="analysisSection">
+    <div class="container">
+      <div class="blog-showcase-head">
+        <span class="blog-eyebrow">Monthly Briefing</span>
+        <h2 class="blog-showcase-h2">Monthly Financial &amp; Economic Analysis</h2>
+        <p class="blog-showcase-sub">A recurring SRP Research briefing on the markets we operate in — equity indices, inflation, exchange rates, commodities, and the external-sector trends that shape cross-border business decisions.</p>
+      </div>
+      <a class="blog-showcase" href="/insights/financial-economic-analysis-may-2026">
+        <div class="blog-showcase-media">
+          <img src="/images/services/financial-services.jpg" alt="">
+          <span class="blog-pill blog-pill--gold blog-showcase-tag">May 2026</span>
+          <span class="blog-showcase-cap">May 2026 &middot; Executive Summary</span>
+        </div>
+        <div class="blog-showcase-body">
+          <span class="blog-pill blog-pill--plain">Market Updates</span>
+          <h3 class="blog-showcase-title">Financial &amp; Economic Analysis — May 2026</h3>
+          <p class="blog-showcase-summary">Sri Lankan equities edged lower as the ASPI eased 1.06% to 22,310.80; headline inflation ticked up to 5.5%, the rupee weakened 2.65% to LKR 327.82/USD, and Brent crude fell to around USD 91/bbl — even as tourist arrivals rose 9.65% year-on-year. Here is the full breakdown across local and international markets.</p>
+          <span class="blog-showcase-cta">Read the analysis <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ LATEST ARTICLES — grid + sidebar. Hidden when the only post is the
+       Editor's Pick (nothing left for the grid) and no category filter is active. ══ -->
+  <% if (active || secondary.length || gridPosts.length) { %>
+  <section class="section blog-main" id="blogMain">
+    <div class="container">
+      <div class="blog-layout">
+        <div class="blog-grid-col">
+          <h2 class="blog-section-title" id="blogGridTitle"><%= active ? categoryName(active) : 'Latest Articles' %></h2>
+
+          <% var latest = (!active ? (typeof secondary !== 'undefined' && secondary ? secondary : []).concat(gridPosts) : gridPosts); %>
+          <% if (latest.length) { %>
+          <div class="blog-grid" id="blogGrid">
+            <% latest.forEach(function(post) { %>
+              <%- include('partials/blog-card', { post: post }) %>
+            <% }); %>
+          </div>
+          <div class="blog-search-empty" id="blogSearchEmpty"><p>No articles match your search.</p></div>
+          <% } else { %>
+          <div class="blog-empty">
+            <p>No articles in this category yet.</p>
+            <a href="/blog" class="btn btn-outline">View all insights</a>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- ── Sidebar ── -->
+        <aside class="blog-sidebar" aria-label="More from SRP Insights">
+          <div class="blog-widget">
+            <h3 class="blog-widget-title">Popular Articles</h3>
+            <ol class="blog-popular">
+              <% popularPosts.forEach(function(p, i) { %>
+              <li>
+                <a class="blog-popular-item" href="/blog/<%= p.slug %>">
+                  <span class="blog-popular-num"><%= i + 1 %></span>
+                  <span class="blog-popular-text">
+                    <span class="blog-popular-headline"><%= p.title %></span>
+                    <span class="blog-popular-date"><%= fmtDate(p.date) %></span>
+                  </span>
+                </a>
+              </li>
+              <% }); %>
+            </ol>
+          </div>
+
+          <div class="blog-widget">
+            <h3 class="blog-widget-title">Browse by Topic</h3>
+            <ul class="blog-topics">
+              <% categories.forEach(function(c) { %>
+                <% if (counts[c.slug]) { %>
+                <li>
+                  <a href="/blog?category=<%= c.slug %>"<%= active === c.slug ? ' class="is-active"' : '' %>>
+                    <span><%= c.name %></span>
+                    <span class="blog-topic-count"><%= counts[c.slug] %></span>
+                  </a>
+                </li>
+                <% } %>
+              <% }); %>
+            </ul>
+          </div>
+
+          <div class="blog-advisor">
+            <h3>Have a question this raised?</h3>
+            <p>Our advisors can talk you through what it means for your business — across any of our markets.</p>
+            <a href="/contact" class="btn btn-primary btn-sm">Talk to an Advisor <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+
+  <script>
+    /* Category filter carousel — endcap arrows, edge fades, active-chip reveal */
+    (function () {
+      var viewport = document.querySelector('.blog-filter-viewport');
+      var track = document.getElementById('filterTrack');
+      var prev  = document.getElementById('filterPrev');
+      var next  = document.getElementById('filterNext');
+      if (!viewport || !track || !prev || !next) return;
+
+      function update() {
+        var overflow = track.scrollWidth - track.clientWidth;
+        var hasOverflow = overflow > 1;
+        var x = track.scrollLeft;
+        var atStart = x <= 1;
+        var atEnd   = !hasOverflow || x >= overflow - 1;
+        // Arrows stay put as endcaps; they just enable/disable.
+        prev.disabled = !hasOverflow || atStart;
+        next.disabled = atEnd;
+        viewport.classList.toggle('has-fade-left',  hasOverflow && !atStart);
+        viewport.classList.toggle('has-fade-right', hasOverflow && !atEnd);
+      }
+
+      function nudge(dir) {
+        var amount = Math.max(track.clientWidth * 0.7, 160);
+        track.scrollBy({ left: dir * amount, behavior: 'smooth' });
+      }
+
+      prev.addEventListener('click', function () { nudge(-1); });
+      next.addEventListener('click', function () { nudge(1); });
+      track.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+
+      // Reveal the active category if it starts off-screen.
+      var activeChip = track.querySelector('.blog-chip.is-active');
+      if (activeChip) {
+        var right = activeChip.offsetLeft + activeChip.offsetWidth;
+        if (right > track.clientWidth) {
+          track.scrollLeft = right - track.clientWidth + 24;
+        }
+      }
+      update();
+    })();
+
+    /* Insights search — live client-side filter over the article grid */
+    (function () {
+      var input = document.getElementById('blogSearchInput');
+      var grid  = document.getElementById('blogGrid');
+      if (!input || !grid) return;
+      var cards     = Array.prototype.slice.call(grid.querySelectorAll('.blog-card'));
+      var gridTitle = document.getElementById('blogGridTitle');
+      var emptyEl   = document.getElementById('blogSearchEmpty');
+      var editorial = document.getElementById('editorialSection');
+      var analysis  = document.getElementById('analysisSection');
+      var mainSec   = document.getElementById('blogMain');
+      var baseTitle = gridTitle ? gridTitle.textContent : '';
+      var wasSearching = false;
+
+      function apply() {
+        var raw = input.value.trim();
+        var q = raw.toLowerCase();
+        var searching = q.length > 0;
+
+        if (editorial) editorial.style.display = searching ? 'none' : '';
+        if (analysis)  analysis.style.display  = searching ? 'none' : '';
+
+        var shown = 0;
+        cards.forEach(function (card) {
+          var match = !searching || card.textContent.toLowerCase().indexOf(q) !== -1;
+          card.style.display = match ? '' : 'none';
+          if (match) shown++;
+        });
+
+        if (gridTitle) gridTitle.textContent = searching ? ('Results for “' + raw + '”') : baseTitle;
+        if (emptyEl)   emptyEl.style.display = (searching && shown === 0) ? 'block' : 'none';
+
+        // On entering search, bring the results into view once.
+        if (searching && !wasSearching && mainSec) {
+          mainSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        wasSearching = searching;
+      }
+
+      input.addEventListener('input', apply);
+      input.addEventListener('search', apply);
+    })();
+  </script>
+</body>
+</html>

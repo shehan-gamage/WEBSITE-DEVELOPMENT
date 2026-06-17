@@ -36,7 +36,7 @@
           </div>
         </div>
       </li>
-      <li><a href="/contact" <% if (typeof activePage !== 'undefined' && activePage === 'contact') { %>class="active"<% } %>>Contact Us</a></li>
+      <li><a href="/blog" <% if (typeof activePage !== 'undefined' && activePage === 'blog') { %>class="active"<% } %>>Insights</a></li>
     </ul>
 
     <div class="nav-cta-group">
@@ -61,7 +61,7 @@
       <a href="/<%= o.slug %>"><%= o.label %><% if (o.isHQ) { %> · Hub<% } %><% if (o.comingSoon) { %> · Opening 2026<% } %></a>
     <% }); %>
   </div>
-  <a href="/contact" <% if (typeof activePage !== 'undefined' && activePage === 'contact') { %>class="active"<% } %>>Contact Us</a>
+  <a href="/blog" <% if (typeof activePage !== 'undefined' && activePage === 'blog') { %>class="active"<% } %>>Insights</a>
   <div class="mobile-nav-ctas">
     <a href="/contact" class="btn btn-outline">Schedule a Consultation</a>
     <a href="/portal" class="btn btn-portal">Client Portal</a>

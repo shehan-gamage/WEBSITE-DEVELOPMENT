@@ -85,13 +85,36 @@ export const offices = [
       line1: 'International House, 64 Nile Street',
       line2: 'London, England, N1 7SR',
     },
-    phone:     '+44 7485 480474',
-    phoneHref: '+447485480474',
+    phone:     '+44 7807 854544',
+    phoneHref: '+447807854544',
     email:     'info@srpitl.com',
     hours:     'Mon–Fri, 9:00 AM – 5:00 PM (GMT/BST)',
     lead: {
       name: 'Jonathan Kitcat',
       role: 'Managing Director, SRP International United Kingdom',
+    },
+  },
+
+  {
+    slug:    'hong-kong',
+    label:   'Hong Kong',
+    city:    'Hong Kong',
+    region:  'East Asia',
+    cityImage: '/images/cities/hong-kong.jpg',
+    tagline: 'Regional Office',
+    flag:    'hk',
+    isHQ:    false,
+    address: {
+      line1: '7/F, 39 Village Road',
+      line2: 'Happy Valley, Hong Kong',
+    },
+    phone:     '+852 9387 5524',
+    phoneHref: '+85293875524',
+    email:     'info@srpitl.com',
+    hours:     'Mon–Fri, 9:00 AM – 5:00 PM (GMT+8)',
+    lead: {
+      name: 'Greg Brutus',
+      role: 'Managing Director, SRP International Hong Kong',
     },
   },
 ];

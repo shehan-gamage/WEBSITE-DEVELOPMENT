@@ -18,7 +18,7 @@
         <span><%= service.shortTitle %><% if (service.comingSoon) { %> · Opening 2026<% } %></span>
       </div>
       <h1><%= service.title %></h1>
-      <p><%= service.overview.substring(0, 160) %>...</p>
+      <p><%= firstSentence(service.overview) %></p>
       <div style="margin-top:28px;">
         <a href="/contact" class="btn btn-white">Get Started <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
@@ -110,7 +110,7 @@
         <% relatedServices.forEach(function(rel, i) { %>
         <a href="/<%= office.slug %>/<%= rel.slug %>" class="card card-service reveal <%= i > 0 ? 'reveal-delay-' + i : '' %>" style="text-decoration:none; display:block;">
           <h3 class="svc-title"><%= rel.title %></h3>
-          <p class="svc-body"><%= rel.overview.substring(0, 120) %>...</p>
+          <p class="svc-body"><%= firstSentence(rel.overview) %></p>
           <span class="svc-link">Learn More <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
         </a>
         <% }); %>
@@ -142,7 +142,7 @@
   <!-- ══ FINAL CTA ═══════════════════════════════════ -->
   <section class="cta-band">
     <h2>Need Support With <%= service.shortTitle %>?</h2>
-    <p>Contact SRP International to discuss how we can support your business with professional <%= service.shortTitle.toLowerCase() %> services.</p>
+    <p>Talk to SRP International about how we can support your business with dependable <%= service.shortTitle.toLowerCase() %> services.</p>
     <div class="cta-band-btns">
       <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       <a href="/services" class="btn btn-ghost">View All Services</a>

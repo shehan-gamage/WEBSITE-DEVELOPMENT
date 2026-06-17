@@ -10,10 +10,11 @@
      AND as fallback zoom centre for tiny countries
   ─────────────────────────────────────────────────*/
   const SRP = {
-    '826': { name: 'United Kingdom',            code: 'GB', iso2: 'gb', role: 'Europe',          geo: [ -2.5,  54.5 ] },
-    '784': { name: 'United Arab Emirates',      code: 'AE', iso2: 'ae', role: 'Middle East',      geo: [ 54.0,  24.0 ] },
-    '144': { name: 'Sri Lanka',                 code: 'LK', iso2: 'lk', role: 'Head Office',      geo: [ 80.7,   7.9 ] },
-    '702': { name: 'Singapore',                 code: 'SG', iso2: 'sg', role: 'South-East Asia',  geo: [103.8,   1.4 ] },
+    '826': { name: 'United Kingdom',       code: 'GB', iso2: 'gb', role: 'Europe',          geo: [ -2.5,  54.5 ], desc: 'Corporate services across the United Kingdom and Europe',           tag: 'Regional Office' },
+    '784': { name: 'United Arab Emirates', code: 'AE', iso2: 'ae', role: 'Middle East',     geo: [ 54.0,  24.0 ], desc: 'Corporate services across the Middle East and GCC region',          tag: 'Regional Office' },
+    '144': { name: 'Sri Lanka',            code: 'LK', iso2: 'lk', role: 'Head Office',     geo: [ 80.7,   7.9 ], desc: 'Corporate services across Sri Lanka and the South Asia region',     tag: 'Operational Hub' },
+    '702': { name: 'Singapore',            code: 'SG', iso2: 'sg', role: 'South-East Asia', geo: [103.8,   1.4 ], desc: 'Corporate services across Singapore and the South-East Asia region', tag: 'Regional Office' },
+    '344': { name: 'Hong Kong',            code: 'HK', iso2: 'hk', role: 'East Asia',       geo: [114.2,  22.3 ], desc: 'Corporate services across Hong Kong and the Greater China region',   tag: 'Regional Office' },
   };
 
   /* Flag URLs — flagcdn.com w160 for rectangular flags, with a
@@ -158,7 +159,7 @@
       const flagLayer = g.append('g').attr('class', 'flag-layer');
 
       /* Stagger float delay — each flag bobs at its own phase */
-      const FLOAT_DELAYS = { '826': '0s', '784': '0.9s', '144': '1.8s', '702': '2.7s' };
+      const FLOAT_DELAYS = { '826': '0s', '784': '0.9s', '144': '1.8s', '702': '2.7s', '344': '3.6s' };
       const GOLD = '#CEAF71';
 
       /* Circle badge radius (SVG units) */
@@ -368,7 +369,9 @@
                 <div class="mtt-name">${info.name}</div>
                 <div class="mtt-role">${info.role}</div>
               </div>
-            </div>`);
+            </div>
+            ${info.desc ? `<div class="mtt-desc">${info.desc}</div>` : ''}
+            ${info.tag ? `<div class="mtt-tag${info.tag === 'Operational Hub' ? ' mtt-tag--hq' : ''}">${info.tag}</div>` : ''}`);
       }
 
       /* ════════════════════════════════════════

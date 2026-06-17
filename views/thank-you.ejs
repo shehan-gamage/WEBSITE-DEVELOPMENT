@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+  <!-- Reuse the Insights card component for the "More from our Blog" grid. -->
+  <link rel="stylesheet" href="/css/blog.css?v=<%= cssVer('blog.css') %>">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ HERO ════════════════════════════════════════ -->
+  <section class="page-hero thanks-hero" id="main-content">
+    <div class="page-hero-content thanks-hero-content">
+      <span class="thanks-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z" opacity=".5"/>
+          <polyline points="8 10 11 13 16 8"/>
+        </svg>
+      </span>
+      <h1>Thank You for Reaching Out</h1>
+      <p>We have received your inquiry and a member of our team will get back to you within 24 hours.</p>
+      <div class="thanks-hero-btns">
+        <a href="/" class="btn btn-white">Back to Home <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="/services" class="btn btn-ghost">Explore Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ MORE FROM THE BLOG ══════════════════════════ -->
+  <% if (recentPosts && recentPosts.length) { %>
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">While You Wait</div>
+        <h2 class="heading">Get More Insights From Our Blog</h2>
+        <p class="subheading">Practical guidance on incorporation, tax, accounting, and global expansion &mdash; from the team that handles it every day.</p>
+      </div>
+      <div class="blog-grid blog-grid--3">
+        <% recentPosts.forEach(function(post) { %>
+          <%- include('partials/blog-card', { post: post }) %>
+        <% }); %>
+      </div>
+      <div class="thanks-center-cta">
+        <a href="/blog" class="btn btn-outline">View All Insights <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <!-- ══ SOCIAL PROOF ════════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <figure class="thanks-quote reveal">
+        <svg class="thanks-quote-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 7H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h3v3a1 1 0 0 1-1 1H5a1 1 0 0 0 0 2h1a3 3 0 0 0 3-3V8.5A1.5 1.5 0 0 0 7.5 7zm12 0H16a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h3v3a1 1 0 0 1-1 1h-1a1 1 0 0 0 0 2h1a3 3 0 0 0 3-3V8.5A1.5 1.5 0 0 0 19.5 7z"/></svg>
+        <blockquote class="thanks-quote-text">Several people told me, &ldquo;Speak to SRP&rdquo; &mdash; some of the best advice I received. Having run businesses for over 35 years and worked with countless providers worldwide, I can honestly say SRP ranks among the very best: responsive, proactive, and always going the extra mile.</blockquote>
+        <figcaption class="thanks-quote-author"><strong>Carl</strong> &middot; CEO, Media Agency &mdash; UAE</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ══ GET SOCIAL ══════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="kicker">Stay Connected</div>
+        <h2 class="heading">Get Social With Us</h2>
+        <p class="subheading">Follow SRP International for updates, insights, and news from across our markets.</p>
+      </div>
+      <div class="thanks-social-grid">
+        <a class="thanks-social-card" href="https://lk.linkedin.com/company/srpinternational" target="_blank" rel="noopener">
+          <span class="thanks-social-icon thanks-social-icon--linkedin" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 17.34V10.4H6.04v6.94h2.3zM7.19 9.4a1.33 1.33 0 1 0 0-2.66 1.33 1.33 0 0 0 0 2.66zm10.15 7.94v-3.8c0-2.03-1.08-2.98-2.53-2.98a2.18 2.18 0 0 0-1.98 1.09v-.94h-2.3c.03.65 0 6.94 0 6.94h2.3v-3.88c0-.2.01-.41.07-.56.17-.41.54-.84 1.18-.84.83 0 1.16.63 1.16 1.56v3.72h2.3z"/></svg>
+          </span>
+          <span class="thanks-social-name">LinkedIn</span>
+          <span class="thanks-social-desc">Connect with us for company updates and the latest articles.</span>
+          <span class="thanks-social-link">Connect on LinkedIn <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+        <a class="thanks-social-card" href="https://www.facebook.com/srpitl" target="_blank" rel="noopener">
+          <span class="thanks-social-icon thanks-social-icon--facebook" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </span>
+          <span class="thanks-social-name">Facebook</span>
+          <span class="thanks-social-desc">Follow our page to stay up to date with news and announcements.</span>
+          <span class="thanks-social-link">Follow on Facebook <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+        <a class="thanks-social-card" href="https://www.instagram.com/srpitl/" target="_blank" rel="noopener">
+          <span class="thanks-social-icon thanks-social-icon--instagram" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="thanks-social-name">Instagram</span>
+          <span class="thanks-social-desc">See behind the scenes and highlights from the SRP team.</span>
+          <span class="thanks-social-link">Follow on Instagram <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

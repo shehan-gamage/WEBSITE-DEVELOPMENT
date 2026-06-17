@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <% function dirOf(chg){ return String(chg).trim().charAt(0) === '-' ? 'down' : 'up'; } %>
+
+  <article>
+    <header class="post-hero" id="main-content">
+      <div class="post-hero-content">
+        <div class="breadcrumb">
+          <a href="/">Home</a>
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          <a href="/blog">Insights</a>
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+          <span>Financial &amp; Economic Analysis — <%= edition.label %></span>
+        </div>
+        <span class="post-category-pill">Monthly Briefing</span>
+        <h1 class="post-title">Financial &amp; Economic Analysis — <%= edition.label %></h1>
+        <div class="post-byline">
+          <img class="post-byline-avatar" src="/images/team/Aaron.jpg" alt="">
+          <span>
+            <span class="post-byline-author">Aaron Russell-Davison</span>
+            <span class="post-byline-meta">Editor · Managing Director, SRP International</span>
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <div class="report-layout">
+      <div class="report-main">
+      <div class="report-meta-card">
+        <span class="report-credit"><span class="report-credit-label">Prepared by</span><span class="report-credit-dot">·</span><span class="report-credit-value">SRP Research</span></span>
+        <span class="report-credit"><span class="report-credit-label">Designed by</span><span class="report-credit-dot">·</span><span class="report-credit-value">SRP Studio</span></span>
+        <span class="report-credit report-credit--editor"><span class="report-credit-label">Editor</span><span class="report-credit-dot">·</span><span class="report-credit-value">Aaron Russell-Davison <span class="report-credit-role">— Managing Director, SRP International</span></span></span>
+        <span class="report-credit"><span class="report-credit-label">Period</span><span class="report-credit-dot">·</span><span class="report-credit-value"><%= edition.label %></span></span>
+      </div>
+
+      <!-- ── Executive summary ── -->
+      <section class="report-section">
+        <h2>Executive Summary</h2>
+        <% if (edition.summary.overview) { %>
+        <h3>Economic Overview</h3>
+        <p><%= edition.summary.overview %></p>
+        <% } %>
+        <h3>Equity Markets</h3>
+        <p><%= edition.summary.equity %></p>
+        <h3>Inflation</h3>
+        <p><%= edition.summary.inflation %></p>
+        <% if (edition.summary.interest) { %>
+        <h3>Interest Rates</h3>
+        <p><%= edition.summary.interest %></p>
+        <% } %>
+        <h3>Exchange Rates</h3>
+        <p><%= edition.summary.exchange %></p>
+        <h3>Crude Oil Prices</h3>
+        <p><%= edition.summary.crude %></p>
+        <h3>Tourist Arrivals</h3>
+        <p><%= edition.summary.tourism %></p>
+      </section>
+
+      <!-- ── Market statistics (Sri Lanka) ── -->
+      <section class="report-section">
+        <h2>Market Statistics</h2>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Month Ending</th><th><%= edition.cols.cur %></th><th><%= edition.cols.prev %></th><th>Change (%)</th></tr></thead>
+            <tbody>
+              <% edition.marketStats.forEach(function(r){ %>
+              <tr<%= r.sub ? ' class="sub"' : '' %>><td><%= r.name %></td><td><%= r.cur %></td><td><%= r.prev %></td><td class="<%= dirOf(r.chg) %>"><%= r.chg %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── International markets ── -->
+      <section class="report-section">
+        <h2>International Markets</h2>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Market</th><th><%= edition.cols.cur %></th><th><%= edition.cols.prev %></th><th>Change (%)</th></tr></thead>
+            <tbody>
+              <% edition.intlMarkets.forEach(function(r){ %>
+              <tr><td><%= r.name %></td><td><%= r.cur %></td><td><%= r.prev %></td><td class="<%= dirOf(r.chg) %>"><%= r.chg %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Exchange rates ── -->
+      <section class="report-section">
+        <h2>Exchange Rates</h2>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Currency</th><th><%= edition.cols.cur %></th><th><%= edition.cols.prev %></th><th>Change (%)</th></tr></thead>
+            <tbody>
+              <% edition.fx.forEach(function(r){ %>
+              <tr><td><%= r.name %></td><td><%= r.cur %></td><td><%= r.prev %></td><td><%= r.chg %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        <p class="report-note">Quoted as LKR per unit of foreign currency; a higher figure indicates depreciation of the rupee.</p>
+      </section>
+
+      <!-- ── Commodity prices ── -->
+      <section class="report-section">
+        <h2>Commodity Prices</h2>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Commodity</th><th><%= edition.commodityCols[0] %></th><th><%= edition.commodityCols[1] %></th><th><%= edition.commodityCols[2] %></th></tr></thead>
+            <tbody>
+              <% edition.commodities.forEach(function(r){ %>
+              <tr><td><%= r.name %></td><td><%= r.c0 %></td><td><%= r.c1 %></td><td><%= r.c2 %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Interest rates ── -->
+      <section class="report-section">
+        <h2>Interest Rates</h2>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Rate type</th><th><%= edition.cols.cur %></th><th><%= edition.cols.prev %></th><th>Change (%)</th></tr></thead>
+            <tbody>
+              <% edition.interestRates.forEach(function(r){ %>
+              <tr<%= r.sub ? ' class="sub"' : '' %>><td><%= r.name %></td><td><%= r.cur || '' %></td><td><%= r.prev || '' %></td><td><%= r.chg || '' %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        <p class="report-note">AWDR = Commercial Bank Average Weighted Deposit Rate. AWPR = Commercial Bank Average Weighted Prime Lending Rate.</p>
+      </section>
+
+      <!-- ── Inflation (headline) ── -->
+      <section class="report-section">
+        <h2>Inflation (Headline)</h2>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Inflation</th><th><%= edition.cols.cur %></th><th><%= edition.cols.prev %></th><th>Change (%)</th></tr></thead>
+            <tbody>
+              <tr><td><%= edition.inflationHeadline.name %></td><td><%= edition.inflationHeadline.cur %></td><td><%= edition.inflationHeadline.prev %></td><td><%= edition.inflationHeadline.chg %></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Daily indices ── -->
+      <section class="report-section">
+        <h2>Daily Indices</h2>
+        <div class="report-chart-wrap"><canvas id="chartDailyIndices"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Day</th><th>ASPI</th><th>S&amp;P SL 20</th></tr></thead>
+            <tbody>
+              <% edition.dailyIndices.forEach(function(r){ %>
+              <tr><td><%= r.day %></td><td><%= r.aspi %></td><td><%= r.sp %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Volume & turnover ── -->
+      <section class="report-section">
+        <h2>Volume &amp; Turnover</h2>
+        <div class="report-chart-wrap"><canvas id="chartVolTurn"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Day</th><th>Turnover</th><th>Volume</th></tr></thead>
+            <tbody>
+              <% edition.volTurn.forEach(function(r){ %>
+              <tr><td><%= r.day %></td><td><%= r.turnover %></td><td><%= r.volume %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Tea auction prices ── -->
+      <section class="report-section">
+        <h2>Tea Auction Prices (USD)</h2>
+        <div class="report-chart-wrap"><canvas id="chartTea"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Month</th><% teaTable.headerYears.forEach(function(y){ %><th><%= y %></th><% }); %></tr></thead>
+            <tbody>
+              <% teaTable.rows.forEach(function(r){ %>
+              <tr><td><%= r.month %></td><% r.cells.forEach(function(c){ %><td><%= c %></td><% }); %></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Tourist arrivals ── -->
+      <section class="report-section">
+        <h2>Tourist Arrivals</h2>
+        <div class="report-chart-wrap"><canvas id="chartArrivals"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Tourist Arrivals</th><% arrTable.headerYears.forEach(function(y){ %><th><%= y %></th><% }); %></tr></thead>
+            <tbody>
+              <% arrTable.rows.forEach(function(r){ %>
+              <tr><td><%= r.month %></td><% r.cells.forEach(function(c){ %><td><%= c %></td><% }); %></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        <p class="report-note"><%= edition.arrivalsNote %></p>
+      </section>
+
+      <!-- ── Primary deposit & lending rates ── -->
+      <section class="report-section">
+        <h2>Primary Deposit &amp; Lending Rates</h2>
+        <div class="report-chart-wrap"><canvas id="chartRates"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Period (Year Month)</th><th>AWDR</th><th>AWPR</th></tr></thead>
+            <tbody>
+              <% edition.rates.forEach(function(r){ %>
+              <tr><td><%= r.period %></td><td><%= r.awdr %></td><td><%= r.awpr %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── CCPI year on year ── -->
+      <section class="report-section">
+        <h2>CCPI Year on Year (%)</h2>
+        <div class="report-chart-wrap"><canvas id="chartCCPI"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Month (Year Month)</th><th>Headline</th><th>Food</th><th>Non Food</th></tr></thead>
+            <tbody>
+              <% edition.ccpi.forEach(function(r){ %>
+              <tr><td><%= r.month %></td><td><%= r.headline %></td><td><%= r.food %></td><td><%= r.nonfood %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── External sector ── -->
+      <section class="report-section">
+        <h2>External Sector</h2>
+        <p class="report-note" style="margin-bottom:14px;">Values are in USD million.</p>
+        <div class="report-chart-wrap"><canvas id="chartExternal"></canvas></div>
+        <div class="report-table-wrap">
+          <table class="report-table">
+            <thead><tr><th>Month (Year Month)</th><th>Official Reserves</th><th>Workers' Remittances</th><th>Earnings from Tourism</th></tr></thead>
+            <tbody>
+              <% edition.external1.forEach(function(r){ %>
+              <tr><td><%= r.month %></td><td><%= r.reserves %></td><td><%= r.remittances %></td><td><%= r.tourism %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+        <div class="report-table-wrap" style="margin-top:18px;">
+          <table class="report-table">
+            <thead><tr><th>Month (Year Month)</th><th>Exports</th><th>Imports</th><th>Fuel Imports</th><th>Import (Non Fuel)</th></tr></thead>
+            <tbody>
+              <% edition.external2.forEach(function(r){ %>
+              <tr><td><%= r.month %></td><td><%= r.exports %></td><td><%= r.imports %></td><td><%= r.fuel %></td><td><%= r.nonfuel %></td></tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      </section>
+        <div class="report-foot">
+          <p class="report-disclaimer">This briefing is prepared by SRP Research for general information only and does not constitute financial, investment, or tax advice. Figures are reproduced from the SRP International Financial &amp; Economic Analysis for <%= edition.monthName %> (external-sector figures to <%= edition.externalThrough %>) and are subject to revision.</p>
+          <p style="margin-top:18px;"><a class="post-back" href="/blog">← Back to Insights</a></p>
+        </div>
+      </div><!-- /.report-main -->
+
+      <!-- ── Chronological archive of past editions ── -->
+      <aside class="report-archive" aria-label="Past analysis editions">
+        <div class="report-archive-inner">
+          <h2 class="report-archive-title">Archive</h2>
+          <% reportGroups.forEach(function (g) { %>
+          <div class="report-archive-year"><%= g.year %></div>
+          <ul class="report-archive-list">
+            <% g.items.forEach(function (r) { %>
+            <li>
+              <a class="report-archive-link<%= r.slug === currentSlug ? ' is-current' : '' %>"
+                 href="/insights/<%= r.slug %>"<%= r.slug === currentSlug ? ' aria-current="page"' : '' %>>
+                <span class="report-archive-month"><%= r.label %></span>
+                <% if (r.slug === latestSlug) { %><span class="report-archive-badge">Latest</span><% } %>
+              </a>
+            </li>
+            <% }); %>
+          </ul>
+          <% }); %>
+          <p class="report-archive-note">A new edition is published each month — past editions appear here as they are released.</p>
+          <a class="report-archive-all" href="/blog">All Insights →</a>
+        </div>
+      </aside>
+    </div><!-- /.report-layout -->
+
+    <!-- ── Closing CTA ── -->
+    <section class="cta-band">
+      <h2>Want this analysis applied to your business?</h2>
+      <p>Our advisors can talk through what these trends mean for your operations across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.</p>
+      <a href="/contact" class="btn btn-white">Talk to an Advisor</a>
+    </section>
+  </article>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+
+  <!-- Charts (branded) — all series derived from this edition's tables -->
+  <script>window.__REPORT__ = <%- JSON.stringify(charts) %>;</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    window.addEventListener('load', function () {
+      if (!window.Chart) return;
+      var R = window.__REPORT__;
+      var C = {
+        navy: '#061E75', navyDark: '#03103F', gold: '#CEAF71', goldDark: '#A8893D',
+        blue: '#4A90D9', teal: '#1FA6A6', magenta: '#C0398B', orange: '#E2792B',
+        green: '#3FA34D', slate: '#64748B', purple: '#7C5CBF'
+      };
+      var PALETTE = [C.navy, C.gold, C.teal, C.magenta, C.orange, C.green, C.slate, C.purple];
+      Chart.defaults.font.family = "'Open Sans', system-ui, sans-serif";
+      Chart.defaults.font.size = 11;
+      Chart.defaults.color = '#475569';
+      Chart.defaults.plugins.legend.labels.boxWidth = 12;
+      Chart.defaults.plugins.legend.labels.boxHeight = 12;
+      Chart.defaults.plugins.legend.labels.usePointStyle = true;
+      Chart.defaults.maintainAspectRatio = false;
+
+      var GRID = 'rgba(6,30,117,0.08)';
+      var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      function ctx(id) { var el = document.getElementById(id); return el ? el.getContext('2d') : null; }
+      function line(label, data, color, axis) {
+        return { label: label, data: data, borderColor: color, backgroundColor: color,
+                 borderWidth: 2, pointRadius: 2, pointHoverRadius: 4, tension: 0.3,
+                 spanGaps: false, yAxisID: axis || 'y' };
+      }
+      function yearSets(series, years) {
+        return years.map(function (k, i) { return line(k, series[k], PALETTE[i]); });
+      }
+
+      // Daily Indices — dual axis
+      if (ctx('chartDailyIndices')) new Chart(ctx('chartDailyIndices'), {
+        type: 'line',
+        data: { labels: R.days, datasets: [ line('ASPI', R.aspi, C.navy, 'y'), line('S&P SL 20', R.sp, C.gold, 'y1') ] },
+        options: { interaction: { mode: 'index', intersect: false },
+          scales: {
+            y:  { position: 'left',  grid: { color: GRID }, title: { display: true, text: 'ASPI' } },
+            y1: { position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'S&P SL 20' } },
+            x:  { grid: { display: false } } } }
+      });
+
+      // Volume & Turnover — bars (turnover) + line (volume), dual axis
+      if (ctx('chartVolTurn')) new Chart(ctx('chartVolTurn'), {
+        data: { labels: R.days, datasets: [
+          { type: 'bar', label: 'Turnover (LKR)', yAxisID: 'y', data: R.turnover,
+            backgroundColor: 'rgba(74,144,217,0.55)', borderColor: C.blue, borderWidth: 1, borderRadius: 3 },
+          { type: 'line', label: 'Volume', yAxisID: 'y1', data: R.volume,
+            borderColor: C.gold, backgroundColor: C.gold, borderWidth: 2, pointRadius: 2, tension: 0.3 }
+        ]},
+        options: { interaction: { mode: 'index', intersect: false },
+          scales: {
+            y:  { position: 'left',  grid: { color: GRID }, title: { display: true, text: 'Turnover' }, ticks: { callback: function (v) { return (v / 1e9) + 'B'; } } },
+            y1: { position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Volume' }, ticks: { callback: function (v) { return (v / 1e6) + 'M'; } } },
+            x:  { grid: { display: false } } } }
+      });
+
+      // Tea Auction Prices — multi-year lines
+      if (ctx('chartTea')) new Chart(ctx('chartTea'), {
+        type: 'line',
+        data: { labels: MONTHS, datasets: yearSets(R.teaSeries, R.teaYears) },
+        options: { scales: { y: { grid: { color: GRID } }, x: { grid: { display: false } } } }
+      });
+
+      // Tourist Arrivals — multi-year lines
+      if (ctx('chartArrivals')) new Chart(ctx('chartArrivals'), {
+        type: 'line',
+        data: { labels: MONTHS, datasets: yearSets(R.arrSeries, R.arrYears) },
+        options: { scales: { y: { grid: { color: GRID }, ticks: { callback: function (v) { return (v / 1000) + 'K'; } } }, x: { grid: { display: false } } } }
+      });
+
+      // Primary Deposit & Lending Rates (chronological)
+      if (ctx('chartRates')) new Chart(ctx('chartRates'), {
+        type: 'line',
+        data: { labels: R.ratesLabels, datasets: [ line('AWDR', R.awdr, C.gold), line('AWPR', R.awpr, C.navy) ] },
+        options: { scales: { y: { grid: { color: GRID } }, x: { grid: { display: false } } } }
+      });
+
+      // CCPI Year on Year (chronological)
+      if (ctx('chartCCPI')) new Chart(ctx('chartCCPI'), {
+        type: 'line',
+        data: { labels: R.ccpiLabels, datasets: [ line('Headline', R.headline, C.navy), line('Food', R.food, C.teal), line('Non Food', R.nonfood, C.magenta) ] },
+        options: { scales: { y: { grid: { color: GRID } }, x: { grid: { display: false } } } }
+      });
+
+      // External Sector (chronological)
+      if (ctx('chartExternal')) new Chart(ctx('chartExternal'), {
+        type: 'line',
+        data: { labels: R.extLabels, datasets: [
+          line('Official Reserves', R.reserves, C.navy),
+          line("Workers' Remittances", R.remittances, C.gold),
+          line('Earnings from Tourism', R.tourism, C.teal)
+        ]},
+        options: { scales: { y: { grid: { color: GRID } }, x: { grid: { display: false } } } }
+      });
+    });
+  </script>
+</body>
+</html>

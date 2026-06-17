@@ -2,6 +2,11 @@
    SRP International — Contact Page (UI/UX Pro Max)
    ═══════════════════════════════════════════════════ */
 
+/* Hero title breaks after "Can" on desktop; wraps naturally on small screens. */
+@media (max-width: 560px) {
+  .page-hero h1 .hero-line-break { display: none; }
+}
+
 .contact-layout {
   display: grid;
   grid-template-columns: 1fr 1.6fr;
@@ -252,3 +257,73 @@
   .offices-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 @media (max-width: 540px) { .office-grid { grid-template-columns: 1fr; } }
+
+/* ─── "What happens next" reassurance block ──── */
+.contact-next {
+  margin-top: 32px;
+  padding: 22px 24px;
+  background: var(--white);
+  border: 1px solid var(--border-subtle, #E2E8F0);
+  border-radius: 0;
+}
+.contact-next-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--navy);
+  margin-bottom: 12px;
+}
+.contact-next-list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.contact-next-list li {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-mid);
+}
+
+/* WhatsApp contact-row icon — filled glyph, overriding the stroke-only
+   icon style used by the other contact rows. */
+.contact-ico--wa svg { fill: var(--navy); stroke: none; }
+.contact-row:hover .contact-ico--wa svg { fill: var(--white); stroke: none; }
+
+/* "Chat on WhatsApp" button inside the "what happens next" block */
+.wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 11px 18px;
+  background: #25D366;
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: var(--fw-bold);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.wa-btn:hover {
+  background: #1da851;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37,211,102,.35);
+}
+.wa-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+/* ─── Form consent line ──────────────────────── */
+.form-consent {
+  margin-top: 14px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-mid);
+  text-align: center;
+}
+.form-consent a {
+  color: var(--navy);
+  text-decoration: underline;
+}

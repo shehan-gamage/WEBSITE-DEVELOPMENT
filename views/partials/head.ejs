@@ -1,11 +1,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title><%= typeof title !== 'undefined' ? title : 'SRP International | Global Corporate Services' %></title>
-<meta name="description" content="<%= typeof description !== 'undefined' ? description : 'SRP International delivers expert corporate services including Company Incorporation, Financial Services, Research & Business Planning, and Human Resource Management.' %>">
+<%
+  const _title = typeof title !== 'undefined' ? title : 'SRP International | Global Corporate Services';
+  const _desc  = typeof description !== 'undefined' ? description : 'SRP International delivers expert corporate services including Company Incorporation, Financial Services, Research & Business Planning, and Human Resource Management.';
+%>
+<title><%= _title %></title>
+<meta name="description" content="<%= _desc %>">
+
+<link rel="canonical" href="<%= pageUrl %>">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- Social sharing (Open Graph + Twitter) -->
+<% const _ogImage = (typeof ogImage !== 'undefined' && ogImage) ? ogImage : siteBase + '/images/og/share.jpg'; %>
+<meta property="og:site_name" content="SRP International">
+<meta property="og:type" content="<%= (typeof ogType !== 'undefined' && ogType) ? ogType : 'website' %>">
+<meta property="og:title" content="<%= _title %>">
+<meta property="og:description" content="<%= _desc %>">
+<meta property="og:url" content="<%= pageUrl %>">
+<meta property="og:image" content="<%= _ogImage %>">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<%= _title %>">
+<meta name="twitter:description" content="<%= _desc %>">
+<meta name="twitter:image" content="<%= _ogImage %>">
+
+<!-- Vercel Web Analytics (no-op until enabled in the Vercel dashboard) -->
+<script defer src="/_vercel/insights/script.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="/css/global.css?v=<%= cssVer('global.css') %>">
 <% if (typeof pageCss !== 'undefined' && pageCss) { %>
-<link rel="stylesheet" href="/css/<%= pageCss %>">
+<link rel="stylesheet" href="/css/<%= pageCss %>?v=<%= cssVer(pageCss) %>">
 <% } %>
