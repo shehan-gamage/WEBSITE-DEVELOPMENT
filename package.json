@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "postinstall": "node scripts/sync-faq.mjs",
+    "sync-faq": "node scripts/sync-faq.mjs --force"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",

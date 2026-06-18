@@ -12,3 +12,7 @@
 /ekaya-extracted.txt
 /node_modules
 .vercel
+
+# FAQ synced fresh from the Google Doc on each build (scripts/sync-faq.mjs).
+# The committed data/faq.baseline.json is the fallback.
+/data/faq.generated.json
