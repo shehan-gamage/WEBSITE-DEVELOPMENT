@@ -22,11 +22,11 @@
   <!-- ══ JUMP LINKS + FAQ SECTIONS ═══════════════════ -->
   <section class="section faq-main">
     <div class="container">
-      <nav class="faq-jump" aria-label="Jump to a jurisdiction">
+      <div class="faq-jump" role="navigation" aria-label="Jump to a jurisdiction">
         <% faqTree.forEach(function(c){ %>
           <a class="faq-jump-link" href="#faq-<%= c.slug %>"><%= c.country %></a>
         <% }); %>
-      </nav>
+      </div>
 
       <% faqTree.forEach(function(c){ %>
       <div class="faq-country" id="faq-<%= c.slug %>">
