@@ -449,6 +449,20 @@ app.get('/thank-you', (req, res) => {
   });
 });
 
+/* Public FAQ page — renders the SAME FAQ tree the chatbot uses (data/faq.js),
+   so the website and chatbot can never drift. Update data/faq.js → both follow.
+   Markets without FAQ entries (e.g. Hong Kong) are omitted. */
+app.get('/faq', (req, res) => {
+  res.render('faq', {
+    activePage: 'faq',
+    title: 'FAQs | SRP International',
+    description: "Answers to common questions about SRP International's corporate services — incorporation, compliance, accounting, tax, and HR across Sri Lanka, Singapore, the UAE, and the UK.",
+    pageCss: 'faq.css',
+    pageJs: null,
+    faqTree: faqTreeForClient().filter(c => c.categories.length),
+  });
+});
+
 app.get('/portal', (req, res) => {
   res.render('portal', {
     activePage: 'portal',
@@ -634,7 +648,7 @@ app.get('/robots.txt', (req, res) => {
 });
 
 app.get('/sitemap.xml', (req, res) => {
-  const staticPaths = ['/', '/about', '/services', '/global-presence', '/contact', '/blog', '/privacy', '/terms', '/portal'];
+  const staticPaths = ['/', '/about', '/services', '/global-presence', '/contact', '/blog', '/faq', '/privacy', '/terms', '/portal'];
   const regionPaths = offices.flatMap(o => [
     `/${o.slug}`,
     ...Object.keys(services[o.slug] || {}).map(s => `/${o.slug}/${s}`),

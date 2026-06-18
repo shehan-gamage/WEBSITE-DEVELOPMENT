@@ -5,10 +5,11 @@
    (owner shehan@srpitl.com, docId 1JHKn9duE-J55ojpZ7tWW0t9GGfjA0jVmd96NlS_Ox2o).
    Synced 2026-06-17. When the Doc changes, update FAQ_TREE to match.
 
-   FAQ_TREE drives BOTH:
+   FAQ_TREE is the SINGLE SOURCE OF TRUTH — it drives all of:
+     • the public /faq page (views/faq.ejs),
      • the chatbot's guided triage flow (country → service → question chips), and
      • FAQ_KNOWLEDGE — the text block fed to the AI for free-text questions.
-   Keeping one tree avoids the two drifting apart.
+   Update this one file and the website + chatbot stay in sync automatically.
 
    Hong Kong is offered as a jurisdiction but has no FAQ entries yet, so its
    `categories` is empty — the chatbot routes it straight to the consultation CTA.

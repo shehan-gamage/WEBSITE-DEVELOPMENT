@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ HERO ════════════════════════════════════════ -->
+  <section class="page-hero faq-hero" id="main-content">
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>FAQs</span>
+      </div>
+      <h1>Frequently Asked Questions</h1>
+      <p>Clear answers on incorporation, compliance, accounting, tax, and HR across the markets we serve. Can&rsquo;t find yours? Our team is one message away.</p>
+    </div>
+  </section>
+
+  <!-- ══ JUMP LINKS + FAQ SECTIONS ═══════════════════ -->
+  <section class="section faq-main">
+    <div class="container">
+      <nav class="faq-jump" aria-label="Jump to a jurisdiction">
+        <% faqTree.forEach(function(c){ %>
+          <a class="faq-jump-link" href="#faq-<%= c.slug %>"><%= c.country %></a>
+        <% }); %>
+      </nav>
+
+      <% faqTree.forEach(function(c){ %>
+      <div class="faq-country" id="faq-<%= c.slug %>">
+        <h2 class="faq-country-title"><%= c.country %></h2>
+        <% c.categories.forEach(function(cat){ %>
+        <div class="faq-cat">
+          <h3 class="faq-cat-title"><%= cat.name %></h3>
+          <div class="faq-list">
+            <% cat.questions.forEach(function(item){ %>
+            <details class="faq-item">
+              <summary class="faq-q">
+                <span><%= item.q %></span>
+                <svg class="faq-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </summary>
+              <div class="faq-a"><%= item.a %></div>
+            </details>
+            <% }); %>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+      <% }); %>
+    </div>
+  </section>
+
+  <!-- ══ CTA ═════════════════════════════════════════ -->
+  <section class="cta-band">
+    <h2>Still have a question?</h2>
+    <p>Tell us about your situation and our advisory team will respond within 24 hours &mdash; or ask our chatbot, bottom-right.</p>
+    <div class="cta-band-btns" style="justify-content:center;">
+      <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>
