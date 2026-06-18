@@ -112,6 +112,49 @@
   transition: color var(--dur-fast) var(--ease-out);
 }
 .portal-login-links a:hover { color: var(--gold); text-decoration: underline; }
+
+/* ── Coming-soon state (portalLive = false) ── */
+.portal-badge {
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+  background: rgba(206, 175, 113, 0.18);
+  border: 1px solid rgba(206, 175, 113, 0.55);
+  color: var(--gold);
+  font-family: var(--font-family);
+  font-weight: var(--fw-bold);
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.portal-soon-body { margin: 8px 0 32px; }
+.portal-soon-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 22px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--gold);
+}
+.portal-soon-icon svg {
+  width: 36px; height: 36px;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.portal-soon-text {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.82);
+  margin-bottom: 16px;
+}
+.portal-soon-cta { width: 100%; justify-content: center; margin-top: 8px; }
+
 .portal-security-note {
   display: flex;
   align-items: center;

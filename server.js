@@ -467,9 +467,11 @@ app.get('/portal', (req, res) => {
   res.render('portal', {
     activePage: 'portal',
     title: 'Client Portal | SRP International',
-    description: 'Access the SRP International Client Portal to manage company documents, compliance, invoices, and services in one secure dashboard.',
+    description: 'The SRP International Client Portal — a secure dashboard to manage company documents, compliance, invoices, and services. Launching soon.',
     pageCss: 'portal.css',
-    pageJs: 'portal.js'
+    pageJs: 'portal.js',
+    /* Flip to true to bring the live login form back. */
+    portalLive: false,
   });
 });
 

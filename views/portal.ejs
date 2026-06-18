@@ -13,8 +13,11 @@
       <div class="portal-login-glow"></div>
     </div>
     <div class="portal-login-container">
-      <div class="portal-login-card">
+      <div class="portal-login-card<%= portalLive ? '' : ' portal-soon' %>">
+        <% if (!portalLive) { %><span class="portal-badge">Launching Soon</span><% } %>
         <h1>Client Portal</h1>
+
+        <% if (portalLive) { %>
         <p class="portal-login-subtitle">Access your secure business dashboard</p>
 
         <form class="portal-login-form" onsubmit="return false;">
@@ -40,6 +43,23 @@
           <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span>Secured with enterprise-grade encryption. Your data is safe with SRP.</span>
         </div>
+        <% } else { %>
+        <p class="portal-login-subtitle">Your secure business dashboard is on its way.</p>
+
+        <div class="portal-soon-body">
+          <span class="portal-soon-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7.5 12 12 15.5 14"/></svg>
+          </span>
+          <p class="portal-soon-text">We&rsquo;re putting the finishing touches on your Client Portal &mdash; one secure place to manage your documents, compliance, invoices, and services with SRP. It will be available right here shortly.</p>
+          <p class="portal-soon-text">Already an SRP client? Get in touch and we&rsquo;ll set up your access the moment it goes live.</p>
+          <a href="/contact" class="btn btn-primary btn-lg portal-soon-cta">Contact Us <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+
+        <div class="portal-security-note">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Built with enterprise-grade encryption &mdash; your data will be safe with SRP.</span>
+        </div>
+        <% } %>
       </div>
     </div>
   </section>
@@ -47,8 +67,8 @@
 
   <!-- ══ PORTAL CTA ══════════════════════════════════ -->
   <section class="cta-band">
-    <h2>Want Access to the Client Portal?</h2>
-    <p>The SRP Client Portal is available to existing clients. Contact us to set up your account and start managing your business with SRP.</p>
+    <h2>Be First on the Client Portal</h2>
+    <p>The SRP Client Portal is launching soon. Contact us and we&rsquo;ll set up your account so you&rsquo;re ready the moment it goes live.</p>
     <div class="cta-band-btns">
       <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       <a href="/services" class="btn btn-ghost">Explore Services</a>
