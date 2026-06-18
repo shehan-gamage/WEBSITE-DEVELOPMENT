@@ -19,43 +19,70 @@
     </div>
   </section>
 
-  <!-- ══ JUMP LINKS + FAQ SECTIONS ═══════════════════ -->
-  <section class="section faq-main">
-    <div class="container">
-      <div class="faq-jump" role="navigation" aria-label="Jump to a jurisdiction">
-        <% faqTree.forEach(function(c){ %>
-          <a class="faq-jump-link" href="#faq-<%= c.slug %>"><%= c.country %></a>
-        <% }); %>
-      </div>
+  <!-- ══ SEARCH + SIDEBAR + ACCORDIONS ═══════════════ -->
+  <section class="section faq-main" id="faqMain">
+    <div class="container faq-layout">
 
-      <% faqTree.forEach(function(c){ %>
-      <div class="faq-country" id="faq-<%= c.slug %>">
-        <h2 class="faq-country-title"><%= c.country %></h2>
-        <% c.categories.forEach(function(cat){ %>
-        <div class="faq-cat">
-          <h3 class="faq-cat-title"><%= cat.name %></h3>
-          <div class="faq-list">
-            <% cat.questions.forEach(function(item){ %>
-            <details class="faq-item">
-              <summary class="faq-q">
-                <span><%= item.q %></span>
-                <svg class="faq-chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-              </summary>
-              <div class="faq-a"><%= item.a %></div>
-            </details>
+      <!-- Sticky sidebar: search + jurisdictions -->
+      <aside class="faq-aside">
+        <div class="faq-aside-inner">
+          <div class="faq-search">
+            <svg class="faq-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+            <input type="search" id="faqSearch" placeholder="Search questions…" aria-label="Search the FAQs" autocomplete="off">
+          </div>
+
+          <div class="faq-nav" role="navigation" aria-label="Jump to a jurisdiction">
+            <% faqTree.forEach(function(c){ %>
+              <a class="faq-nav-link" href="#faq-<%= c.slug %>" data-slug="faq-<%= c.slug %>"><%= c.country %></a>
             <% }); %>
           </div>
+
+          <a class="faq-aside-cta" href="/contact">
+            <span>Still stuck?</span>
+            <strong>Talk to our team
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </strong>
+          </a>
         </div>
+      </aside>
+
+      <!-- FAQ content -->
+      <div class="faq-content" id="faqContent">
+        <p class="faq-noresults" id="faqNoResults" hidden>
+          No questions match &ldquo;<span id="faqQuery"></span>&rdquo;. Try another term, or <a href="/contact">ask our team</a>.
+        </p>
+
+        <% faqTree.forEach(function(c){ %>
+        <section class="faq-country" id="faq-<%= c.slug %>" data-country>
+          <h2 class="faq-country-title"><%= c.country %></h2>
+          <% c.categories.forEach(function(cat){ %>
+          <div class="faq-cat" data-cat>
+            <h3 class="faq-cat-title"><%= cat.name %><span class="faq-cat-count"><%= cat.questions.length %></span></h3>
+            <div class="faq-list">
+              <% cat.questions.forEach(function(item){ %>
+              <details class="faq-item" data-item>
+                <summary class="faq-q">
+                  <span class="faq-q-text"><%= item.q %></span>
+                  <span class="faq-chevron" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                </summary>
+                <div class="faq-a"><%= item.a %></div>
+              </details>
+              <% }); %>
+            </div>
+          </div>
+          <% }); %>
+        </section>
         <% }); %>
       </div>
-      <% }); %>
     </div>
   </section>
 
   <!-- ══ CTA ═════════════════════════════════════════ -->
   <section class="cta-band">
     <h2>Still have a question?</h2>
-    <p>Tell us about your situation and our advisory team will respond within 24 hours &mdash; or ask our chatbot, bottom-right.</p>
+    <p>Tell us about your situation and our advisory team will respond within 24 hours, or ask our chatbot in the corner.</p>
     <div class="cta-band-btns" style="justify-content:center;">
       <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>

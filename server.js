@@ -458,7 +458,7 @@ app.get('/faq', (req, res) => {
     title: 'FAQs | SRP International',
     description: "Answers to common questions about SRP International's corporate services — incorporation, compliance, accounting, tax, and HR across Sri Lanka, Singapore, the UAE, and the UK.",
     pageCss: 'faq.css',
-    pageJs: null,
+    pageJs: 'faq.js',
     faqTree: faqTreeForClient().filter(c => c.categories.length),
   });
 });
