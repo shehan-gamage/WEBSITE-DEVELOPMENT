@@ -46,6 +46,16 @@ function firstSentence(text) {
   return (m ? m[0] : String(text)).trim();
 }
 
+/* Canonical host: 301-redirect www.srpitl.com → srpitl.com (preserving path +
+   query). Runs first so it short-circuits before any route or static asset.
+   Only the www host is affected — the apex, *.vercel.app, and localhost pass through. */
+app.use((req, res, next) => {
+  if (req.headers.host === 'www.srpitl.com') {
+    return res.redirect(301, 'https://srpitl.com' + (req.originalUrl || '/'));
+  }
+  next();
+});
+
 app.use((req, res, next) => {
   res.locals.offices = offices;
   res.locals.whatsapp = WHATSAPP;
