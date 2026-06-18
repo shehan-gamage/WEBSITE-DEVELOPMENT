@@ -1,0 +1,36 @@
+# Periodically re-deploys the site so the build re-syncs the FAQs from the
+# "WEBSITE - FAQ" Google Doc (scripts/sync-faq.mjs runs on every build).
+#
+# Triggers:
+#   • schedule  — automatic daily refresh (picks up Doc edits without a manual deploy)
+#   • workflow_dispatch — a "Run workflow" button in the Actions tab for an instant refresh
+#
+# One-time setup: add a repository secret VERCEL_TOKEN
+#   (Vercel → Account Settings → Tokens → Create; then GitHub repo →
+#    Settings → Secrets and variables → Actions → New repository secret).
+name: Refresh FAQ (redeploy)
+
+on:
+  schedule:
+    - cron: "0 6 * * *"   # every day at 06:00 UTC (adjust as you like)
+  workflow_dispatch: {}    # manual "Run workflow" button
+
+concurrency:
+  group: faq-redeploy
+  cancel-in-progress: false
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_72PW0Div0ZLW5fcXjwIVnRCo
+      VERCEL_PROJECT_ID: prj_cXjcPf25QEBnDORzaJwlEpz8CyGE
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Deploy to production (build re-syncs FAQ from the Doc)
+        run: npx --yes vercel@latest deploy --prod --yes --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
