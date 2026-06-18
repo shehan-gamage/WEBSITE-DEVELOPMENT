@@ -8,6 +8,7 @@ import 'dotenv/config';
 import { offices } from './data/offices.js';
 import { services, getService, getRegionServices, globalServices } from './data/services.js';
 import { posts, categories, getPost, categoryName, readingTime, categoryCounts } from './data/posts.js';
+import { FAQ_KNOWLEDGE, faqTreeForClient } from './data/faq.js';
 import { reportsByYear, getEdition, reportView, latestEdition } from './data/reports.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -157,18 +158,18 @@ Head office: ${HQ.address.line1}, ${HQ.address.line2}
 
 Locations: ${LOCATIONS}
 
-A detailed MARKET CATALOG follows with each market's services, what's included, regulatory
-specifics (e.g. ACRA, Companies House, Companies Registry, IRD/FTA, GST/VAT, profits tax),
-typical timelines, regional leads, and office contacts. Use it to answer specific questions.
+Two reference sources follow. The CLIENT FAQ is your PRIMARY knowledge base — use it first to
+answer client inquiries, matching the client's market when known. The MARKET CATALOG is supporting
+detail (each market's services, regulatory specifics, timelines, regional leads, and office
+phone/email/hours) — use it to add context and to give the right office's contact details.
 
 Rules:
 - Be professional, warm, and concise (aim for under 120 words per reply)
-- Answer market-specific questions using the MARKET CATALOG; quote its facts accurately
+- Reply in plain conversational text — no Markdown, headings, bullet symbols, or emojis
+- Answer from the CLIENT FAQ first; use the MARKET CATALOG for supporting detail and office contacts. Quote facts accurately and match the client's market
 - Use the conversation history to stay in context and avoid repeating yourself
-- For the right office, give that market's phone/email/hours from the catalog
-- For pricing, quotes, or detailed consultations, direct visitors to contact the team at ${HQ.email} — never state specific fees
-- Do not invent anything not in the catalog — team members, pricing, fees, timelines, or services. If it's not covered, offer to connect them with the team
-- If asked about something unrelated to SRP International's services, politely redirect to how you can help`;
+- Never state specific fees or prices — for pricing or quotes, direct the client to the team
+- FALLBACK — ESCAPE CLAUSE: If the CLIENT FAQ (and catalog) do not clearly answer the question, do NOT guess or invent anything. Briefly acknowledge that, then give a clear call to action to schedule a consultation call with our team — invite them to book through the Contact page (/contact) or to reach us at ${HQ.email} or ${HQ.phone}, and offer to help arrange it. Apply this same fallback to anything outside SRP International's services`;
 
 
 // ── Page Routes ───────────────────────────────────
@@ -526,7 +527,8 @@ app.post('/api/chat', async (req, res) => {
         max_tokens: 320,
         system: [
           { type: 'text', text: SYSTEM_INTRO },
-          { type: 'text', text: MARKET_CATALOG, cache_control: { type: 'ephemeral' } },
+          { type: 'text', text: FAQ_KNOWLEDGE },                                   // primary knowledge base
+          { type: 'text', text: MARKET_CATALOG, cache_control: { type: 'ephemeral' } }, // supporting detail (one cache breakpoint covers the whole static prefix)
         ],
         messages: history,
       }),
@@ -544,6 +546,12 @@ app.post('/api/chat', async (req, res) => {
     console.error('Chat request failed:', err?.name, err?.message);
     res.status(500).json({ error: 'Failed to generate response' });
   }
+});
+
+// ── FAQ tree (drives the chatbot's guided triage chips) ──
+app.get('/api/faq-tree', (req, res) => {
+  res.set('Cache-Control', 'public, max-age=300');
+  res.json({ tree: faqTreeForClient() });
 });
 
 // ── Contact Form API ──────────────────────────────

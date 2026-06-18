@@ -1496,6 +1496,53 @@ footer {
 .msg.bot .msg-bubble a { color: var(--navy); font-weight: 600; text-decoration: underline; }
 .msg.user .msg-bubble a { color: #fff; text-decoration: underline; }
 
+/* ─── Guided-flow quick-reply chips + consultation CTA ─── */
+.chat-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-self: flex-start;
+  max-width: 94%;
+}
+.chat-chips--stack { flex-direction: column; align-items: stretch; }
+.chat-chip {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+  padding: 8px 14px;
+  background: #fff;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+.chat-chip:hover { background: var(--navy); color: #fff; }
+/* Long question chips read better as soft rectangles than full pills. */
+.chat-chips--stack .chat-chip { border-radius: 12px; }
+.chat-chip--others {
+  border-color: var(--gold-dark);
+  color: var(--gold-dark);
+  font-weight: var(--fw-semibold);
+}
+.chat-chip--others:hover { background: var(--gold-dark); color: #fff; }
+.chat-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 10px 18px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: var(--radius-full);
+  font-size: 13.5px;
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transition: background var(--dur-base) var(--ease-out);
+}
+.chat-cta-btn:hover { background: var(--gold-dark); }
+
 .typing-bubble {
   background: var(--off-white);
   border-radius: 14px;

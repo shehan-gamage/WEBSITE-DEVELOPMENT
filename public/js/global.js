@@ -63,6 +63,8 @@ const chatInput  = document.getElementById('chatInput');
 const chatSend   = document.getElementById('chatSend');
 
 let chatOpen = false;
+let guidedStarted = false;   // guided triage flow runs once, on first open
+let faqTree = null;          // cached /api/faq-tree response
 
 function openChat() {
   chatOpen = true;
@@ -70,6 +72,7 @@ function openChat() {
   chatToggle.querySelector('.icon-chat').style.display = 'none';
   chatToggle.querySelector('.icon-close').style.display = 'block';
   chatInput.focus();
+  if (!guidedStarted) { guidedStarted = true; startGuidedFlow(); }
 }
 function closeChat() {
   chatOpen = false;
@@ -183,6 +186,91 @@ if (chatSend) {
 }
 if (chatInput) {
   chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendChat(); });
+}
+
+// ── Guided FAQ triage (chips): country → service → question → answer/Others ──
+async function loadFaqTree() {
+  if (faqTree) return faqTree;
+  const res = await fetch('/api/faq-tree');
+  if (!res.ok) throw new Error('faq tree');
+  faqTree = (await res.json()).tree;
+  return faqTree;
+}
+
+/* Render a row of quick-reply chips. On click the group is consumed, the choice
+   is echoed as the user's message, then onSelect() advances the flow. */
+function appendChips(items, opts) {
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-chips' + (opts && opts.stack ? ' chat-chips--stack' : '');
+  items.forEach(it => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chat-chip' + (it.variant ? ` chat-chip--${it.variant}` : '');
+    btn.textContent = it.label;
+    btn.addEventListener('click', () => {
+      wrap.remove();
+      appendMsg(it.label, 'user');
+      it.onSelect();
+    });
+    wrap.appendChild(btn);
+  });
+  chatBody.appendChild(wrap);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Absolute fallback — "Others" or an unmapped jurisdiction routes to a consultation.
+function appendConsultationCTA(lead) {
+  appendMsg(lead || 'For specific or customised inquiries, we recommend speaking directly with our advisory team. Schedule a call or share your details and a member of our team will get back to you within 24 hours.', 'bot');
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-chips';
+  const a = document.createElement('a');
+  a.className = 'chat-cta-btn';
+  a.href = '/contact';
+  a.textContent = 'Schedule a Consultation →';
+  wrap.appendChild(a);
+  chatBody.appendChild(wrap);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+async function startGuidedFlow() {
+  try {
+    await loadFaqTree();
+  } catch {
+    appendMsg('How can I help you today? Ask me anything about our services, or share your details and our team will be in touch.', 'bot');
+    return;
+  }
+  renderCountryStep('To get started, please select the country or jurisdiction where you require our services:');
+}
+
+function renderCountryStep(prompt) {
+  appendMsg(prompt, 'bot');
+  appendChips(faqTree.map(c => ({ label: c.country, onSelect: () => chooseCountry(c) })));
+}
+
+function chooseCountry(c) {
+  if (!c.categories || !c.categories.length) {
+    appendConsultationCTA(`We don't have a quick FAQ for ${c.country} just yet — but our team can absolutely help. Let's get you connected.`);
+    return;
+  }
+  appendMsg(`Great. What specific service are you looking for in ${c.country}?`, 'bot');
+  appendChips(c.categories.map(cat => ({ label: cat.name, onSelect: () => chooseService(c, cat) })));
+}
+
+function chooseService(c, cat) {
+  appendMsg(`Here are some frequently asked questions about ${cat.name} in ${c.country}. Select a topic, or choose “Others” if you have a different question:`, 'bot');
+  const chips = cat.questions.slice(0, 6).map(item => ({ label: item.q, onSelect: () => chooseQuestion(c, cat, item) }));
+  chips.push({ label: 'Others 💬', variant: 'others', onSelect: () => appendConsultationCTA() });
+  appendChips(chips, { stack: true });
+}
+
+function chooseQuestion(c, cat, item) {
+  appendMsg(item.a, 'bot');
+  appendChips([
+    { label: 'Ask another question', onSelect: () => chooseService(c, cat) },
+    { label: 'Change service', onSelect: () => chooseCountry(c) },
+    { label: 'Change country', onSelect: () => renderCountryStep('Which country or jurisdiction can we help you with?') },
+    { label: 'Talk to our team 💬', variant: 'others', onSelect: () => appendConsultationCTA() },
+  ]);
 }
 
 // ── Scroll reveal ─────────────────────────────────
