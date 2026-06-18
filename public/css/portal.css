@@ -148,8 +148,8 @@
 }
 .portal-soon-text {
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 16.5px;
+  line-height: 1.75;
   color: rgba(255, 255, 255, 0.82);
   margin-bottom: 16px;
 }
