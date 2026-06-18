@@ -36,7 +36,7 @@ const EXPORT_URL = `https://docs.google.com/document/d/${DOC_ID}/export?format=m
 const COUNTRIES = [
   { re: /sri\s*lanka/i,             country: 'Sri Lanka',      slug: 'sri-lanka', flag: '🇱🇰' },
   { re: /singapore/i,               country: 'Singapore',      slug: 'singapore', flag: '🇸🇬' },
-  { re: /uae|dubai/i,               country: 'Dubai (UAE)',    slug: 'uae',       flag: '🇦🇪' },
+  { re: /uae|dubai/i,               country: 'United Arab Emirates', slug: 'uae',  flag: '🇦🇪' },
   { re: /united\s*kingdom|\buk\b/i, country: 'United Kingdom', slug: 'uk',        flag: '🇬🇧' },
   { re: /hong\s*kong/i,             country: 'Hong Kong',      slug: 'hong-kong', flag: '🇭🇰' },
 ];

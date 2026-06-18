@@ -33,7 +33,7 @@
           },
           {
             "q": "What is the process for changing my company's registered address?",
-            "a": "A registered address change usually requires a company resolution, updated forms, approval or filing with the relevant authority, and updates to bank and company records. The effective date of the address change stated in the form will be set five working days after the filing date. If there are any outstanding Annual Retun filings, the address change cannot be completed until all backlog Annual Returns and updates have been brought up to date, as the change is processed in real time (e.g., in a file transfer, the previous company secretary has not filed AR’s)."
+            "a": "A registered address change usually requires a company resolution, updated forms, approval or filing with the relevant authority, and updates to bank and company records. The effective date of the address change stated in the form will be set five working days after the filing date. If there are any outstanding Annual Return filings, the address change cannot be completed until all backlog Annual Returns and updates have been brought up to date, as the change is processed in real time (e.g., in a file transfer, the previous company secretary has not filed ARs)."
           }
         ]
       },
@@ -42,11 +42,11 @@
         "questions": [
           {
             "q": "How can I secure a plot of land if my company isn't fully incorporated yet?",
-            "a": "You can usually secure it through a reservation agreement, along with an advance payment or a nominee/holding arrangement until the company is ready."
+            "a": "You can usually secure it through a reservation agreement, along with an advance payment or a nominee/holding arrangement, until the company is ready."
           },
           {
             "q": "Is it safe to pay a large deposit directly to the seller before my company's bank account is open?",
-            "a": "It is not recommended. Your company(s) must be incorporated, and the bank accounts must be opened, to make any payments."
+            "a": "It is not recommended. Your companies must be incorporated, and the bank accounts must be opened, to make any payments."
           },
           {
             "q": "How should I record an advance land payment in my company’s financial statements?",
@@ -54,7 +54,7 @@
           },
           {
             "q": "Why can’t I convert my advance land payment into director's shares?",
-            "a": "Because the advance was paid for land, not through the Company’s bank account, this will be recorded as a director's payment, and when it comes for a foreigner, this essentially becomes a sunk cost."
+            "a": "Because the advance was paid for land, not through the Company’s bank account, this will be recorded as a director's payment, and in the case of a foreigner, this essentially becomes a sunk cost."
           },
           {
             "q": "Can I use a local service provider as a trusted fund holder to secure land until my company is ready?",
@@ -79,7 +79,7 @@
           },
           {
             "q": "How can I share my monthly financial information with you?",
-            "a": "We provide monthly accounting and financial services. You can securely upload your bank statements, income and expense records, invoices, receipts, and other supporting documents to a designated cloud-based folder, such as Google Drive or Dropbox. Alternatively, you may submit the documents directly to our office."
+            "a": "You can securely upload your bank statements, income and expense records, invoices, receipts, and other supporting documents to a designated cloud-based folder, such as Google Drive or Dropbox. Alternatively, you may submit the documents directly to our office."
           },
           {
             "q": "Do you handle payroll as well?",
@@ -95,15 +95,15 @@
           },
           {
             "q": "Do you fill out tax returns?",
-            "a": "Yes, we are filing APIT/WHT/VAT/SSCL/SD and all other relevant IRD returns."
+            "a": "Yes, we file APIT/WHT/VAT/SSCL/SD and all other relevant IRD returns."
           },
           {
             "q": "Do you provide tax advisory services?",
-            "a": "Yes, we help provide you with tax consultation from a trusted external tax advisor."
+            "a": "Yes, we connect you with a trusted external tax advisor for consultation."
           },
           {
             "q": "What is the VAT registration threshold?",
-            "a": "Current threshold is 60mn per annum and 15 per quarter, whichever occurs first. As of the 1st of July 2026, this will be reduced to 36 million per annum and 9 million per quarter"
+            "a": "Current threshold is 60mn per annum and 15 per quarter, whichever occurs first. As of the 1st of July 2026, this will be reduced to 36 million per annum and 9 million per quarter."
           },
           {
             "q": "Do you visit client premises?",
@@ -115,7 +115,7 @@
           },
           {
             "q": "How long do you need to maintain documents?",
-            "a": "For a minimum of five years from the date of each transaction, the company needs to maintain documents."
+            "a": "Documents must be maintained for a minimum of five years from the date of each transaction."
           },
           {
             "q": "Do you provide exclusive annual Financial Statements Preparation Services?",
@@ -139,7 +139,7 @@
           },
           {
             "q": "What is the annual corporate income tax rate in Sri Lanka?",
-            "a": "At present, it is sitting at around 30% per annum"
+            "a": "At present, it is sitting at around 30% per annum."
           },
           {
             "q": "When are we expected to file our annual corporate income tax return?",
@@ -314,7 +314,7 @@
     ]
   },
   {
-    "country": "Dubai (UAE)",
+    "country": "United Arab Emirates",
     "slug": "uae",
     "flag": "🇦🇪",
     "categories": [
@@ -356,7 +356,7 @@
           },
           {
             "q": "Do you handle bank account opening?",
-            "a": "Tier 2 includes hands-on support; a standalone \"Bank Account & Card Services\" option is also an add-on. We work closely with WIO Bank and Mashreq Bank"
+            "a": "Tier 2 includes hands-on support; a standalone \"Bank Account & Card Services\" option is also an add-on. We work closely with WIO Bank and Mashreq Bank."
           },
           {
             "q": "Are residency permits charged on top?",
@@ -388,7 +388,7 @@
           },
           {
             "q": "How long do I need to stay in the UAE to complete my residency visa process?",
-            "a": "Usually, you should plan to stay long enough to complete the medical test, Emirates ID biometrics, and visa processing. This is about 7 10 Business Days (subject to immigration approval)."
+            "a": "Usually, you should plan to stay long enough to complete the medical test, Emirates ID biometrics, and visa processing. This is about 7–10 Business Days (subject to immigration approval)."
           },
           {
             "q": "Can I enter the UAE on an on-arrival visa while my entry permit is being processed?",
@@ -469,7 +469,7 @@
           },
           {
             "q": "How long does UK incorporation take?",
-            "a": "A standard private limited company incorporation usually takes 2-4 business days to obtain approval from the Companies House, once the KYC, documentation, and incorporation forms are completed, signed, and in order."
+            "a": "A standard private limited company incorporation usually takes 2-4 business days to obtain approval from Companies House, once the KYC, documentation, and incorporation forms are completed, signed, and in order."
           },
           {
             "q": "Do I need a UK resident director?",
@@ -535,7 +535,7 @@
           },
           {
             "q": "Do I need a statutory audit?",
-            "a": "Most small companies are exempt from audit if they meet the small company exemption thresholds Turnover ≤ £10.2 million Balance sheet total ≤ £5.1 million Employees ≤ 50"
+            "a": "Most small companies are exempt from audit if they meet the small company exemption thresholds Turnover ≤ £10.2 million Balance sheet total ≤ £5.1 million Employees ≤ 50 WIO Bank and Mashreq Bank"
           }
         ]
       }
