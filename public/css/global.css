@@ -1391,6 +1391,47 @@ footer {
 }
 .chat-toggle-btn .icon-close { display: none; }
 
+/* ─── Back-to-top button ──────────────────────────
+   Sits above the WhatsApp (bottom:96) + chat (bottom:28) stack,
+   center-aligned with them; fades in after scrolling past 300px. */
+.to-top {
+  position: fixed;
+  right: 32px;
+  bottom: 164px;
+  z-index: 850;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+  background: var(--navy-dark);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(3, 16, 63, 0.30);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity .25s var(--ease-out), transform .25s var(--ease-out),
+              visibility .25s, background .2s var(--ease-out);
+}
+.to-top.is-visible { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { background: var(--navy); transform: translateY(-3px); }
+.to-top:active { transform: translateY(-1px); }
+.to-top svg {
+  width: 22px; height: 22px;
+  fill: none; stroke: currentColor; stroke-width: 2.5;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+@media (max-width: 560px) {
+  .to-top { right: 20px; bottom: 162px; width: 44px; height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .to-top { transition: opacity .2s, visibility .2s; transform: none; }
+  .to-top.is-visible, .to-top:hover, .to-top:active { transform: none; }
+}
+
 .chat-panel {
   position: absolute;
   bottom: 72px; right: 0;

@@ -311,3 +311,17 @@ const counterObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+
+// ── Back-to-top ───────────────────────────────────
+(function () {
+  const toTop = document.getElementById('toTop');
+  if (!toTop) return;
+  const THRESHOLD = 300;
+  const onScroll = () => toTop.classList.toggle('is-visible', window.scrollY > THRESHOLD);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+  toTop.addEventListener('click', () => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  });
+})();
