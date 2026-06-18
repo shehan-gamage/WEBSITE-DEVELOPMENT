@@ -680,7 +680,7 @@ nav.scrolled {
 .hamburger span {
   display: block;
   width: 22px; height: 2px;
-  background: var(--text-dark);
+  background: #fff;            /* white bars on the solid-navy header */
   border-radius: 2px;
   transition: transform .3s, opacity .3s;
 }
