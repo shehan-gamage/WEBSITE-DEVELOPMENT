@@ -3,9 +3,14 @@
 <%
   const _title = typeof title !== 'undefined' ? title : 'SRP International | Global Corporate Services';
   const _desc  = typeof description !== 'undefined' ? description : 'SRP International delivers expert corporate services including Company Incorporation, Financial Services, Research & Business Planning, and Human Resource Management.';
+  /* Indexation control. Default: index everything, allow large rich-result
+     previews. Thin/utility pages (thank-you, 404) pass robots:'noindex, follow'. */
+  const _robots = (typeof robots !== 'undefined' && robots) ? robots : 'index, follow, max-image-preview:large, max-snippet:-1';
 %>
 <title><%= _title %></title>
 <meta name="description" content="<%= _desc %>">
+<meta name="robots" content="<%= _robots %>">
+<meta name="theme-color" content="#061E75">
 
 <link rel="canonical" href="<%= pageUrl %>">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
@@ -15,20 +20,43 @@
 <!-- Social sharing (Open Graph + Twitter) -->
 <% const _ogImage = (typeof ogImage !== 'undefined' && ogImage) ? ogImage : siteBase + '/images/og/share.jpg'; %>
 <meta property="og:site_name" content="SRP International">
+<meta property="og:locale" content="en">
 <meta property="og:type" content="<%= (typeof ogType !== 'undefined' && ogType) ? ogType : 'website' %>">
 <meta property="og:title" content="<%= _title %>">
 <meta property="og:description" content="<%= _desc %>">
 <meta property="og:url" content="<%= pageUrl %>">
 <meta property="og:image" content="<%= _ogImage %>">
+<meta property="og:image:alt" content="<%= _title %>">
+<% if (typeof ogType !== 'undefined' && ogType === 'article' && typeof articleMeta !== 'undefined' && articleMeta) { %>
+<meta property="article:published_time" content="<%= articleMeta.publishedTime %>">
+<% if (articleMeta.modifiedTime) { %><meta property="article:modified_time" content="<%= articleMeta.modifiedTime %>"><% } %>
+<% if (articleMeta.author) { %><meta property="article:author" content="<%= articleMeta.author %>"><% } %>
+<% if (articleMeta.section) { %><meta property="article:section" content="<%= articleMeta.section %>"><% } %>
+<% } %>
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="<%= _title %>">
 <meta name="twitter:description" content="<%= _desc %>">
 <meta name="twitter:image" content="<%= _ogImage %>">
+<meta name="twitter:image:alt" content="<%= _title %>">
+
+<!-- Structured data: sitewide Organization + WebSite, merged with any page-specific nodes -->
+<%
+  const _graph = []
+    .concat(typeof baseGraph !== 'undefined' && baseGraph ? baseGraph : [])
+    .concat(typeof jsonLd !== 'undefined' && jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []);
+%>
+<% if (_graph.length) { %>
+<script type="application/ld+json"><%- JSON.stringify({ '@context': 'https://schema.org', '@graph': _graph }).replace(/</g, '\\u003c') %></script>
+<% } %>
 
 <!-- Vercel Web Analytics (no-op until enabled in the Vercel dashboard) -->
 <script defer src="/_vercel/insights/script.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Largest Contentful Paint hint: preload the page's hero image when a route supplies one -->
+<% if (typeof preloadImage !== 'undefined' && preloadImage) { %>
+<link rel="preload" as="image" href="<%= preloadImage %>" fetchpriority="high">
+<% } %>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/css/global.css?v=<%= cssVer('global.css') %>">
 <% if (typeof pageCss !== 'undefined' && pageCss) { %>

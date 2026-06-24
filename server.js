@@ -9,7 +9,11 @@ import { offices } from './data/offices.js';
 import { services, getService, getRegionServices, globalServices } from './data/services.js';
 import { posts, categories, getPost, categoryName, readingTime, categoryCounts } from './data/posts.js';
 import { FAQ_KNOWLEDGE, faqTreeForClient } from './data/faq.js';
-import { reportsByYear, getEdition, reportView, latestEdition } from './data/reports.js';
+import { reportsByYear, getEdition, reportView, latestEdition, activeEditions } from './data/reports.js';
+import {
+  organizationLd, websiteLd, breadcrumbLd, blogPostingLd,
+  reportArticleLd, faqPageLd, professionalServiceLd, serviceLd,
+} from './data/seo.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -20,7 +24,23 @@ app.set('view engine', 'ejs');
 app.set('views', join(__dirname, 'views'));
 
 app.use(express.json());
-app.use(express.static(join(__dirname, 'public')));
+
+/* Static assets with cache headers tuned for Core Web Vitals on repeat views.
+   CSS/JS are always requested with a ?v=<mtime> cache-buster (see res.locals.cssVer
+   + partials/head.ejs), so they are safe to mark immutable for a year. Images and
+   fonts get a week with stale-while-revalidate — fast repeat loads, but a replaced
+   asset still refreshes promptly (team portraits additionally use ?v= cache-busting).
+   Vercel's edge compresses (gzip/brotli) these responses automatically. */
+app.use(express.static(join(__dirname, 'public'), {
+  maxAge: '1d',
+  setHeaders(res, filePath) {
+    if (/\.(css|js)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else if (/\.(jpe?g|png|webp|avif|gif|svg|ico|woff2?|ttf|otf)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
+    }
+  },
+}));
 
 /* Make the offices list available to EVERY rendered view so partials
    (header, footer) can read it without each route having to pass it. */
@@ -64,6 +84,10 @@ app.use((req, res, next) => {
      follow the domain automatically (vercel.app now, custom domain later). */
   res.locals.siteBase = `${req.protocol}://${req.get('host')}`;
   res.locals.pageUrl = res.locals.siteBase + (req.originalUrl || '/').split('?')[0];
+  /* Sitewide structured data emitted on every page (partials/head.ejs merges any
+     per-route `jsonLd` into this @graph). Host-derived so the @id URLs follow the
+     domain. Routes add page-specific nodes (BlogPosting, FAQPage, breadcrumbs, …). */
+  res.locals.baseGraph = [organizationLd(res.locals.siteBase), websiteLd(res.locals.siteBase)];
   /* Date formatter for the blog (NA English: "June 12, 2026"). Anchored to
      local midnight so the date never slips across a timezone boundary. */
   res.locals.fmtDate = (iso) =>
@@ -189,7 +213,9 @@ app.get('/', (req, res) => {
     title: 'SRP International | Corporate Services Built for the Long Term',
     description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across five markets.',
     pageCss: 'home.css',
-    pageJs: 'home.js'
+    pageJs: 'home.js',
+    /* Preload the first cinematic hero frame (the LCP element) — see views/home.ejs */
+    preloadImage: '/images/cities/sri-lanka.jpg',
   });
 });
 
@@ -219,6 +245,10 @@ app.get('/about', (req, res) => {
     description: 'Get to know SRP International — a trusted corporate services partner supporting businesses with reliable, transparent, and dependable services since 2017.',
     pageCss: 'about.css',
     pageJs: null,
+    jsonLd: breadcrumbLd(res.locals.siteBase, [
+      { name: 'Home', path: '/' },
+      { name: 'About Us', path: '/about' },
+    ]),
     team
   });
 });
@@ -248,6 +278,10 @@ app.get('/blog', (req, res) => {
     description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — from the SRP International team.',
     pageCss: 'blog.css',
     pageJs: null,
+    jsonLd: breadcrumbLd(res.locals.siteBase, [
+      { name: 'Home', path: '/' },
+      { name: 'Insights', path: '/blog' },
+    ]),
     categories, active, featured, secondary, gridPosts, popularPosts,
     counts: categoryCounts(),
     categoryName, readingTime,
@@ -263,12 +297,27 @@ app.get('/blog/:slug', (req, res, next) => {
     .concat(posts.filter(p => p.slug !== post.slug && p.category !== post.category))
     .slice(0, 3);
 
+  const section = categoryName(post.category);
   res.render('blog-post', {
     activePage: 'blog',
     title: `${post.title} | SRP Insights`,
     description: post.excerpt,
     ogType: 'article',
     ogImage: res.locals.siteBase + post.image,
+    articleMeta: {
+      publishedTime: post.date,
+      modifiedTime: post.modified || post.date,
+      author: post.author?.name,
+      section,
+    },
+    jsonLd: [
+      blogPostingLd(res.locals.siteBase, { ...post, sectionName: section }, res.locals.pageUrl),
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'Insights', path: '/blog' },
+        { name: post.title, path: `/blog/${post.slug}` },
+      ]),
+    ],
     pageCss: 'blog.css',
     pageJs: null,
     post, related,
@@ -287,6 +336,19 @@ app.get('/insights/:slug', (req, res, next) => {
     title: `${edition.title} | SRP Insights`,
     description: edition.description,
     ogType: 'article',
+    articleMeta: {
+      publishedTime: `${edition.period}-01`,
+      author: 'SRP Research',
+      section: 'Market Updates',
+    },
+    jsonLd: [
+      reportArticleLd(res.locals.siteBase, edition, res.locals.pageUrl),
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'Insights', path: '/blog' },
+        { name: edition.label, path: `/insights/${edition.slug}` },
+      ]),
+    ],
     pageCss: 'blog.css',
     pageJs: null,
     edition,
@@ -340,6 +402,10 @@ app.get('/services', (req, res) => {
     description: 'SRP International\'s global service portfolio: company incorporation & governance, financial services, HR management, and research & business planning — calibrated to each market we operate in.',
     pageCss: 'services.css',
     pageJs: null,
+    jsonLd: breadcrumbLd(res.locals.siteBase, [
+      { name: 'Home', path: '/' },
+      { name: 'Services', path: '/services' },
+    ]),
     globalServices,
     offices,
   });
@@ -353,6 +419,10 @@ app.get('/global-presence', (req, res) => {
     description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, and Hong Kong — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
     pageCss: 'services.css',
     pageJs: null,
+    jsonLd: breadcrumbLd(res.locals.siteBase, [
+      { name: 'Home', path: '/' },
+      { name: 'Global Presence', path: '/global-presence' },
+    ]),
   });
 });
 
@@ -392,6 +462,14 @@ app.get('/:region', (req, res, next) => {
     description: `Corporate services in ${office.label}: ${regionServices.map(s => s.shortTitle).join(', ')}.`,
     pageCss: 'services.css',
     pageJs: null,
+    jsonLd: [
+      professionalServiceLd(res.locals.siteBase, office),
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'Global Presence', path: '/global-presence' },
+        { name: office.label, path: `/${office.slug}` },
+      ]),
+    ],
     office,
     regionServices,
   });
@@ -402,7 +480,7 @@ app.get('/:region/:slug', (req, res, next) => {
   const { region, slug } = req.params;
   if (!KNOWN_REGIONS.has(region)) return next();
   const service = getService(region, slug);
-  if (!service) return res.status(404).render('404', { activePage: '', title: 'Page Not Found | SRP International', pageCss: null, pageJs: null });
+  if (!service) return res.status(404).render('404', { activePage: '', title: 'Page Not Found | SRP International', robots: 'noindex, follow', pageCss: null, pageJs: null });
   const office          = offices.find(o => o.slug === region);
   const relatedServices = (service.relatedSlugs || [])
     .map(s => getService(region, s))
@@ -414,6 +492,15 @@ app.get('/:region/:slug', (req, res, next) => {
     description: firstSentence(service.overview),
     pageCss: 'service-detail.css',
     pageJs: null,
+    jsonLd: [
+      serviceLd(res.locals.siteBase, office, service, res.locals.pageUrl),
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'Global Presence', path: '/global-presence' },
+        { name: office.label, path: `/${office.slug}` },
+        { name: service.title, path: `/${office.slug}/${service.slug || req.params.slug}` },
+      ]),
+    ],
     office,
     service,
     relatedServices,
@@ -426,7 +513,14 @@ app.get('/contact', (req, res) => {
     title: 'Contact Us | SRP International',
     description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, and Hong Kong.',
     pageCss: 'contact.css',
-    pageJs: 'contact.js'
+    pageJs: 'contact.js',
+    jsonLd: [
+      { '@type': 'ContactPage', '@id': `${res.locals.pageUrl}#contactpage`, url: res.locals.pageUrl, name: 'Contact SRP International' },
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'Contact Us', path: '/contact' },
+      ]),
+    ],
   });
 });
 
@@ -441,6 +535,8 @@ app.get('/thank-you', (req, res) => {
     activePage: 'contact',
     title: 'Thank You | SRP International',
     description: 'Thank you for reaching out to SRP International. We have received your inquiry and a member of our team will respond within 24 hours.',
+    /* Utility confirmation page — keep it out of the index (thin content). */
+    robots: 'noindex, follow',
     pageCss: 'thank-you.css',
     pageJs: null,
     recentPosts,
@@ -453,13 +549,21 @@ app.get('/thank-you', (req, res) => {
    so the website and chatbot can never drift. Update data/faq.js → both follow.
    Markets without FAQ entries (e.g. Hong Kong) are omitted. */
 app.get('/faq', (req, res) => {
+  const faqTree = faqTreeForClient().filter(c => c.categories.length);
   res.render('faq', {
     activePage: 'faq',
     title: 'FAQs | SRP International',
     description: "Answers to common questions about SRP International's corporate services — incorporation, compliance, accounting, tax, and HR across Sri Lanka, Singapore, the UAE, and the UK.",
     pageCss: 'faq.css',
     pageJs: 'faq.js',
-    faqTree: faqTreeForClient().filter(c => c.categories.length),
+    jsonLd: [
+      faqPageLd(faqTree),
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'FAQs', path: '/faq' },
+      ]),
+    ],
+    faqTree,
   });
 });
 
@@ -645,22 +749,62 @@ app.post('/api/contact', async (req, res) => {
    the move from the vercel.app URL to the custom domain. */
 app.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(
-    `User-agent: *\nAllow: /\n\nSitemap: ${res.locals.siteBase}/sitemap.xml\n`
+    [
+      'User-agent: *',
+      'Allow: /',
+      'Disallow: /api/',          // JSON endpoints (chat, contact, faq-tree) — not content
+      'Disallow: /thank-you',     // utility confirmation page (also meta-noindexed)
+      '',
+      `Sitemap: ${res.locals.siteBase}/sitemap.xml`,
+      '',
+    ].join('\n')
   );
 });
 
+/* Deploy timestamp — the default <lastmod> for evergreen pages. Editions and
+   articles override it with their own publish dates below. */
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
+/* Sitemap generator. Every indexable route is derived from the same data the
+   app renders (offices/services/posts/active editions), so the sitemap can
+   never drift from what actually resolves. Non-indexable utility routes
+   (/thank-you, 404, /api/*) are intentionally excluded. */
 app.get('/sitemap.xml', (req, res) => {
-  const staticPaths = ['/', '/about', '/services', '/global-presence', '/contact', '/blog', '/faq', '/privacy', '/terms', '/portal'];
-  const regionPaths = offices.flatMap(o => [
-    `/${o.slug}`,
-    ...Object.keys(services[o.slug] || {}).map(s => `/${o.slug}/${s}`),
-  ]);
-  const blogPaths = posts.map(p => `/blog/${p.slug}`);
-  const urls = [...staticPaths, ...regionPaths, ...blogPaths]
-    .map(p => `  <url><loc>${res.locals.siteBase}${p}</loc></url>`)
-    .join('\n');
+  const base = res.locals.siteBase;
+  const entry = (path, { lastmod = BUILD_DATE, changefreq = 'monthly', priority = '0.6' } = {}) =>
+    `  <url><loc>${base}${path}</loc><lastmod>${lastmod}</lastmod><changefreq>${changefreq}</changefreq><priority>${priority}</priority></url>`;
+
+  const items = [
+    entry('/',                { changefreq: 'weekly',  priority: '1.0' }),
+    entry('/about',           { priority: '0.8' }),
+    entry('/services',        { priority: '0.8' }),
+    entry('/global-presence', { priority: '0.8' }),
+    entry('/faq',             { changefreq: 'weekly',  priority: '0.8' }),
+    entry('/contact',         { priority: '0.7' }),
+    entry('/blog',            { changefreq: 'weekly',  priority: '0.7' }),
+    entry('/portal',          { changefreq: 'yearly',  priority: '0.3' }),
+    entry('/privacy',         { changefreq: 'yearly',  priority: '0.3' }),
+    entry('/terms',           { changefreq: 'yearly',  priority: '0.3' }),
+  ];
+
+  // Regional hubs + region-scoped service detail pages.
+  for (const o of offices) {
+    items.push(entry(`/${o.slug}`, { priority: '0.8' }));
+    for (const s of Object.keys(services[o.slug] || {})) {
+      items.push(entry(`/${o.slug}/${s}`, { priority: '0.7' }));
+    }
+  }
+  // Insights articles (lastmod = publish/modified date).
+  for (const p of posts) {
+    items.push(entry(`/blog/${p.slug}`, { lastmod: p.modified || p.date, priority: '0.6' }));
+  }
+  // Monthly Financial & Economic Analysis editions inside the active window.
+  for (const ed of activeEditions()) {
+    items.push(entry(`/insights/${ed.slug}`, { lastmod: `${ed.period}-01`, priority: '0.6' }));
+  }
+
   res.type('application/xml').send(
-    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${items.join('\n')}\n</urlset>\n`
   );
 });
 
@@ -669,6 +813,7 @@ app.use((req, res) => {
   res.status(404).render('404', {
     activePage: '',
     title: 'Page Not Found | SRP International',
+    robots: 'noindex, follow',
     pageCss: null,
     pageJs: null
   });
