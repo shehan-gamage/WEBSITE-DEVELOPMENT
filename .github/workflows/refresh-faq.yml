@@ -12,7 +12,12 @@ name: Refresh FAQ (redeploy)
 
 on:
   schedule:
-    - cron: "0 6 * * *"   # every day at 06:00 UTC (adjust as you like)
+    # Target: 11:30 AM Sri Lanka time (SLT, UTC+5:30) every day == 06:00 UTC.
+    # CAVEAT: GitHub's scheduled runs are best-effort and routinely fire 1-5 hours
+    # late under load, so the real run time drifts past 11:30 SLT. For punctual
+    # execution, trigger a Vercel Deploy Hook from a dedicated cron service
+    # (e.g. cron-job.org) set to 06:00 UTC instead of relying on this schedule.
+    - cron: "0 6 * * *"
   workflow_dispatch: {}    # manual "Run workflow" button
 
 concurrency:
