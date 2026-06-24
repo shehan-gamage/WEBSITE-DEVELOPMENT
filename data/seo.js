@@ -59,7 +59,7 @@ export function organizationLd(base) {
       '@type': 'ImageObject',
       url: `${base}/images/logo/srp-international-logo.png`,
     },
-    image: `${base}/images/og/share.jpg`,
+    image: `${base}/images/og/share.png`,
     description:
       'SRP International is a professional corporate services firm providing company incorporation & governance, financial services, research & business planning, and human resource management across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
     slogan: 'Your trusted partner for outsourced corporate services and business support.',
@@ -170,7 +170,7 @@ export function professionalServiceLd(base, office) {
     '@id': `${base}/${office.slug}#business`,
     name: `SRP International ${office.label}`,
     url: `${base}/${office.slug}`,
-    image: `${base}/images/og/share.jpg`,
+    image: `${base}/images/og/share.png`,
     telephone: office.phone,
     email: office.email,
     address: postalAddress(office),
