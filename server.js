@@ -12,7 +12,7 @@ import { FAQ_KNOWLEDGE, faqTreeForClient } from './data/faq.js';
 import { reportsByYear, getEdition, reportView, latestEdition, activeEditions } from './data/reports.js';
 import {
   organizationLd, websiteLd, breadcrumbLd, blogPostingLd,
-  reportArticleLd, faqPageLd, professionalServiceLd, serviceLd,
+  reportArticleLd, faqPageLd, professionalServiceLd, serviceLd, teamPersonsLd,
 } from './data/seo.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -245,10 +245,14 @@ app.get('/about', (req, res) => {
     description: 'Get to know SRP International — a trusted corporate services partner supporting businesses with reliable, transparent, and dependable services since 2017.',
     pageCss: 'about.css',
     pageJs: null,
-    jsonLd: breadcrumbLd(res.locals.siteBase, [
-      { name: 'Home', path: '/' },
-      { name: 'About Us', path: '/about' },
-    ]),
+    jsonLd: [
+      { '@type': 'AboutPage', '@id': `${res.locals.pageUrl}#aboutpage`, url: res.locals.pageUrl, about: { '@id': `${res.locals.siteBase}/#organization` } },
+      breadcrumbLd(res.locals.siteBase, [
+        { name: 'Home', path: '/' },
+        { name: 'About Us', path: '/about' },
+      ]),
+      ...teamPersonsLd(res.locals.siteBase, team, res.locals.pageUrl),
+    ],
     team
   });
 });

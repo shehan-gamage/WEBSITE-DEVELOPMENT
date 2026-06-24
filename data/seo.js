@@ -192,3 +192,20 @@ export function serviceLd(base, office, service, pageUrl) {
     provider: { '@id': ORG_ID(base) },
   };
 }
+
+/* Leadership team → Person nodes for the /about page. Each Person is tied to
+   the Organization via worksFor (@id reference, resolved within the page's own
+   @graph) and to their LinkedIn profile via sameAs. The ?v= cache-buster on the
+   photo path is stripped so the image URL is a stable canonical. */
+export function teamPersonsLd(base, team, pageUrl) {
+  return (team || []).map(m => ({
+    '@type': 'Person',
+    '@id': `${base}/about#${m.firstName.toLowerCase()}`,
+    name: m.name,
+    jobTitle: m.role,
+    image: m.photo ? `${base}${m.photo.split('?')[0]}` : undefined,
+    worksFor: { '@id': ORG_ID(base) },
+    url: m.linkedin || pageUrl,
+    sameAs: m.linkedin ? [m.linkedin] : undefined,
+  }));
+}
