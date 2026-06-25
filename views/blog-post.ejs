@@ -2,23 +2,6 @@
 <html lang="en">
 <head>
   <%- include('partials/head') %>
-  <script type="application/ld+json">
-  <%- JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": siteBase + post.image,
-    "datePublished": post.date,
-    "author": { "@type": "Person", "name": post.author.name },
-    "publisher": {
-      "@type": "Organization",
-      "name": "SRP International",
-      "logo": { "@type": "ImageObject", "url": siteBase + "/images/logo/srp-international-logo.png" }
-    },
-    "mainEntityOfPage": pageUrl
-  }) %>
-  </script>
 </head>
 <body>
   <%- include('partials/header') %>

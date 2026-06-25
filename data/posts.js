@@ -34,9 +34,64 @@ const A = {
   shanika: { name: 'Shanika Fernando',      role: 'Head of Research',  department: 'Research',                           avatar: '/images/team/shanika.jpg' },
   ramesh:  { name: 'Ramesh Kumarage',       role: 'Head of HR Services', department: 'Human Resources',                  avatar: '/images/team/ramesh.jpg' },
   azmar:   { name: 'Mohamed Azmar Huzair',  role: 'Head of International Accounting', department: 'Corporate Compliance / Tax & Finance', avatar: '/images/team/azmar.jpg' },
+  /* Madushini also appears in leadership above as Director; this entry carries her
+     article byline (Company Secretary, Corporate Services) for the UBO piece. */
+  madushiniCs:{ name: 'Madushini Fernando',  role: 'Company Secretary', department: 'Corporate Services', avatar: '/images/team/Madushini.jpg' },
 };
 
 export const posts = [
+  {
+    slug: 'sri-lanka-ubo-compliance-2026',
+    title: 'Who Really Owns the Company? Understanding UBO Compliance in Sri Lanka',
+    excerpt: 'Sri Lanka’s Companies (Amendment) Act No. 12 of 2025 and the Beneficial Ownership Regulations — effective 30 March 2026 — require companies to look past the share register and identify the natural persons who ultimately own or control them, keep verified records, and report to the Registrar. UBO compliance is now an ongoing governance process, not a one-off filing.',
+    category: 'corporate-services',
+    author: A.madushiniCs,
+    date: '2026-06-24',
+    image: '/images/services/incorporation-governance.jpg',
+    featured: false,
+    popular: true,
+    body: [
+      { p: 'A company’s share register identifies its legal shareholders — but it does not always reveal the individual who ultimately benefits from, or controls, the business. Behind a registered corporate shareholder there may be another company, a nominee, a trust, or a chain of entities, and somewhere at the end of that chain sits a real person.' },
+      { p: 'Sri Lanka’s Companies (Amendment) Act, No. 12 of 2025 and the Companies (Beneficial Ownership) Regulations, No. 01 of 2026 — effective from 30 March 2026 — now require companies to look beyond the registered name and identify the natural persons behind the ownership and control structure. In essence, the law asks companies to identify the people who ultimately own or control them, maintain verified records, and report those details to the Registrar of Companies. The key shift in mindset is this: UBO compliance is an ongoing governance process, not a one-off filing.' },
+
+      { h2: 'Who is an ultimate beneficial owner?' },
+      { p: 'A beneficial owner is a natural person who ultimately owns or controls 10% or more of a company — directly or indirectly — through shares, voting rights, or another ownership interest.' },
+      { p: 'The definition deliberately reaches further than shareholding alone. It also captures a person who exercises effective control by other means, such as influencing strategic decisions or the appointment or removal of directors. Companies must therefore trace through corporate shareholders, nominees, trusts, and layered ownership structures until the relevant natural person is identified. Ownership on paper and control in practice are not always the same thing — and the law is concerned with both.' },
+
+      { h2: 'What companies must do' },
+      { p: 'The obligations are practical and ongoing. Companies must:' },
+      { list: [
+        'Identify and verify their beneficial owners;',
+        'Maintain a beneficial ownership register; and',
+        'Appoint a natural person resident in Sri Lanka as the authorised person responsible for safeguarding the records.',
+      ] },
+      { p: 'Prescribed BO filings are required at several trigger points: at incorporation, after an issue or transfer of shares, with the annual return, and when the authorised person or the location of the register changes. The timelines matter — changes to beneficial-owner information must generally be notified within 14 working days, while filings following an issue or transfer of shares are required within 20 working days.' },
+
+      { h2: 'Why accurate UBO records matter' },
+      { p: 'The real challenge is rarely completing the form. It is establishing the true ownership and control position in the first place.' },
+      { p: 'To do that reliably, directors and company secretaries should obtain reliable identification documents, prepare an ownership chart, and record the precise basis on which the 10% threshold or the effective-control test is met — then update those records whenever ownership or control changes. The stakes for getting it wrong are significant: inaccurate, incomplete, or misleading information may expose both the company and its responsible officers to serious statutory penalties. And because certain beneficial-ownership details may be publicly accessible, errors are not only a compliance risk but a reputational one.' },
+
+      { h2: 'The practical takeaway' },
+      { p: 'Companies should conduct a UBO review now, rather than waiting for the next filing trigger:' },
+      { list: [
+        'Identify every natural person who meets the ownership or control test.',
+        'Collect and verify the prescribed information.',
+        'Appoint the authorised person.',
+        'Complete the applicable initial filing.',
+        'Introduce a standing process requiring shareholders to notify the company of relevant changes.',
+      ] },
+      { p: 'From here on, UBO checks should form part of every incorporation, share issue, share transfer, restructuring, and annual-return review — built into the company’s routine governance rather than treated as a separate compliance chore.' },
+
+      { h2: 'References and source notes' },
+      { list: [
+        'Companies (Amendment) Act, No. 12 of 2025.',
+        'Gazette Extraordinary No. 2480/47 dated 21 March 2026 (commencement order).',
+        'Companies (Beneficial Ownership) Regulations, No. 01 of 2026 — Gazette Extraordinary No. 2480/48 dated 21 March 2026.',
+        'Department of the Registrar of Companies — Beneficial Ownership System and user guides.',
+      ] },
+      { p: 'This article is intended as general guidance for company directors, shareholders, company secretaries, and compliance teams in Sri Lanka. It is not a substitute for advice on a specific matter.' },
+    ],
+  },
   {
     slug: 'sri-lanka-cash-payment-rules-2026',
     title: 'Updated Cash Payment Rules in Sri Lanka: Why Rs. 500,000 Payments Need Proper Banking Evidence',
