@@ -34,9 +34,6 @@ const A = {
   shanika: { name: 'Shanika Fernando',      role: 'Head of Research',  department: 'Research',                           avatar: '/images/team/shanika.jpg' },
   ramesh:  { name: 'Ramesh Kumarage',       role: 'Head of HR Services', department: 'Human Resources',                  avatar: '/images/team/ramesh.jpg' },
   azmar:   { name: 'Mohamed Azmar Huzair',  role: 'Head of International Accounting', department: 'Corporate Compliance / Tax & Finance', avatar: '/images/team/azmar.jpg' },
-  /* Madushini also appears in leadership above as Director; this entry carries her
-     article byline (Company Secretary, Corporate Services) for the UBO piece. */
-  madushiniCs:{ name: 'Madushini Fernando',  role: 'Company Secretary', department: 'Corporate Services', avatar: '/images/team/Madushini.jpg' },
 };
 
 export const posts = [
@@ -45,7 +42,7 @@ export const posts = [
     title: 'Who Really Owns the Company? Understanding UBO Compliance in Sri Lanka',
     excerpt: 'Sri Lanka’s Companies (Amendment) Act No. 12 of 2025 and the Beneficial Ownership Regulations — effective 30 March 2026 — require companies to look past the share register and identify the natural persons who ultimately own or control them, keep verified records, and report to the Registrar. UBO compliance is now an ongoing governance process, not a one-off filing.',
     category: 'corporate-services',
-    author: A.madushiniCs,
+    author: A.madushini,
     date: '2026-06-24',
     image: '/images/services/incorporation-governance.jpg',
     featured: false,
