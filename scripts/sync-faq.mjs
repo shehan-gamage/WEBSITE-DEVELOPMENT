@@ -77,7 +77,12 @@ function parse(md) {
     }
 
     if (line.startsWith('*') || line.startsWith('-')) {
-      const text = line.replace(/^[*-]\s*/, '').replace(/\s+/g, ' ').trim();
+      // Google Docs' Markdown export backslash-escapes punctuation it deems
+      // significant (e.g. a period after a number: "2026." exports as "2026\.").
+      // Strip those escapes so answers read as clean prose — a backslash before
+      // punctuation is never intentional in the source Doc.
+      const text = line.replace(/^[*-]\s*/, '').replace(/\s+/g, ' ')
+        .replace(/\\([^\w\s])/g, '$1').trim();
       if (!text || !cat) continue;
       const q = text.indexOf('?');
       if (q !== -1 && q < text.length - 1) {        // new Q&A
