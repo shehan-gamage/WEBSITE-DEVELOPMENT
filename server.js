@@ -21,6 +21,15 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const app  = express();
 const port = process.env.PORT || 3000;
 
+/* Cache-bust token for static CSS/JS. Assets are served immutable for a year
+   (see the static-asset headers), so the ?v= query MUST change every deploy or
+   returning visitors keep stale files. On Vercel, file mtimes are normalized to
+   a fixed constant at build time — so an mtime-based token never changes across
+   deploys (silently broken). Key off the deploy's git SHA instead, which is
+   unique per deploy. Locally there is no SHA, so cssVer/jsVer fall back to the
+   file mtime (which DOES change on edit) — see below. */
+const DEPLOY_VER = (process.env.VERCEL_GIT_COMMIT_SHA || process.env.VERCEL_DEPLOYMENT_ID || '').slice(0, 8);
+
 app.set('view engine', 'ejs');
 app.set('views', join(__dirname, 'views'));
 
@@ -133,17 +142,16 @@ app.use((req, res, next) => {
      local midnight so the date never slips across a timezone boundary. */
   res.locals.fmtDate = (iso) =>
     new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  /* Cache-bust CSS links by file mtime so stylesheet edits show immediately
-     (no hard refresh) and never get served stale after a deploy. */
+  /* Cache-bust CSS/JS. Prefer the per-deploy DEPLOY_VER (git SHA) so every
+     deploy busts caches on Vercel; fall back to the file mtime locally (no SHA
+     in dev), which changes on each edit so styles/scripts refresh immediately. */
   res.locals.cssVer = (file) => {
+    if (DEPLOY_VER) return DEPLOY_VER;
     try { return Math.floor(statSync(join(__dirname, 'public', 'css', file)).mtimeMs); }
     catch { return 0; }
   };
-  /* Same cache-bust for JS. Scripts are served immutable for a year (see the
-     static-asset headers), so without a ?v=<mtime> query a returning visitor
-     keeps stale JS after a deploy. Version every local <script> the same way
-     CSS links are versioned. */
   res.locals.jsVer = (file) => {
+    if (DEPLOY_VER) return DEPLOY_VER;
     try { return Math.floor(statSync(join(__dirname, 'public', 'js', file)).mtimeMs); }
     catch { return 0; }
   };
