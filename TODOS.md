@@ -16,14 +16,6 @@ use inline `<script>` blocks, `on*` handlers, and `style=""` attributes
 throughout. Move inline scripts to `/public/js` files, replace inline
 handlers with listeners, then drop `'unsafe-inline'` for a nonce-based CSP.
 
-### Rotate the enquiry-webhook token
-**Priority:** P4 (optional)
-`ENQUIRY_WEBHOOK_URL`'s `?token=` shared secret was exposed in an assistant
-chat transcript during setup. Low risk (the sink only appends rows and the URL
-is unguessable), but for hygiene rotate it: change `SECRET` in the Apps Script
-AND the `?token=` in the Vercel env var (they must match), then redeploy the
-script. Steps in `docs/enquiry-webhook.md`.
-
 ## Server
 
 ### Extract a rate-limit middleware factory
@@ -41,6 +33,15 @@ on the paid Anthropic endpoint, front it with a shared store (e.g. Upstash
 Redis). Documented limitation in the limiter's header comment.
 
 ## Completed
+
+### Rotate the enquiry-webhook token
+**Priority:** P4
+The `ENQUIRY_WEBHOOK_URL` `?token=` shared secret was exposed in a setup
+transcript. Rotated: new `SECRET` in the Apps Script → deployed as Version 2 of
+the same web-app deployment (the `/exec` URL is unchanged); `?token=` updated in
+the Vercel env var and prod redeployed. Verified the sink now rejects the old
+token (`unauthorized`) and accepts the new one. Old token is dead.
+**Completed:** 2026-07-02
 
 ### Asset cache-busting → SHA-based (Vercel-effective)
 **Priority:** P2
