@@ -2,15 +2,6 @@
 
 ## Security
 
-### Durable capture of enquiries while SMTP is down
-**Priority:** P2
-The PII log scrub means that when SMTP is unconfigured, a contact/subscribe
-submission is accepted but its content is no longer written anywhere — only a
-correlation `tag=` + field-presence list is logged. SMTP is configured in
-production so this is a safety-net path, but for guaranteed capture during an
-outage, persist submissions to a datastore (e.g. a Google Sheet via the
-existing Workspace creds, or a KV store) instead of relying on logs.
-
 ### Re-enable HSTS includeSubDomains after a subdomain audit
 **Priority:** P2
 HSTS currently pins the main domain only (`max-age=31536000`). Before adding
@@ -42,6 +33,17 @@ on the paid Anthropic endpoint, front it with a shared store (e.g. Upstash
 Redis). Documented limitation in the limiter's header comment.
 
 ## Completed
+
+### Durable capture of enquiries while SMTP is down
+**Priority:** P2
+When SMTP is unconfigured or a send fails, the contact/subscribe handler now
+POSTs the enquiry JSON to `ENQUIRY_WEBHOOK_URL` (5s timeout, no-op if unset)
+so the lead is captured instead of only tag-logged. Point the URL at a Google
+Sheet (Apps Script), Slack/Discord webhook, or Zapier/Make. Env-gated →
+unchanged behaviour until configured. Falls back to the PII-free tag log if the
+webhook itself fails. Tests + live E2E (local receiver) confirm the payload
+lands and no PII reaches logs. Set `ENQUIRY_WEBHOOK_URL` in prod to activate.
+**Completed:** 2026-07-02
 
 ### Scrub PII from serverless logs
 **Priority:** P1

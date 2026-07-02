@@ -431,6 +431,36 @@ const LOG_SALT = process.env.LOG_SALT || ENQUIRY_TO;
 const piiTag = (email) =>
   createHash('sha256').update(String(email) + LOG_SALT).digest('hex').slice(0, 10);
 
+/* Durable fallback sink for enquiries. When SMTP can't take a submission —
+   unconfigured, or the send throws — POST it to ENQUIRY_WEBHOOK_URL so the lead
+   is captured instead of lost (previously it was only tag-logged, i.e. gone).
+   Point that URL at whatever the team monitors: a Google Sheet via an Apps
+   Script web app, a Slack/Discord incoming webhook, Zapier/Make, etc.
+   No-op (returns false) when unset, so nothing is provisioned by default and
+   the behaviour is unchanged until you opt in. The URL is operator-set, not
+   user input, so it is a trusted sink (not an SSRF vector); we still bound the
+   request with a 5s timeout so a hung webhook can't stall the function, and we
+   never log the URL or its response body. Returns true only on a 2xx. */
+const ENQUIRY_WEBHOOK_URL = process.env.ENQUIRY_WEBHOOK_URL || '';
+async function captureEnquiry(kind, data) {
+  if (!ENQUIRY_WEBHOOK_URL) return false;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 5000);
+  try {
+    const r = await fetch(ENQUIRY_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ kind, receivedAt: new Date().toISOString(), ...data }),
+      signal: ctrl.signal,
+    });
+    return r.ok;
+  } catch {
+    return false;                 // network error / timeout / abort — treat as not captured
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 /* Newsletter subscribe — emails the address to the enquiry inbox when SMTP is
    configured; otherwise logs it so nothing is lost. Mirrors the contact flow. */
 app.post('/api/subscribe', async (req, res) => {
@@ -442,7 +472,11 @@ app.post('/api/subscribe', async (req, res) => {
     return res.status(400).json({ error: 'A valid email is required.' });
   }
   if (!mailer) {
-    console.warn(`[subscribe] Email not configured — accepted, not logged (PII). tag=${piiTag(email)}`);
+    if (await captureEnquiry('subscribe', { email })) {
+      console.warn(`[subscribe] SMTP unconfigured — captured via fallback webhook. tag=${piiTag(email)}`);
+    } else {
+      console.warn(`[subscribe] Email not configured, no fallback sink — accepted, not logged (PII). tag=${piiTag(email)}`);
+    }
     return res.json({ success: true });
   }
   try {
@@ -455,6 +489,11 @@ app.post('/api/subscribe', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error('[subscribe] send failed:', err.message);
+    // Don't lose the subscriber — try the durable fallback before giving up.
+    if (await captureEnquiry('subscribe', { email })) {
+      console.warn(`[subscribe] send failed — captured via fallback webhook. tag=${piiTag(email)}`);
+      return res.json({ success: true });
+    }
     res.status(500).json({ error: 'Could not subscribe right now.' });
   }
 });
@@ -788,15 +827,21 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'A valid email is required.' });
   }
 
-  // No SMTP credentials → keep the form working, but never write the enquiry's
-  // PII to logs. Record only a correlation tag + which fields were supplied so a
-  // dropped enquiry is detectable without exposing content. (For guaranteed
-  // capture while SMTP is down, persist to a datastore — see TODOS.md.)
+  const submission = { name, email, phone, company, service, subject, message };
+  const ok = () => res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
+
+  // No SMTP credentials → keep the form working. Try the durable fallback sink
+  // first so the lead is captured; if there's no sink, fall back to a PII-free
+  // correlation tag + field-presence list (content is not logged).
   if (!mailer) {
+    if (await captureEnquiry('contact', submission)) {
+      console.warn(`[contact] SMTP unconfigured — captured via fallback webhook. tag=${piiTag(email)}`);
+      return ok();
+    }
     const present = [name && 'name', email && 'email', phone && 'phone', company && 'company',
                      service && 'service', subject && 'subject', message && 'message'].filter(Boolean).join(',');
-    console.warn(`[contact] Email not configured — accepted, not logged (PII). tag=${piiTag(email)} fields=${present}`);
-    return res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
+    console.warn(`[contact] Email not configured, no fallback sink — accepted, not logged (PII). tag=${piiTag(email)} fields=${present}`);
+    return ok();
   }
 
   const lines = [
@@ -839,11 +884,16 @@ app.post('/api/contact', async (req, res) => {
 
     // The client no longer receives an auto-confirmation email — on success the
     // browser redirects them to the /thank-you page instead (see public/js/contact.js).
-    res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
+    ok();
   } catch (err) {
     // Log only err.message — the raw error object can echo the envelope
     // (client's address) and, in err.response, the message body.
     console.error('[contact] Failed to send enquiry email:', err?.message);
+    // Don't lose the lead — try the durable fallback before reporting failure.
+    if (await captureEnquiry('contact', submission)) {
+      console.warn(`[contact] SMTP send failed — captured via fallback webhook. tag=${piiTag(email)}`);
+      return ok();
+    }
     res.status(502).json({ error: 'Sorry, we could not send your inquiry right now. Please email clientrelations@srpitl.com directly.' });
   }
 });
