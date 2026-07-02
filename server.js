@@ -480,10 +480,7 @@ async function captureEnquiry(kind, data) {
 
 /* Newsletter subscribe — emails the address to the enquiry inbox when SMTP is
    configured; otherwise logs it so nothing is lost. Mirrors the contact flow. */
-app.post('/api/subscribe', async (req, res) => {
-  if (rateLimited('subscribe:' + clientIp(req), MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)) {
-    return res.status(429).set('Retry-After', '60').json({ error: 'Too many requests. Please wait a moment and try again.' });
-  }
+app.post('/api/subscribe', rateLimit('subscribe', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW), async (req, res) => {
   const email = clip(req.body?.email, EMAIL_MAX);
   if (!email || !EMAIL_RE.test(email)) {
     return res.status(400).json({ error: 'A valid email is required.' });
@@ -745,11 +742,21 @@ function clientIp(req) {
   return req.ip || 'unknown';
 }
 
-app.post('/api/chat', async (req, res) => {
-  if (rateLimited('chat:' + clientIp(req), CHAT_RATE_LIMIT, CHAT_RATE_WINDOW)) {
-    return res.status(429).set('Retry-After', '60').json({ error: 'Too many messages. Please wait a moment and try again.' });
-  }
+/* Express middleware wrapping the limiter, so the 429 guard is mounted per
+   route instead of copy-pasted into each handler. `prefix` namespaces the
+   bucket; Retry-After is derived from the window. (Function declaration, so it
+   hoists above the routes that reference it earlier in the file.) */
+function rateLimit(prefix, limit, windowMs, message = 'Too many requests. Please wait a moment and try again.') {
+  const retryAfter = String(Math.ceil(windowMs / 1000));
+  return (req, res, next) => {
+    if (rateLimited(`${prefix}:${clientIp(req)}`, limit, windowMs)) {
+      return res.status(429).set('Retry-After', retryAfter).json({ error: message });
+    }
+    next();
+  };
+}
 
+app.post('/api/chat', rateLimit('chat', CHAT_RATE_LIMIT, CHAT_RATE_WINDOW, 'Too many messages. Please wait a moment and try again.'), async (req, res) => {
   /* Accept a conversation: { messages: [{ role, content }, …] }.
      Backward-compatible with a single { message } string. */
   let { messages, message } = req.body;
@@ -821,11 +828,7 @@ app.get('/api/faq-tree', (req, res) => {
 });
 
 // ── Contact Form API ──────────────────────────────
-app.post('/api/contact', async (req, res) => {
-  if (rateLimited('contact:' + clientIp(req), MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)) {
-    return res.status(429).set('Retry-After', '60').json({ error: 'Too many requests. Please wait a moment and try again.' });
-  }
-
+app.post('/api/contact', rateLimit('contact', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW), async (req, res) => {
   /* Bound every field (defends against oversized payloads and caps what lands
      in mail headers) and validate the email format — the address flows into the
      Reply-To header and the name into the Subject. */
