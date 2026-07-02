@@ -167,3 +167,18 @@
 .portal-security-note svg { width: 15px; height: 15px; stroke: var(--gold); stroke-width: 2; fill: none; flex-shrink: 0; }
 .portal-security-note span { font-size: 11px; color: rgba(255, 255, 255, 0.68); line-height: 1.5; font-family: var(--font-body); }
 
+/* Inline notice shown on login submit while the portal is pre-launch
+   (replaces the old blocking alert()). */
+.portal-msg {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+  font-family: var(--font-body);
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+.portal-msg a { color: var(--gold); text-decoration: underline; }
+

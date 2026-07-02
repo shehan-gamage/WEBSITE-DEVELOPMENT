@@ -1,10 +1,31 @@
 /* Contact Page — Form Validation & Submission */
 const contactForm = document.getElementById('contactForm');
 const contactBtn = document.getElementById('contactBtn');
+const formMsg = document.getElementById('formMsg');
+
+/* Inline status messaging (replaces blocking alert(), which suspends the page's
+   JS event loop until dismissed — bad UX and un-testable by automation).
+   `build` receives the message element and appends text/anchor nodes, so we
+   never assign untrusted innerHTML. */
+function hideMsg() {
+  if (!formMsg) return;
+  formMsg.hidden = true;
+  formMsg.textContent = '';
+  formMsg.className = 'form-msg';
+}
+function showMsg(type, build) {
+  if (!formMsg) return;
+  formMsg.textContent = '';
+  formMsg.className = `form-msg form-msg--${type}`;
+  build(formMsg);
+  formMsg.hidden = false;
+  formMsg.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
 
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    hideMsg();
 
     const formData = {
       name: document.getElementById('fName').value.trim(),
@@ -17,7 +38,9 @@ if (contactForm) {
     };
 
     if (!formData.name || !formData.email || !formData.message) {
-      alert('Please fill in your name, email address, and message.');
+      showMsg('error', el => {
+        el.textContent = 'Please fill in your name, email address, and message.';
+      });
       return;
     }
 
@@ -44,7 +67,14 @@ if (contactForm) {
     } catch {
       contactBtn.textContent = 'Submit Inquiry';
       contactBtn.disabled = false;
-      alert('Something went wrong. Please try again or contact us directly at info@srpitl.com.');
+      showMsg('error', el => {
+        el.appendChild(document.createTextNode('Something went wrong. Please try again, or email us directly at '));
+        const a = document.createElement('a');
+        a.href = 'mailto:info@srpitl.com';
+        a.textContent = 'info@srpitl.com';
+        el.appendChild(a);
+        el.appendChild(document.createTextNode('.'));
+      });
     }
   });
 }
