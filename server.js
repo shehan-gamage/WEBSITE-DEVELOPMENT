@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { statSync } from 'fs';
+import { createHash } from 'crypto';
 import 'dotenv/config';
 import { offices } from './data/offices.js';
 import { services, getService, getRegionServices, globalServices } from './data/services.js';
@@ -166,7 +167,7 @@ const mailer = mailConfigured
   : null;
 
 if (!mailConfigured) {
-  console.warn('[contact] SMTP_USER/SMTP_PASS not set — enquiries will be logged but NOT emailed. See .env.example.');
+  console.warn('[contact] SMTP_USER/SMTP_PASS not set — enquiries will be accepted but NOT emailed (and NOT logged, to avoid storing PII). See .env.example.');
 }
 
 /* Contact + locations are sourced from the offices data (single source of
@@ -417,6 +418,19 @@ const MAIL_RATE_WINDOW = 60_000;     // …per minute, per IP
 const clip = (v, max) =>
   (typeof v === 'string' ? v.trim().replace(/[\x00-\x1f\x7f]+/g, " ").slice(0, max).trim() : '');
 
+/* Non-reversible marker for logs. When SMTP is unconfigured we must not write
+   raw PII (name/email/phone/message) to Vercel's function logs, but an operator
+   still needs to correlate a dropped enquiry if the sender follows up. piiTag()
+   is a stable, salted hash of the email — re-hash the address at lookup time to
+   match. NOTE: the email space is enumerable, so this obscures PII in logs, it
+   does not make the address secret. Salt with LOG_SALT (a real secret) when set;
+   otherwise the recipient constant, which still keeps tags non-portable across
+   deployments. SMTP is configured in production, so this path is a
+   misconfig/local safety net — durable capture belongs in a datastore, not logs. */
+const LOG_SALT = process.env.LOG_SALT || ENQUIRY_TO;
+const piiTag = (email) =>
+  createHash('sha256').update(String(email) + LOG_SALT).digest('hex').slice(0, 10);
+
 /* Newsletter subscribe — emails the address to the enquiry inbox when SMTP is
    configured; otherwise logs it so nothing is lost. Mirrors the contact flow. */
 app.post('/api/subscribe', async (req, res) => {
@@ -428,7 +442,7 @@ app.post('/api/subscribe', async (req, res) => {
     return res.status(400).json({ error: 'A valid email is required.' });
   }
   if (!mailer) {
-    console.warn('[subscribe] Email not configured — logged only:', email);
+    console.warn(`[subscribe] Email not configured — accepted, not logged (PII). tag=${piiTag(email)}`);
     return res.json({ success: true });
   }
   try {
@@ -774,11 +788,14 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'A valid email is required.' });
   }
 
-  const submission = { name, email, phone, company, service, subject, message };
-
-  // No SMTP credentials yet → log so nothing is lost, but keep the form working.
+  // No SMTP credentials → keep the form working, but never write the enquiry's
+  // PII to logs. Record only a correlation tag + which fields were supplied so a
+  // dropped enquiry is detectable without exposing content. (For guaranteed
+  // capture while SMTP is down, persist to a datastore — see TODOS.md.)
   if (!mailer) {
-    console.warn('[contact] Email not configured — enquiry logged only:', submission);
+    const present = [name && 'name', email && 'email', phone && 'phone', company && 'company',
+                     service && 'service', subject && 'subject', message && 'message'].filter(Boolean).join(',');
+    console.warn(`[contact] Email not configured — accepted, not logged (PII). tag=${piiTag(email)} fields=${present}`);
     return res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
   }
 
@@ -824,7 +841,9 @@ app.post('/api/contact', async (req, res) => {
     // browser redirects them to the /thank-you page instead (see public/js/contact.js).
     res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
   } catch (err) {
-    console.error('[contact] Failed to send enquiry email:', err);
+    // Log only err.message — the raw error object can echo the envelope
+    // (client's address) and, in err.response, the message body.
+    console.error('[contact] Failed to send enquiry email:', err?.message);
     res.status(502).json({ error: 'Sorry, we could not send your inquiry right now. Please email clientrelations@srpitl.com directly.' });
   }
 });

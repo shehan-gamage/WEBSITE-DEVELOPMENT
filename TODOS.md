@@ -2,13 +2,14 @@
 
 ## Security
 
-### Scrub PII from serverless logs
-**Priority:** P1
-When SMTP is unconfigured, `/api/contact` logs the full submission (name,
-email, phone, message) and the subscribe handler logs the address
-(`server.js` — search `[contact] Email not configured` / `[subscribe]`).
-Vercel retains function logs. Log a non-PII marker (e.g. a hash of the email)
-instead. Found in the 2026-07 security review (L1).
+### Durable capture of enquiries while SMTP is down
+**Priority:** P2
+The PII log scrub means that when SMTP is unconfigured, a contact/subscribe
+submission is accepted but its content is no longer written anywhere — only a
+correlation `tag=` + field-presence list is logged. SMTP is configured in
+production so this is a safety-net path, but for guaranteed capture during an
+outage, persist submissions to a datastore (e.g. a Google Sheet via the
+existing Workspace creds, or a KV store) instead of relying on logs.
 
 ### Re-enable HSTS includeSubDomains after a subdomain audit
 **Priority:** P2
@@ -41,3 +42,14 @@ on the paid Anthropic endpoint, front it with a shared store (e.g. Upstash
 Redis). Documented limitation in the limiter's header comment.
 
 ## Completed
+
+### Scrub PII from serverless logs
+**Priority:** P1
+When SMTP was unconfigured, `/api/contact` logged the full submission and
+`/api/subscribe` logged the raw address; the contact send-failure path logged
+the raw nodemailer error (which can echo the envelope + body). Replaced with a
+salted non-reversible `piiTag(email)` correlation marker + field-presence list;
+send-failure now logs `err.message` only. Regression tests assert no raw
+name/email/phone/message text reaches `console`. Found in the 2026-07 security
+review (L1).
+**Completed:** 2026-07-02
