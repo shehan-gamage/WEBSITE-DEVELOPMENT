@@ -18,14 +18,6 @@ handlers with listeners, then drop `'unsafe-inline'` for a nonce-based CSP.
 
 ## Server
 
-### Extract a rate-limit middleware factory
-**Priority:** P3
-The identical 3-line 429 guard is repeated in `/api/chat`, `/api/contact`,
-and `/api/subscribe` (`server.js`). Extract
-`rateLimit(prefix, limit, windowMs)` returning Express middleware and mount
-it per route so the three call sites can't drift. Flagged by the 2026-07
-pre-landing review (maintainability).
-
 ### Global rate limiting via a shared store
 **Priority:** P4
 The in-memory limiter is per-warm-instance on Vercel. For hard global limits
@@ -33,6 +25,14 @@ on the paid Anthropic endpoint, front it with a shared store (e.g. Upstash
 Redis). Documented limitation in the limiter's header comment.
 
 ## Completed
+
+### Extract a rate-limit middleware factory
+**Priority:** P3
+The copy-pasted 3-line 429 guard in `/api/chat`, `/api/contact`, and
+`/api/subscribe` is now `rateLimit(prefix, limit, windowMs, message?)` — Express
+middleware mounted per route. `Retry-After` derived from the window. Behaviour-
+preserving; 27/27 tests still pass. From the 2026-07 pre-landing review.
+**Completed:** 2026-07-02
 
 ### Rotate the enquiry-webhook token
 **Priority:** P4
