@@ -1,6 +1,8 @@
 /.claude
 /.env
 /.env.*
+# ...but DO track the placeholder-only template (the code references it).
+!/.env.example
 /.tmp
 /credentials.json
 /token.json
