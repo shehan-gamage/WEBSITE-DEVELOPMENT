@@ -1,0 +1,20 @@
+# Runs the vitest security-regression suite on every push and PR.
+# The suite (test/security.test.js) locks in the 2026-07 API hardening:
+# rate-limit IP keying, mail-endpoint validation/caps, and security headers.
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test
