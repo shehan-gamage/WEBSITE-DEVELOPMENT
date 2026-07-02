@@ -94,21 +94,23 @@
             <div class="form-row">
               <div class="form-group">
                 <label for="fName">Full Name *</label>
-                <input type="text" id="fName" name="name" placeholder="Your full name" required autocomplete="name">
+                <!-- maxlength values mirror the server-side caps in /api/contact (server.js)
+                     so the limit is visible in the browser instead of silently truncating. -->
+                <input type="text" id="fName" name="name" placeholder="Your full name" required autocomplete="name" maxlength="120">
               </div>
               <div class="form-group">
                 <label for="fEmail">Email Address *</label>
-                <input type="email" id="fEmail" name="email" placeholder="you@company.com" required autocomplete="email">
+                <input type="email" id="fEmail" name="email" placeholder="you@company.com" required autocomplete="email" maxlength="254">
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label for="fPhone">Contact Number</label>
-                <input type="tel" id="fPhone" name="phone" placeholder="+94 XX XXX XXXX" autocomplete="tel">
+                <input type="tel" id="fPhone" name="phone" placeholder="+94 XX XXX XXXX" autocomplete="tel" maxlength="40">
               </div>
               <div class="form-group">
                 <label for="fCompany">Company Name</label>
-                <input type="text" id="fCompany" name="company" placeholder="Your company" autocomplete="organization">
+                <input type="text" id="fCompany" name="company" placeholder="Your company" autocomplete="organization" maxlength="160">
               </div>
             </div>
             <div class="form-row">
@@ -125,12 +127,12 @@
               </div>
               <div class="form-group">
                 <label for="fSubject">Subject</label>
-                <input type="text" id="fSubject" name="subject" placeholder="How can we help?">
+                <input type="text" id="fSubject" name="subject" placeholder="How can we help?" maxlength="160">
               </div>
             </div>
             <div class="form-group">
               <label for="fMsg">Message *</label>
-              <textarea id="fMsg" name="message" placeholder="Tell us about your business needs..." required></textarea>
+              <textarea id="fMsg" name="message" placeholder="Tell us about your business needs..." required maxlength="5000"></textarea>
             </div>
             <button type="submit" class="btn btn-primary btn-lg" id="contactBtn" style="width:100%; justify-content:center;">Submit Inquiry</button>
             <p class="form-consent">By submitting this form, you agree to our <a href="/privacy">Privacy Policy</a> and consent to SRP International contacting you about your inquiry.</p>
