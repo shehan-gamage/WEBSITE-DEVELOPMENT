@@ -440,7 +440,8 @@ const piiTag = (email) =>
    the behaviour is unchanged until you opt in. The URL is operator-set, not
    user input, so it is a trusted sink (not an SSRF vector); we still bound the
    request with a 5s timeout so a hung webhook can't stall the function, and we
-   never log the URL or its response body. Returns true only on a 2xx. */
+   never log the URL or its response body. Returns true only on a 2xx.
+   Setup guide (Google Sheet sink): docs/enquiry-webhook.md */
 const ENQUIRY_WEBHOOK_URL = process.env.ENQUIRY_WEBHOOK_URL || '';
 async function captureEnquiry(kind, data) {
   if (!ENQUIRY_WEBHOOK_URL) return false;
