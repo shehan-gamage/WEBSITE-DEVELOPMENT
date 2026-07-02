@@ -14,7 +14,7 @@
    Vercel's edge writes the real client IP to in production. Each test uses its
    own last-hop IP so the shared in-memory rate buckets never bleed between tests. */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import request from 'supertest';
 
 /* Env setup MUST precede loading server.js — static `import` hoists above any
@@ -154,6 +154,38 @@ describe('H1 + M1 — rate limiting keyed on the real client IP', () => {
       .set('X-Forwarded-For', xff('203.0.113.50'))
       .send({});
     expect(res.status).toBe(400);
+  });
+});
+
+describe('L1 — no PII written to logs when SMTP is unconfigured', () => {
+  let warns;
+  beforeEach(() => { warns = vi.spyOn(console, 'warn').mockImplementation(() => {}); });
+  afterEach(() => { warns.mockRestore(); });
+
+  it('contact drops the enquiry from logs — no name/email/phone/message text', async () => {
+    const pii = {
+      name: 'Alice Zephyr', email: 'alice.zephyr@example.com',
+      phone: '+94771234567', company: 'Acme Ltd',
+      subject: 'Confidential merger', message: 'secret deal terms here',
+    };
+    const res = await request(app).post('/api/contact')
+      .set('X-Forwarded-For', xff('203.0.113.60')).send(pii);
+    expect(res.status).toBe(200);
+    const logged = warns.mock.calls.flat().join(' ');
+    for (const v of Object.values(pii)) expect(logged).not.toContain(v);
+    // A correlation tag + the field-presence list are fine (no raw values).
+    expect(logged).toMatch(/tag=[0-9a-f]{10}/);
+    expect(logged).toContain('fields=');
+  });
+
+  it('subscribe logs a tag, never the raw address', async () => {
+    const res = await request(app).post('/api/subscribe')
+      .set('X-Forwarded-For', xff('203.0.113.61'))
+      .send({ email: 'reader.secret@example.com' });
+    expect(res.status).toBe(200);
+    const logged = warns.mock.calls.flat().join(' ');
+    expect(logged).not.toContain('reader.secret@example.com');
+    expect(logged).toMatch(/tag=[0-9a-f]{10}/);
   });
 });
 
