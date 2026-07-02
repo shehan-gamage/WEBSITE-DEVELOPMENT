@@ -23,6 +23,42 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', join(__dirname, 'views'));
 
+/* ── Security headers (registered FIRST, before any middleware that can error
+   out of the chain — e.g. express.json()'s 400/413 parse failures — so even
+   those error responses carry the headers) ──
+   No external dep: set manually. frame-ancestors 'none' blocks clickjacking
+   (matters once the Client Portal login ships); nosniff stops MIME-sniffing;
+   HSTS pins HTTPS (main domain only — add includeSubDomains once every
+   srpitl.com subdomain is confirmed to terminate TLS; the browser pin is a
+   one-way door). The CSP keeps 'unsafe-inline' for script/style because the
+   site relies on inline <script> blocks, inline on* handlers, and inline
+   style="" attributes throughout the EJS templates — tightening to nonces is a
+   larger refactor. Allow-lists cover the CDNs and Google Fonts actually used. */
+const IS_PREVIEW = process.env.VERCEL_ENV === 'preview';
+const CSP = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  /* vercel.live is the preview-deploy comments toolbar — preview only. */
+  `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net${IS_PREVIEW ? ' https://vercel.live' : ''}`,
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' https://fonts.gstatic.com",
+  "img-src 'self' data: https:",
+  // jsdelivr also serves the world-atlas topojson fetched by public/js/map.js (d3.json → XHR)
+  `connect-src 'self' https://cdn.jsdelivr.net${IS_PREVIEW ? ' https://vercel.live wss://*.pusher.com' : ''}`,
+].join('; ');
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  res.setHeader('Content-Security-Policy', CSP);
+  next();
+});
+
 app.use(express.json());
 
 /* Static assets with cache headers tuned for Core Web Vitals on repeat views.
@@ -54,7 +90,11 @@ const WHATSAPP = {
 };
 
 /* Honour X-Forwarded-Proto from Vercel's proxy so req.protocol is https
-   in production (needed for absolute canonical/OG URLs). */
+   in production (needed for absolute canonical/OG URLs), AND — security-load-
+   bearing — for req.ip, which keys the per-IP rate limiter (see clientIp()).
+   Keep this at exactly 1 (one trusted hop = Vercel's edge): raising it or
+   setting `true` would trust client-supplied X-Forwarded-For entries and
+   reopen the rate-limit spoofing bypass. */
 app.set('trust proxy', 1);
 
 /* Returns the first complete sentence of a block of text — used for hero
@@ -365,11 +405,26 @@ app.get('/insights/:slug', (req, res, next) => {
   });
 });
 
+/* Shared guards for the public mail endpoints (contact + subscribe). Both are
+   rate-limited per IP (the SMTP relay is a paid/quota'd resource and a spam
+   target) and length-bounded (defence against oversized-payload abuse). */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_MAX = 254;               // RFC 5321 max address length
+const MAIL_RATE_LIMIT = 5;           // submissions…
+const MAIL_RATE_WINDOW = 60_000;     // …per minute, per IP
+/* Trim, strip control characters (CR/LF must never reach mail headers — we
+   don't rely solely on nodemailer's header encoding), and length-bound. */
+const clip = (v, max) =>
+  (typeof v === 'string' ? v.trim().replace(/[\x00-\x1f\x7f]+/g, " ").slice(0, max).trim() : '');
+
 /* Newsletter subscribe — emails the address to the enquiry inbox when SMTP is
    configured; otherwise logs it so nothing is lost. Mirrors the contact flow. */
 app.post('/api/subscribe', async (req, res) => {
-  const { email } = req.body;
-  if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (rateLimited('subscribe:' + clientIp(req), MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)) {
+    return res.status(429).set('Retry-After', '60').json({ error: 'Too many requests. Please wait a moment and try again.' });
+  }
+  const email = clip(req.body?.email, EMAIL_MAX);
+  if (!email || !EMAIL_RE.test(email)) {
     return res.status(400).json({ error: 'A valid email is required.' });
   }
   if (!mailer) {
@@ -584,7 +639,9 @@ app.get('/portal', (req, res) => {
 });
 
 // ── Chat API ──────────────────────────────────────
-/* Lightweight in-memory per-IP rate limiter for the public AI endpoint.
+/* Lightweight in-memory per-IP rate limiter shared by ALL public POST
+   endpoints — /api/chat (paid Anthropic API), /api/contact and /api/subscribe
+   (SMTP relay). Each endpoint namespaces its own bucket ("chat:<ip>" etc.).
    NOTE: on serverless (Vercel) each warm instance keeps its own counters, so
    this throttles abuse per-instance rather than globally. For hard global
    limits, front it with a shared store (e.g. Upstash Redis). It still blocks
@@ -593,29 +650,34 @@ const CHAT_RATE_LIMIT = 20;          // requests…
 const CHAT_RATE_WINDOW = 60_000;     // …per minute, per IP
 const rateHits = new Map();
 
-function rateLimited(ip) {
+/* Generic fixed-window limiter. `key` namespaces the bucket per endpoint
+   (e.g. "chat:1.2.3.4") so the AI proxy and the mail endpoints throttle
+   independently. Returns true when the caller is over the limit. */
+function rateLimited(key, limit, windowMs) {
   const now = Date.now();
-  let bucket = rateHits.get(ip);
+  let bucket = rateHits.get(key);
   if (!bucket || now > bucket.resetAt) {
-    bucket = { count: 0, resetAt: now + CHAT_RATE_WINDOW };
-    rateHits.set(ip, bucket);
+    bucket = { count: 0, resetAt: now + windowMs };
+    rateHits.set(key, bucket);
   }
   bucket.count += 1;
   if (rateHits.size > 5000) {                 // bound memory: drop expired buckets
     for (const [k, v] of rateHits) if (now > v.resetAt) rateHits.delete(k);
   }
-  return bucket.count > CHAT_RATE_LIMIT;
+  return bucket.count > limit;
 }
 
+/* Real client IP. `trust proxy` is set to 1 (Vercel's proxy), so req.ip is the
+   client's address as seen by that trusted hop — NOT the raw, client-spoofable
+   X-Forwarded-For header. Using the raw header would let an attacker rotate a
+   fake IP per request and bypass the limiter entirely (paid-API cost DoS). */
 function clientIp(req) {
-  return (req.headers['x-forwarded-for'] || '').split(',')[0].trim()
-    || req.socket?.remoteAddress
-    || 'unknown';
+  return req.ip || 'unknown';
 }
 
 app.post('/api/chat', async (req, res) => {
-  if (rateLimited(clientIp(req))) {
-    return res.status(429).json({ error: 'Too many messages. Please wait a moment and try again.' });
+  if (rateLimited('chat:' + clientIp(req), CHAT_RATE_LIMIT, CHAT_RATE_WINDOW)) {
+    return res.status(429).set('Retry-After', '60').json({ error: 'Too many messages. Please wait a moment and try again.' });
   }
 
   /* Accept a conversation: { messages: [{ role, content }, …] }.
@@ -690,9 +752,26 @@ app.get('/api/faq-tree', (req, res) => {
 
 // ── Contact Form API ──────────────────────────────
 app.post('/api/contact', async (req, res) => {
-  const { name, email, phone, company, service, subject, message } = req.body;
+  if (rateLimited('contact:' + clientIp(req), MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)) {
+    return res.status(429).set('Retry-After', '60').json({ error: 'Too many requests. Please wait a moment and try again.' });
+  }
+
+  /* Bound every field (defends against oversized payloads and caps what lands
+     in mail headers) and validate the email format — the address flows into the
+     Reply-To header and the name into the Subject. */
+  const name    = clip(req.body?.name, 120);
+  const email   = clip(req.body?.email, EMAIL_MAX);
+  const phone   = clip(req.body?.phone, 40);
+  const company = clip(req.body?.company, 160);
+  const service = clip(req.body?.service, 120);
+  const subject = clip(req.body?.subject, 160);
+  const message = clip(req.body?.message, 5000);
+
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Name, email, and message are required.' });
+  }
+  if (!EMAIL_RE.test(email)) {
+    return res.status(400).json({ error: 'A valid email is required.' });
   }
 
   const submission = { name, email, phone, company, service, subject, message };
@@ -733,7 +812,9 @@ app.post('/api/contact', async (req, res) => {
     await mailer.sendMail({
       from:    `"SRP International Website" <${MAIL_FROM}>`,
       to:      ENQUIRY_TO,
-      replyTo: `"${name}" <${email}>`,        // replies go straight to the client
+      /* Object form: nodemailer handles display-name quoting/encoding itself —
+         no string interpolation of user input into an address header. */
+      replyTo: { name, address: email },      // replies go straight to the client
       subject: subject ? `Website inquiry: ${subject}` : `New website inquiry from ${name}`,
       text:    lines.join('\n'),
       html,
