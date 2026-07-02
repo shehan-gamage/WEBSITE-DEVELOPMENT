@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "test": "vitest run",
     "postinstall": "node scripts/sync-faq.mjs",
     "sync-faq": "node scripts/sync-faq.mjs --force"
   },
@@ -16,5 +17,9 @@
     "ejs": "^5.0.2",
     "express": "^4.19.2",
     "nodemailer": "^8.0.10"
+  },
+  "devDependencies": {
+    "supertest": "^7.2.2",
+    "vitest": "^4.1.9"
   }
 }
