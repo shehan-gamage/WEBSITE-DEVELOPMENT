@@ -45,7 +45,7 @@ export const posts = [
     author: A.madushini,
     date: '2026-06-24',
     image: '/images/services/incorporation-governance.jpg',
-    featured: false,
+    featured: true,
     popular: true,
     body: [
       { p: 'A company’s share register identifies its legal shareholders — but it does not always reveal the individual who ultimately benefits from, or controls, the business. Behind a registered corporate shareholder there may be another company, a nominee, a trust, or a chain of entities, and somewhere at the end of that chain sits a real person.' },
@@ -97,7 +97,7 @@ export const posts = [
     author: A.praneeth,
     date: '2026-06-16',
     image: '/images/cities/sri-lanka.jpg',
-    featured: true,
+    featured: false,
     popular: true,
     body: [
       { p: 'Cash is convenient. For everyday business transactions it is fast, familiar, and often the path of least resistance. But when the amounts get large, that convenience can quietly turn into a tax liability. Under Section 10(2A) of the Inland Revenue Act, a payment of Rs. 500,000 or more that is not made through an approved method can be disallowed as a deduction — and may not be accepted as the cost of an asset — directly affecting your taxable income, your capital allowance claims, and the tax treatment of asset purchases. A 2026 amendment has now widened the list of approved methods, and understanding exactly what counts is the difference between a clean deduction and an unwelcome adjustment at audit.' },
@@ -401,7 +401,7 @@ const _archivedPosts = [
     author: A.greg,
     date: '2026-06-12',
     image: '/images/cities/hong-kong.jpg',
-    featured: true,
+    featured: false,
     popular: true,
     body: [
       { p: 'Hong Kong remains one of the most competitive places in Asia to run a company — and its two-tiered profits tax is a big part of why. But "competitive" is not the same as "automatic." A clean filing still depends on accurate books, a statutory audit, and a correctly prepared Profits Tax Return.' },
