@@ -1,4 +1,4 @@
-<script defer src="/js/global.js"></script>
+<script defer src="/js/global.js?v=<%= jsVer('global.js') %>"></script>
 <% if (typeof pageJs !== 'undefined' && pageJs) { %>
-<script defer src="/js/<%= pageJs %>"></script>
+<script defer src="/js/<%= pageJs %>?v=<%= jsVer(pageJs) %>"></script>
 <% } %>

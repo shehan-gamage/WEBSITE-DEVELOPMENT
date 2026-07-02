@@ -139,6 +139,14 @@ app.use((req, res, next) => {
     try { return Math.floor(statSync(join(__dirname, 'public', 'css', file)).mtimeMs); }
     catch { return 0; }
   };
+  /* Same cache-bust for JS. Scripts are served immutable for a year (see the
+     static-asset headers), so without a ?v=<mtime> query a returning visitor
+     keeps stale JS after a deploy. Version every local <script> the same way
+     CSS links are versioned. */
+  res.locals.jsVer = (file) => {
+    try { return Math.floor(statSync(join(__dirname, 'public', 'js', file)).mtimeMs); }
+    catch { return 0; }
+  };
   next();
 });
 

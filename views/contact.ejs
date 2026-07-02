@@ -134,6 +134,9 @@
               <label for="fMsg">Message *</label>
               <textarea id="fMsg" name="message" placeholder="Tell us about your business needs..." required maxlength="5000"></textarea>
             </div>
+            <!-- Inline status message (replaces blocking alert()); aria-live so
+                 screen readers announce validation/submit errors. -->
+            <div class="form-msg" id="formMsg" role="alert" aria-live="assertive" hidden></div>
             <button type="submit" class="btn btn-primary btn-lg" id="contactBtn" style="width:100%; justify-content:center;">Submit Inquiry</button>
             <p class="form-consent">By submitting this form, you agree to our <a href="/privacy">Privacy Policy</a> and consent to SRP International contacting you about your inquiry.</p>
           </form>
