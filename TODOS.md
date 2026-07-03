@@ -2,12 +2,18 @@
 
 ## Security
 
-### Re-enable HSTS includeSubDomains after a subdomain audit
+### Re-enable HSTS includeSubDomains — BLOCKED on DNS cleanup
 **Priority:** P2
-HSTS currently pins the main domain only (`max-age=31536000`). Before adding
-`includeSubDomains` (+ eventual preload), enumerate every DNS record on
-srpitl.com and confirm each subdomain terminates TLS — the browser pin is a
-one-way door for repeat visitors. See the header comment in `server.js`.
+HSTS pins the main domain only (`max-age=31536000`). Audit (2026-07-03, CT logs +
+DNS probe) found two subdomains that respond over HTTP with **no valid HTTPS**, so
+`includeSubDomains` can't be enabled safely yet (it's a one-way, 1-year browser pin):
+- `ftp.srpitl.com` → Hostinger `109.106.254.209`, HTTP 403, no HTTPS.
+- `autodiscover.srpitl.com` → Hostinger mail, HTTP 200, untrusted HTTPS cert.
+Both look like leftover Hostinger records (site is on Vercel, mail on Google).
+CT logs show certs only for `srpitl.com` + `www`. **Plan:** owner removes those two
+stale DNS records → re-audit → then add `includeSubDomains` to the HSTS header in
+`server.js` and ship. (Practical risk is low — FTP-protocol + Outlook autodiscover
+don't honor browser HSTS — but the pin is irreversible, so clean up first.)
 
 ### Drop `style-src 'unsafe-inline'` by removing inline style attributes
 **Priority:** P4
