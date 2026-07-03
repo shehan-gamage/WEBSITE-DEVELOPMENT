@@ -15,7 +15,7 @@
         <p class="blog-hero2-lead">Practical guidance on incorporation, tax, accounting, and global expansion — from the team that handles it every day, across five markets.</p>
 
         <% if (hasArticles) { %>
-        <form class="blog-hero2-search" role="search" id="blogSearch" autocomplete="off" onsubmit="return false;">
+        <form class="blog-hero2-search" role="search" id="blogSearch" autocomplete="off">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <input type="search" id="blogSearchInput" placeholder="Search insights — tax, incorporation, expansion…" aria-label="Search insights">
         </form>
@@ -184,7 +184,14 @@
   <%- include('partials/chatbot') %>
   <%- include('partials/scripts') %>
 
-  <script>
+  <script nonce="<%= cspNonce %>">
+    /* Keep the decorative search box from reloading the page on Enter (replaces
+       the old inline submit handler; CSP now blocks inline on* attributes). */
+    (function () {
+      var search = document.getElementById('blogSearch');
+      if (search) search.addEventListener('submit', function (e) { e.preventDefault(); });
+    })();
+
     /* Category filter carousel — endcap arrows, edge fades, active-chip reveal */
     (function () {
       var viewport = document.querySelector('.blog-filter-viewport');

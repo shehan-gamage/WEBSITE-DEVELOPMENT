@@ -325,3 +325,17 @@ document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observ
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   });
 })();
+
+// ── Flag image fallback ───────────────────────────
+// Replaces the old inline `img onerror=` handlers (blocked by the nonce-based
+// CSP). A flag <img> that fails to load is swapped for a text span showing the
+// country code. Image error events don't bubble, so listen in the CAPTURE phase
+// at the document. Driven by data-flag-fallback / data-flag-fallback-class attrs.
+document.addEventListener('error', (e) => {
+  const img = e.target;
+  if (!(img instanceof HTMLImageElement) || !img.dataset.flagFallback) return;
+  const span = document.createElement('span');
+  if (img.dataset.flagFallbackClass) span.className = img.dataset.flagFallbackClass;
+  span.textContent = img.dataset.flagFallback;
+  img.replaceWith(span);
+}, true);

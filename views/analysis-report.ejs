@@ -317,9 +317,9 @@
   <%- include('partials/scripts') %>
 
   <!-- Charts (branded) — all series derived from this edition's tables -->
-  <script>window.__REPORT__ = <%- JSON.stringify(charts) %>;</script>
+  <script nonce="<%= cspNonce %>">window.__REPORT__ = <%- JSON.stringify(charts) %>;</script>
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script>
+  <script nonce="<%= cspNonce %>">
     window.addEventListener('load', function () {
       if (!window.Chart) return;
       var R = window.__REPORT__;

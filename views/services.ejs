@@ -88,7 +88,7 @@
                          src="<%= flagSrc %>"
                          alt=""
                          loading="lazy"
-                         onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'gs-chip-flag-fallback',textContent:'<%= office.flag.toUpperCase() %>'}))">
+                         data-flag-fallback="<%= office.flag.toUpperCase() %>" data-flag-fallback-class="gs-chip-flag-fallback">
                     <% if (r.comingSoon) { %><span class="gs-chip-dot" aria-hidden="true"></span><% } %>
                   </a>
                 <% }); %>

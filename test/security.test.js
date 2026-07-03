@@ -47,7 +47,8 @@ describe('M3 — security headers', () => {
     const csp = res.headers['content-security-policy'];
     expect(csp).toContain("frame-ancestors 'none'");
     expect(csp).toContain("object-src 'none'");
-    expect(csp).toContain('script-src \'self\' \'unsafe-inline\' https://cdn.jsdelivr.net');
+    // script-src: nonce-based (no unsafe-inline), still allows self + the jsdelivr CDN. See the CSP-nonce suite.
+    expect(csp).toMatch(/script-src 'self' 'nonce-[^']+' https:\/\/cdn\.jsdelivr\.net/);
     // connect-src must include jsdelivr — public/js/map.js fetches world-atlas topojson from it
     expect(csp).toMatch(/connect-src 'self' https:\/\/cdn\.jsdelivr\.net/);
     expect(csp).toContain('https://fonts.googleapis.com');
@@ -186,6 +187,29 @@ describe('L1 — no PII written to logs when SMTP is unconfigured', () => {
     const logged = warns.mock.calls.flat().join(' ');
     expect(logged).not.toContain('reader.secret@example.com');
     expect(logged).toMatch(/tag=[0-9a-f]{10}/);
+  });
+});
+
+describe('CSP nonces (script-src locked, no unsafe-inline)', () => {
+  it('script-src uses a per-request nonce and has no unsafe-inline; style-src keeps it', async () => {
+    const csp = (await request(app).get('/contact')).headers['content-security-policy'];
+    expect(csp).toMatch(/script-src [^;]*'nonce-[^']+'/);       // nonce present
+    expect(csp).not.toMatch(/script-src[^;]*'unsafe-inline'/);  // script-src locked down
+    expect(csp).toMatch(/style-src[^;]*'unsafe-inline'/);       // style-src keeps it (attribute styles)
+  });
+
+  it('every inline <script> carries the response nonce', async () => {
+    const res = await request(app).get('/contact');
+    const nonce = res.headers['content-security-policy'].match(/'nonce-([^']+)'/)[1];
+    const inline = (res.text.match(/<script\b[^>]*>/g) || []).filter(s => !/\ssrc=/.test(s));
+    expect(inline.length).toBeGreaterThan(0);           // there IS at least one inline script (ld+json)
+    for (const s of inline) expect(s).toContain(`nonce="${nonce}"`);
+  });
+
+  it('the nonce changes per request', async () => {
+    const a = (await request(app).get('/')).headers['content-security-policy'];
+    const b = (await request(app).get('/')).headers['content-security-policy'];
+    expect(a).not.toBe(b);
   });
 });
 
