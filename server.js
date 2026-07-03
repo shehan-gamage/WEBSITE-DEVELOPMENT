@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { statSync } from 'fs';
-import { createHash } from 'crypto';
+import { createHash, randomBytes } from 'crypto';
 import 'dotenv/config';
 import { offices } from './data/offices.js';
 import { services, getService, getRegionServices, globalServices } from './data/services.js';
@@ -40,32 +40,44 @@ app.set('views', join(__dirname, 'views'));
    (matters once the Client Portal login ships); nosniff stops MIME-sniffing;
    HSTS pins HTTPS (main domain only — add includeSubDomains once every
    srpitl.com subdomain is confirmed to terminate TLS; the browser pin is a
-   one-way door). The CSP keeps 'unsafe-inline' for script/style because the
-   site relies on inline <script> blocks, inline on* handlers, and inline
-   style="" attributes throughout the EJS templates — tightening to nonces is a
-   larger refactor. Allow-lists cover the CDNs and Google Fonts actually used. */
+   one-way door).
+   CSP: script-src is locked to a per-request nonce (no 'unsafe-inline') — every
+   inline <script> carries nonce="<%= cspNonce %>"; external scripts load via
+   'self' + the jsdelivr host (NOT 'strict-dynamic', so the host allow-list still
+   applies). style-src KEEPS 'unsafe-inline' because the templates use inline
+   style="" attributes throughout, which a nonce cannot cover — removing every
+   inline style is a separate refactor (see TODOS). */
 const IS_PREVIEW = process.env.VERCEL_ENV === 'preview';
-const CSP = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "frame-ancestors 'none'",
-  "form-action 'self'",
-  /* vercel.live is the preview-deploy comments toolbar — preview only. */
-  `script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net${IS_PREVIEW ? ' https://vercel.live' : ''}`,
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: https:",
-  // jsdelivr also serves the world-atlas topojson fetched by public/js/map.js (d3.json → XHR)
-  `connect-src 'self' https://cdn.jsdelivr.net${IS_PREVIEW ? ' https://vercel.live wss://*.pusher.com' : ''}`,
-].join('; ');
+function buildCsp(nonce) {
+  return [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    /* Production: inline scripts run via the per-request nonce (no 'unsafe-inline').
+       Preview: stay permissive so Vercel Live's comment-toolbar inline scripts work
+       (our own scripts also carry the nonce, harmlessly ignored under unsafe-inline).
+       jsdelivr serves the CDN libs in both. */
+    IS_PREVIEW
+      ? "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://vercel.live"
+      : `script-src 'self' 'nonce-${nonce}' https://cdn.jsdelivr.net`,
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    // jsdelivr also serves the world-atlas topojson fetched by public/js/map.js (d3.json → XHR)
+    `connect-src 'self' https://cdn.jsdelivr.net${IS_PREVIEW ? ' https://vercel.live wss://*.pusher.com' : ''}`,
+  ].join('; ');
+}
 app.use((req, res, next) => {
+  const nonce = randomBytes(16).toString('base64');
+  res.locals.cspNonce = nonce;               // templates read this for inline <script nonce="...">
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Strict-Transport-Security', 'max-age=31536000');
   res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
-  res.setHeader('Content-Security-Policy', CSP);
+  res.setHeader('Content-Security-Policy', buildCsp(nonce));
   next();
 });
 

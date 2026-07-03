@@ -27,8 +27,9 @@
               %>
               <a href="/<%= o.slug %>" class="mega-menu-item">
                 <span class="mega-menu-flag-img" aria-hidden="true">
+                  <%- /* onerror replaced by a delegated JS handler in global.js (CSP blocks inline handlers) */ '' %>
                   <img src="<%= flagSrc %>" alt=""
-                       onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mega-menu-flag-fallback',textContent:'<%= o.flag.toUpperCase() %>'}))">
+                       data-flag-fallback="<%= o.flag.toUpperCase() %>" data-flag-fallback-class="mega-menu-flag-fallback">
                 </span>
                 <div class="mega-menu-title"><%= o.label %></div>
               </a>

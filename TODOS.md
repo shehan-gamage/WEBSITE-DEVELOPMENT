@@ -9,12 +9,14 @@ HSTS currently pins the main domain only (`max-age=31536000`). Before adding
 srpitl.com and confirm each subdomain terminates TLS — the browser pin is a
 one-way door for repeat visitors. See the header comment in `server.js`.
 
-### Migrate CSP from 'unsafe-inline' to nonces
-**Priority:** P3
-`script-src`/`style-src` carry `'unsafe-inline'` because the EJS templates
-use inline `<script>` blocks, `on*` handlers, and `style=""` attributes
-throughout. Move inline scripts to `/public/js` files, replace inline
-handlers with listeners, then drop `'unsafe-inline'` for a nonce-based CSP.
+### Drop `style-src 'unsafe-inline'` by removing inline style attributes
+**Priority:** P4
+`script-src` is now nonce-based (done — see Completed). `style-src` still needs
+`'unsafe-inline'` because the templates use inline `style=""` attributes
+throughout, which a nonce cannot cover (nonces apply to `<style>`/`<script>`
+elements, not attribute-level styles). To drop it, move every inline `style=""`
+into CSS classes, then remove `'unsafe-inline'` from `style-src`. Large, low-risk
+churn for a modest hardening gain — schedule when convenient.
 
 ## Server
 
@@ -25,6 +27,19 @@ on the paid Anthropic endpoint, front it with a shared store (e.g. Upstash
 Redis). Documented limitation in the limiter's header comment.
 
 ## Completed
+
+### CSP: lock script-src to per-request nonces (drop unsafe-inline)
+**Priority:** P3
+`script-src` is now `'self' 'nonce-<per-request>' https://cdn.jsdelivr.net` in
+production — no `'unsafe-inline'`. Every inline `<script>` carries
+`nonce="<%= cspNonce %>"`; the 4 inline `on*` handlers were removed (2 `onsubmit`,
+2 flag-image `onerror` → a delegated capture-phase `error` listener in
+`global.js`). External libs load via `'self'`/jsdelivr host (no `'strict-dynamic'`).
+Preview deploys stay permissive so Vercel Live's toolbar works. Verified by an
+adversarial 3-lens review (0 breakages) + tests asserting nonce presence, no
+script-src unsafe-inline, and every inline script nonced. `style-src` unsafe-inline
+remains (see the P4 above).
+**Completed:** 2026-07-03
 
 ### Extract a rate-limit middleware factory
 **Priority:** P3

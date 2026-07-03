@@ -48,7 +48,7 @@
     .concat(typeof jsonLd !== 'undefined' && jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : []);
 %>
 <% if (_graph.length) { %>
-<script type="application/ld+json"><%- JSON.stringify({ '@context': 'https://schema.org', '@graph': _graph }).replace(/</g, '\\u003c') %></script>
+<script type="application/ld+json" nonce="<%= cspNonce %>"><%- JSON.stringify({ '@context': 'https://schema.org', '@graph': _graph }).replace(/</g, '\\u003c') %></script>
 <% } %>
 
 <!-- Vercel Web Analytics (no-op until enabled in the Vercel dashboard) -->
