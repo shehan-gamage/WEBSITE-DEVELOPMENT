@@ -123,8 +123,7 @@ export const offices = [
     label:   'Guernsey',
     city:    'St Peter Port',
     region:  'Guernsey',
-    /* Placeholder coastal image — swap for a real St Peter Port/harbour photo when available. */
-    cityImage: '/images/cities/guernsey.png',
+    cityImage: '/images/cities/guernsey.jpg',
     tagline: 'Regional Office',
     flag:    'gg',
     isHQ:    false,
