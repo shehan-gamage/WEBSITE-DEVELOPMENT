@@ -234,6 +234,7 @@
         <span class="tg-side-label" aria-hidden="true"><%= m.firstName %></span>
 
         <span class="tg-info">
+          <% if (m.linkedin) { %>
           <a class="tg-linkedin"
              href="<%= m.linkedin %>"
              target="_blank" rel="noopener noreferrer"
@@ -244,6 +245,7 @@
               <circle cx="4" cy="4" r="2" fill="currentColor"/>
             </svg>
           </a>
+          <% } %>
           <span class="tg-text">
             <span class="tg-name"><%= m.name %></span>
             <span class="tg-role"><%= m.role %></span>
