@@ -39,6 +39,7 @@ const COUNTRIES = [
   { re: /uae|dubai/i,               country: 'United Arab Emirates', slug: 'uae',  flag: '🇦🇪' },
   { re: /united\s*kingdom|\buk\b/i, country: 'United Kingdom', slug: 'uk',        flag: '🇬🇧' },
   { re: /hong\s*kong/i,             country: 'Hong Kong',      slug: 'hong-kong', flag: '🇭🇰' },
+  { re: /guernsey/i,                country: 'Guernsey',       slug: 'guernsey',  flag: '🇬🇬' },
 ];
 
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');

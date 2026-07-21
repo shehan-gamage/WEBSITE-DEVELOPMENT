@@ -117,4 +117,28 @@ export const offices = [
       role: 'Managing Director, SRP International Hong Kong',
     },
   },
+
+  {
+    slug:    'guernsey',
+    label:   'Guernsey',
+    city:    'St Peter Port',
+    region:  'Guernsey',
+    /* Placeholder coastal image — swap for a real St Peter Port/harbour photo when available. */
+    cityImage: '/images/cities/guernsey.png',
+    tagline: 'Regional Office',
+    flag:    'gg',
+    isHQ:    false,
+    address: {
+      line1: 'Hartford House, Rue de la Foire',
+      line2: 'Castel, GY5 7DJ, Guernsey',
+    },
+    phone:     '+44 7911 756590',
+    phoneHref: '+447911756590',
+    email:     'info@srpitl.com',
+    hours:     'Mon–Fri, 9:00 AM – 5:00 PM (GMT/BST)',
+    lead: {
+      name: 'Rupert Pleasant',
+      role: 'Managing Director, SRP International Guernsey',
+    },
+  },
 ];

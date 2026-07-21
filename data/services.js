@@ -713,12 +713,143 @@ const hongKong = {
 };
 
 /* ─── Export the unified catalog keyed by region slug ─── */
+/* ─── GUERNSEY ─── bespoke 4-service catalog (client-supplied scope) ─── */
+const guernsey = {
+  'company-formation': {
+    slug: 'company-formation',
+    title: 'Company Formation & Establishment',
+    shortTitle: 'Company Formation',
+    icon: 'file-text',
+    overview: 'SRP International helps businesses and investors establish their presence in Guernsey — from entity setup and incorporation documentation through to statutory registrations and initial corporate structuring. We coordinate every step and work alongside your local professional advisers so your company is set up correctly from day one.',
+    benefits: [
+      { title: 'Set Up Correctly', desc: 'Your entity is structured and registered properly from the outset, avoiding costly corrections later.' },
+      { title: 'Local Coordination', desc: 'We work alongside your Guernsey advisers and the relevant registries so nothing falls between the cracks.' },
+      { title: 'Documentation Handled', desc: 'Incorporation paperwork and statutory registrations are prepared and submitted for you.' },
+      { title: 'One Point of Contact', desc: 'A single team coordinates the whole establishment process end to end.' },
+    ],
+    included: [
+      'Company incorporation and entity setup coordination',
+      'Preparation and submission of incorporation documentation',
+      'Assistance with statutory registrations and onboarding requirements',
+      'Support with initial corporate structuring requirements',
+      'Coordination with local professional advisers where required',
+    ],
+    process: [
+      { step: 1, title: 'Initial Consultation', desc: 'We understand your objectives and the structure you need in Guernsey.' },
+      { step: 2, title: 'Structure & Documentation', desc: 'We plan the setup and prepare the incorporation and registration documents.' },
+      { step: 3, title: 'Registration', desc: 'We submit filings and coordinate statutory registrations and onboarding.' },
+      { step: 4, title: 'Ongoing Support', desc: 'We hand over cleanly and support your governance and accounting needs as they arise.' },
+    ],
+    faqs: [
+      { q: 'Can you work alongside our existing advisers in Guernsey?', a: 'Yes. We coordinate with your local legal, tax, and professional advisers so the establishment process stays joined up.' },
+      { q: 'Do you support businesses expanding into Guernsey as well as new entities?', a: 'Yes. We assist with new incorporations and with investors or groups establishing a presence in the jurisdiction.' },
+    ],
+    relatedSlugs: ['corporate-governance', 'bookkeeping-accounting', 'outsourced-support'],
+  },
+
+  'corporate-governance': {
+    slug: 'corporate-governance',
+    title: 'Corporate Governance & Administration',
+    shortTitle: 'Governance & Administration',
+    icon: 'briefcase',
+    overview: 'We support businesses with their ongoing corporate governance and administration — company secretarial support, statutory record-keeping, board documentation, and compliance coordination — keeping your entity in good standing and your records ready for review.',
+    benefits: [
+      { title: 'Good Standing, Maintained', desc: 'Statutory records and filings stay current, so your entity remains compliant year-round.' },
+      { title: 'Board Support', desc: 'Resolutions, minutes, and corporate documentation are prepared to a consistent standard.' },
+      { title: 'Clear Oversight', desc: 'Compliance coordination and reporting keep directors and shareholders informed.' },
+      { title: 'Reliable Liaison', desc: 'We act as a steady point of contact between directors, shareholders, and advisers.' },
+    ],
+    included: [
+      'Company secretarial support',
+      'Maintenance of statutory and corporate records',
+      'Preparation of board resolutions and corporate documentation',
+      'Compliance coordination and reporting support',
+      'Liaison with directors, shareholders, and professional advisers',
+    ],
+    process: [
+      { step: 1, title: 'Records Review', desc: 'We review your statutory records and identify anything outstanding.' },
+      { step: 2, title: 'Bring Current', desc: 'We update registers and prepare any overdue documentation or filings.' },
+      { step: 3, title: 'Ongoing Administration', desc: 'We maintain records, prepare resolutions, and coordinate compliance on a rolling basis.' },
+      { step: 4, title: 'Reporting', desc: 'We keep directors and shareholders informed and flag actions ahead of deadlines.' },
+    ],
+    faqs: [
+      { q: 'Can you take over governance and administration from another provider?', a: 'Yes. We review the existing records, bring everything up to date, and continue the administration seamlessly.' },
+      { q: 'Do you prepare board resolutions and corporate documentation?', a: 'Yes. We prepare board resolutions, minutes, and the supporting corporate documentation your entity needs.' },
+    ],
+    relatedSlugs: ['company-formation', 'bookkeeping-accounting', 'outsourced-support'],
+  },
+
+  'bookkeeping-accounting': {
+    slug: 'bookkeeping-accounting',
+    title: 'Bookkeeping & Accounting Support',
+    shortTitle: 'Bookkeeping & Accounting',
+    icon: 'dollar-sign',
+    overview: 'Our accounting support helps businesses keep accurate financial records and meet ongoing reporting requirements — day-to-day bookkeeping, bank reconciliations, management reporting, and financial statement preparation support, delivered through modern accounting systems.',
+    benefits: [
+      { title: 'Accurate Records', desc: 'Clean, up-to-date books give you a reliable financial picture at any time.' },
+      { title: 'Reporting on Time', desc: 'Management reports and reconciliations are prepared to a regular schedule.' },
+      { title: 'Audit-Ready', desc: 'Well-kept records make financial statement preparation and review far smoother.' },
+      { title: 'System Fit', desc: 'We work with your accounting systems and help optimise them as you grow.' },
+    ],
+    included: [
+      'Day-to-day bookkeeping',
+      'Bank reconciliations',
+      'Management reporting',
+      'Financial statement preparation support',
+      'Accounting system management and optimisation',
+    ],
+    process: [
+      { step: 1, title: 'Onboarding', desc: 'We set up or connect to your accounting system and agree the reporting cadence.' },
+      { step: 2, title: 'Bookkeeping', desc: 'We record transactions and reconcile accounts on an ongoing basis.' },
+      { step: 3, title: 'Management Reporting', desc: 'We prepare regular management reports so you can track performance.' },
+      { step: 4, title: 'Year-End Support', desc: 'We prepare records to support financial statement preparation and review.' },
+    ],
+    faqs: [
+      { q: 'Can you work with our existing accounting software?', a: 'Yes. We work with commonly used accounting systems and can help manage or optimise your setup.' },
+      { q: 'How often will we receive management reports?', a: 'We agree a reporting schedule with you at onboarding — typically monthly, with additional reports on request.' },
+    ],
+    relatedSlugs: ['company-formation', 'corporate-governance', 'outsourced-support'],
+  },
+
+  'outsourced-support': {
+    slug: 'outsourced-support',
+    title: 'Outsourced Business Support',
+    shortTitle: 'Outsourced Support',
+    icon: 'users',
+    overview: 'Flexible operational support to help businesses manage day-to-day requirements — administrative assistance, document management, process coordination, and liaison with your legal, tax, and professional advisers — so your team can stay focused on the work that matters.',
+    benefits: [
+      { title: 'Capacity When You Need It', desc: 'Flexible support that scales with your day-to-day operational demands.' },
+      { title: 'Organised Documentation', desc: 'Document management and process coordination keep your operations tidy.' },
+      { title: 'Joined-Up Advisers', desc: 'We coordinate with your legal, tax, and professional advisers on your behalf.' },
+      { title: 'Focus Retained', desc: 'We handle the administrative load so your team stays on core priorities.' },
+    ],
+    included: [
+      'Administrative assistance',
+      'Document management',
+      'Process coordination and operational support',
+      'Coordination with legal, tax, and professional advisers',
+    ],
+    process: [
+      { step: 1, title: 'Scope', desc: 'We agree which day-to-day tasks and coordination you want supported.' },
+      { step: 2, title: 'Set Up', desc: 'We put simple processes and document management in place.' },
+      { step: 3, title: 'Ongoing Support', desc: 'We deliver administrative and operational support on a rolling basis.' },
+      { step: 4, title: 'Review', desc: 'We check in regularly and adjust the support as your needs change.' },
+    ],
+    faqs: [
+      { q: 'Is the support flexible month to month?', a: 'Yes. We scope the support to your needs and can adjust it as your requirements change.' },
+      { q: 'Will you liaise with our other advisers?', a: 'Yes. We coordinate with your legal, tax, and professional advisers so your operations stay joined up.' },
+    ],
+    relatedSlugs: ['company-formation', 'corporate-governance', 'bookkeeping-accounting'],
+  },
+};
+
 export const services = {
   'sri-lanka': sriLanka,
   'singapore': singapore,
   'uae':       uae,
   'uk':        uk,
   'hong-kong': hongKong,
+  'guernsey':  guernsey,
 };
 
 /* ─── GLOBAL service portfolio ─────────────────────
@@ -747,6 +878,7 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'incorporation' },
       { slug: 'uk',        linkSlug: 'incorporation' },
       { slug: 'hong-kong', linkSlug: 'incorporation' },
+      { slug: 'guernsey',  linkSlug: 'company-formation' },
     ],
   },
   {
@@ -769,6 +901,7 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'accounting' },
       { slug: 'uk',        linkSlug: 'accounting' },
       { slug: 'hong-kong', linkSlug: 'accounting' },
+      { slug: 'guernsey',  linkSlug: 'bookkeeping-accounting' },
     ],
   },
   {

@@ -280,7 +280,7 @@ app.get('/', (req, res) => {
   res.render('home', {
     activePage: 'home',
     title: 'SRP International | Corporate Services Built for the Long Term',
-    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across five markets.',
+    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across six markets.',
     pageCss: 'home.css',
     pageJs: 'home.js',
     /* Preload the first cinematic hero frame (the LCP element) — see views/home.ejs */
@@ -348,7 +348,7 @@ app.get('/blog', (req, res) => {
     title: active
       ? `${categoryName(active)} | SRP Insights`
       : 'SRP Insights | Corporate Services Articles & Guidance',
-    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — from the SRP International team.',
+    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey — from the SRP International team.',
     pageCss: 'blog.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
@@ -554,7 +554,7 @@ app.get('/global-presence', (req, res) => {
   res.render('global-presence', {
     activePage: 'global-presence',
     title: 'Global Presence | SRP International',
-    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, and Hong Kong — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
+    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, Hong Kong, and Guernsey — supporting clients across South Asia, South-East Asia, the Middle East, Europe, East Asia, and the Channel Islands.',
     pageCss: 'services.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
@@ -569,7 +569,7 @@ app.get('/privacy', (req, res) => {
   res.render('privacy', {
     activePage: '',
     title: 'Privacy Policy | SRP International',
-    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
+    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey.',
     pageCss: null,
     pageJs: null,
   });
@@ -649,7 +649,7 @@ app.get('/contact', (req, res) => {
   res.render('contact', {
     activePage: 'contact',
     title: 'Contact Us | SRP International',
-    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, and Hong Kong.',
+    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, Hong Kong, and Guernsey.',
     pageCss: 'contact.css',
     pageJs: 'contact.js',
     jsonLd: [
