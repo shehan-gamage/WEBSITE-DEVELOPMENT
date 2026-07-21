@@ -554,7 +554,7 @@ app.get('/global-presence', (req, res) => {
   res.render('global-presence', {
     activePage: 'global-presence',
     title: 'Global Presence | SRP International',
-    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, Hong Kong, and Guernsey — supporting clients across South Asia, South-East Asia, the Middle East, Europe, East Asia, and the Channel Islands.',
+    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, Hong Kong, and Guernsey — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
     pageCss: 'services.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
