@@ -108,9 +108,9 @@
    the darker slides (matched to Hong Kong). */
 .fx-bgs .fx-bg:nth-child(6) .fx-bg-overlay {
   background: linear-gradient(150deg,
-    rgba(3,  16, 63,  0.54) 0%,
-    rgba(6,  30, 117, 0.44) 50%,
-    rgba(14, 42, 159, 0.48) 100%);
+    rgba(3,  16, 63,  0.60) 0%,
+    rgba(6,  30, 117, 0.50) 50%,
+    rgba(14, 42, 159, 0.54) 100%);
 }
 
 /* Soft vignette across the whole hero */
