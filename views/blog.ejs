@@ -93,16 +93,16 @@
         <h2 class="blog-showcase-h2">Monthly Financial &amp; Economic Analysis</h2>
         <p class="blog-showcase-sub">A recurring SRP Research briefing on the markets we operate in — equity indices, inflation, exchange rates, commodities, and the external-sector trends that shape cross-border business decisions.</p>
       </div>
-      <a class="blog-showcase" href="/insights/financial-economic-analysis-may-2026">
+      <a class="blog-showcase" href="/insights/<%= latestReport.slug %>">
         <div class="blog-showcase-media">
           <img src="/images/services/financial-services.jpg" alt="" loading="lazy" decoding="async">
-          <span class="blog-pill blog-pill--gold blog-showcase-tag">May 2026</span>
-          <span class="blog-showcase-cap">May 2026 &middot; Executive Summary</span>
+          <span class="blog-pill blog-pill--gold blog-showcase-tag"><%= latestReport.label %></span>
+          <span class="blog-showcase-cap"><%= latestReport.label %> &middot; Executive Summary</span>
         </div>
         <div class="blog-showcase-body">
           <span class="blog-pill blog-pill--plain">Market Updates</span>
-          <h3 class="blog-showcase-title">Financial &amp; Economic Analysis — May 2026</h3>
-          <p class="blog-showcase-summary">Sri Lankan equities edged lower as the ASPI eased 1.06% to 22,310.80; headline inflation ticked up to 5.5%, the rupee weakened 2.65% to LKR 327.82/USD, and Brent crude fell to around USD 91/bbl — even as tourist arrivals rose 9.65% year-on-year. Here is the full breakdown across local and international markets.</p>
+          <h3 class="blog-showcase-title"><%= latestReport.title %></h3>
+          <p class="blog-showcase-summary"><%= latestReport.summary.equity %></p>
           <span class="blog-showcase-cta">Read the analysis <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
         </div>
       </a>

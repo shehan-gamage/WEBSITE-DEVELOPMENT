@@ -360,6 +360,9 @@ app.get('/blog', (req, res) => {
     counts: categoryCounts(),
     categoryName, readingTime,
     hasArticles: posts.length > 0,
+    /* Newest Financial & Economic Analysis edition — drives the /blog
+       "Monthly Briefing" showcase so it always points at the latest report. */
+    latestReport: latestEdition,
   });
 });
 
