@@ -673,6 +673,25 @@
 
 .gp-panel.is-soon { opacity: .92; }
 
+/* One-row (6-up) desktop: the tiles are narrow, so street addresses wrap to a
+   different number of lines each. Anchor the address to a fixed top and pin the
+   phone/email/hours rows to the bottom, so BOTH ends line up across every tile;
+   the flexible gap in between absorbs each address's differing line count.
+   Scoped to the wide layout only — the 2-up / 1-up views have wider tiles. */
+@media (min-width: 1101px) {
+  .gp-panel-details {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 54%;
+    bottom: 36px;
+    width: auto;
+    max-width: none;
+    justify-content: flex-start;
+  }
+  .gp-panel-details .gp-panel-row:nth-child(2) { margin-top: auto; }
+}
+
 /* ─── Responsive ───
    Drop to 2 columns well before the 6-up panels get narrow enough to
    crush the country names (6-up stays only on genuinely wide screens). */
