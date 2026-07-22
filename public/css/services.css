@@ -485,7 +485,7 @@
 ═══════════════════════════════════════════════════ */
 .gp-panels {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   width: 100%;
   height: clamp(520px, 78vh, 740px);
   margin-top: 24px;
@@ -674,8 +674,8 @@
 .gp-panel.is-soon { opacity: .92; }
 
 /* ─── Responsive ───
-   Drop to 2 columns well before the 5-up panels get narrow enough to
-   crush the country names (5-up stays only on genuinely wide screens). */
+   Drop to 2 columns well before the 6-up panels get narrow enough to
+   crush the country names (6-up stays only on genuinely wide screens). */
 @media (max-width: 1100px) {
   .gp-panels { grid-template-columns: 1fr 1fr; height: auto; }
   .gp-panel { aspect-ratio: 3 / 4; }
