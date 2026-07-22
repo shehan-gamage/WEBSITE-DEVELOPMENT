@@ -105,8 +105,8 @@ export const offices = [
     flag:    'hk',
     isHQ:    false,
     address: {
-      line1: '7/F, 39 Village Road',
-      line2: 'Happy Valley, Hong Kong',
+      line1: 'Suite 913, 9/F., Chinachem Golden Plaza',
+      line2: 'No. 77 Mody Road, Tsim Sha Tsui, Kowloon, Hong Kong',
     },
     phone:     '+852 9387 5524',
     phoneHref: '+85293875524',
@@ -128,8 +128,8 @@ export const offices = [
     flag:    'gg',
     isHQ:    false,
     address: {
-      line1: 'Hartford House, Rue de la Foire',
-      line2: 'Castel, GY5 7DJ, Guernsey',
+      line1: '3rd Floor, 10 Le Pollet',
+      line2: 'St. Peter Port, Guernsey, GY1 1WH',
     },
     phone:     '+44 7911 756590',
     phoneHref: '+447911756590',
