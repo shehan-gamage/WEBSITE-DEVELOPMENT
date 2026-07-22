@@ -673,23 +673,20 @@
 
 .gp-panel.is-soon { opacity: .92; }
 
-/* One-row (6-up) desktop: the tiles are narrow, so street addresses wrap to a
-   different number of lines each. Anchor the address to a fixed top and pin the
-   phone/email/hours rows to the bottom, so BOTH ends line up across every tile;
-   the flexible gap in between absorbs each address's differing line count.
-   Scoped to the wide layout only — the 2-up / 1-up views have wider tiles. */
+/* One-row (6-up) desktop: pin the contact block to a fixed top position so the
+   four rows (address, phone, email, working hours) stack from the same top
+   baseline on every tile — address first, each row top-aligned — with any
+   spare height falling at the bottom of the tile. Scoped to the wide layout
+   only; the 2-up / 1-up views have wider tiles and keep the default flow. */
 @media (min-width: 1101px) {
   .gp-panel-details {
     position: absolute;
     left: 22px;
     right: 22px;
-    top: 54%;
-    bottom: 36px;
+    top: 52%;
     width: auto;
     max-width: none;
-    justify-content: flex-start;
   }
-  .gp-panel-details .gp-panel-row:nth-child(2) { margin-top: auto; }
 }
 
 /* ─── Responsive ───
