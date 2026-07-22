@@ -296,7 +296,7 @@ const team = [
   { firstName:'Charles',  name:'Charles Harbottle',     role:'Managing Director — Singapore',                  photo:'/images/team/Charles.jpg',  linkedin:'https://www.linkedin.com/in/charles-harbottle-64868aa' },
   { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.jpg', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
   { firstName:'Greg',     name:'Greg Brutus',           role:'Managing Director — Hong Kong',                  photo:'/images/team/Greg.jpg',     linkedin:'https://www.linkedin.com/in/gregbrutushk/' },
-  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director — Guernsey',                   photo:'/images/team/Rupert.png' },
+  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director — Guernsey',                   photo:'/images/team/Rupert.png',   linkedin:'https://www.linkedin.com/in/rupert-pleasant-5113a29/' },
   { firstName:'Madushini', name:'Madushini Fernando',    role:'Director',                                       photo:'/images/team/Madushini.jpg',linkedin:'https://www.linkedin.com/in/madushini-fernando-6722a7189' },
   { firstName:'Shehan',   name:'Shehan Gamage',         role:'Chief Operating Officer',                        photo:'/images/team/Shehan.jpg',   linkedin:'https://www.linkedin.com/in/shehan-gamage-3987151a2' },
   { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.jpg',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
