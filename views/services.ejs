@@ -75,7 +75,7 @@
               <div class="gs-detail-flags">
                 <% svc.regions.forEach(function(r) {
                   const office = offices.find(o => o.slug === r.slug);
-                  if (!office) return; %>
+                  if (!office || office.hideServices) return; %>
                   <%
                     /* UAE uses the circle-flags library (pre-cropped circular SVG).
                        All other countries continue to use the original flagcdn.com source. */

@@ -221,6 +221,10 @@ function buildMarketCatalog() {
     const hours = office.hours ? ` Hours: ${office.hours}.` : '';
     out.push(`\n## ${office.label} — ${office.city}${soon}`);
     out.push(`Office: ${office.address.line1}, ${office.address.line2}. Phone: ${office.phone}. Email: ${office.email}.${hours}${lead}`);
+    if (office.hideServices) {
+      out.push('Services for this office are still being finalised and will be announced closer to opening. Do not list or promise specific services here; invite the client to register their interest.');
+      continue;
+    }
     for (const svc of Object.values(svcMap)) {
       out.push(`\n### ${svc.title}`);
       if (svc.overview) out.push(svc.overview);
@@ -299,7 +303,7 @@ const team = [
   { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.jpg',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
   { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.jpg', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
   { firstName:'Greg',     name:'Greg Brutus',           role:'Managing Director — Hong Kong',                  photo:'/images/team/Greg.jpg',     linkedin:'https://www.linkedin.com/in/gregbrutushk/' },
-  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director — Guernsey',                   photo:'/images/team/Rupert.png',   linkedin:'https://www.linkedin.com/in/rupert-pleasant-5113a29/' },
+  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director',                   photo:'/images/team/Rupert.png',   linkedin:'https://www.linkedin.com/in/rupert-pleasant-5113a29/' },
 ];
 
 /* Cache-busting version for team portraits. Bump whenever a photo file is
@@ -596,12 +600,14 @@ app.get('/:region', (req, res, next) => {
   const { region } = req.params;
   if (!KNOWN_REGIONS.has(region)) return next();
   const office          = offices.find(o => o.slug === region);
-  const regionServices  = getRegionServices(region);
+  const regionServices  = office.hideServices ? [] : getRegionServices(region);
   res.render('region', {
     activePage: 'regions',
     activeRegion: region,
     title: `${office.label} | SRP International`,
-    description: `Corporate services in ${office.label}: ${regionServices.map(s => s.shortTitle).join(', ')}.`,
+    description: office.hideServices
+      ? `SRP International in ${office.label} — our office is coming soon.`
+      : `Corporate services in ${office.label}: ${regionServices.map(s => s.shortTitle).join(', ')}.`,
     pageCss: 'services.css',
     pageJs: null,
     jsonLd: [
@@ -621,9 +627,12 @@ app.get('/:region', (req, res, next) => {
 app.get('/:region/:slug', (req, res, next) => {
   const { region, slug } = req.params;
   if (!KNOWN_REGIONS.has(region)) return next();
+  const office          = offices.find(o => o.slug === region);
+  /* Region marked coming-soon with an undecided service list — its service
+     detail pages stay hidden (404) until the catalog is confirmed.        */
+  if (office && office.hideServices) return res.status(404).render('404', { activePage: '', title: 'Page Not Found | SRP International', robots: 'noindex, follow', pageCss: null, pageJs: null });
   const service = getService(region, slug);
   if (!service) return res.status(404).render('404', { activePage: '', title: 'Page Not Found | SRP International', robots: 'noindex, follow', pageCss: null, pageJs: null });
-  const office          = offices.find(o => o.slug === region);
   const relatedServices = (service.relatedSlugs || [])
     .map(s => getService(region, s))
     .filter(Boolean);
@@ -980,6 +989,7 @@ app.get('/sitemap.xml', (req, res) => {
   // Regional hubs + region-scoped service detail pages.
   for (const o of offices) {
     items.push(entry(`/${o.slug}`, { priority: '0.8' }));
+    if (o.hideServices) continue;   // service pages hidden until the catalog is confirmed
     for (const s of Object.keys(services[o.slug] || {})) {
       items.push(entry(`/${o.slug}/${s}`, { priority: '0.7' }));
     }

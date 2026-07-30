@@ -23,6 +23,7 @@
     </div>
   </section>
 
+  <% if (!office.hideServices) { %>
   <!-- ══ SERVICES IN THIS REGION ═════════════════════ -->
   <section class="section">
     <div class="container">
@@ -81,6 +82,7 @@
       </div>
     </div>
   </section>
+  <% } %>
 
   <!-- ══ OFFICE INFO CARD ═══════════════════════════ -->
   <section class="section region-office-section">
@@ -123,8 +125,13 @@
 
   <!-- ══ CTA ═════════════════════════════════════════ -->
   <section class="cta-band">
+    <% if (office.comingSoon) { %>
+    <h2>Interested in SRP <%= office.label %>?</h2>
+    <p>Our <%= office.city %> office is coming soon. Register your interest and our team will be in touch as we open.</p>
+    <% } else { %>
     <h2>Ready to set up in <%= office.label %>?</h2>
     <p>Talk to our <%= office.city %> team about incorporation, governance, and accounting — calibrated to your scope.</p>
+    <% } %>
     <div class="cta-band-btns" style="justify-content:center;">
       <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
     </div>
