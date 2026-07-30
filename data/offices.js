@@ -117,4 +117,27 @@ export const offices = [
       role: 'Managing Director, SRP International Hong Kong',
     },
   },
+
+  {
+    slug:    'guernsey',
+    label:   'Guernsey',
+    city:    'St Peter Port',
+    region:  'Guernsey',
+    cityImage: '/images/cities/guernsey.jpg',
+    tagline: 'Regional Office',
+    flag:    'gg',
+    isHQ:    false,
+    address: {
+      line1: '3rd Floor, 10 Le Pollet',
+      line2: 'St. Peter Port, Guernsey, GY1 1WH',
+    },
+    phone:     '+44 7911 756590',
+    phoneHref: '+447911756590',
+    email:     'info@srpitl.com',
+    hours:     'Mon–Fri, 9:00 AM – 5:00 PM (GMT/BST)',
+    lead: {
+      name: 'Rupert Pleasant',
+      role: 'Managing Director, SRP International Guernsey',
+    },
+  },
 ];

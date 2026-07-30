@@ -280,7 +280,7 @@ app.get('/', (req, res) => {
   res.render('home', {
     activePage: 'home',
     title: 'SRP International | Corporate Services Built for the Long Term',
-    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across five markets.',
+    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across six markets.',
     pageCss: 'home.css',
     pageJs: 'home.js',
     /* Preload the first cinematic hero frame (the LCP element) — see views/home.ejs */
@@ -299,6 +299,7 @@ const team = [
   { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.jpg',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
   { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.jpg', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
   { firstName:'Greg',     name:'Greg Brutus',           role:'Managing Director — Hong Kong',                  photo:'/images/team/Greg.jpg',     linkedin:'https://www.linkedin.com/in/gregbrutushk/' },
+  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director — Guernsey',                   photo:'/images/team/Rupert.png',   linkedin:'https://www.linkedin.com/in/rupert-pleasant-5113a29/' },
 ];
 
 /* Cache-busting version for team portraits. Bump whenever a photo file is
@@ -348,7 +349,7 @@ app.get('/blog', (req, res) => {
     title: active
       ? `${categoryName(active)} | SRP Insights`
       : 'SRP Insights | Corporate Services Articles & Guidance',
-    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — from the SRP International team.',
+    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey — from the SRP International team.',
     pageCss: 'blog.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
@@ -557,7 +558,7 @@ app.get('/global-presence', (req, res) => {
   res.render('global-presence', {
     activePage: 'global-presence',
     title: 'Global Presence | SRP International',
-    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, and Hong Kong — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
+    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, Hong Kong, and Guernsey — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
     pageCss: 'services.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
@@ -572,7 +573,7 @@ app.get('/privacy', (req, res) => {
   res.render('privacy', {
     activePage: '',
     title: 'Privacy Policy | SRP International',
-    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
+    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey.',
     pageCss: null,
     pageJs: null,
   });
@@ -652,7 +653,7 @@ app.get('/contact', (req, res) => {
   res.render('contact', {
     activePage: 'contact',
     title: 'Contact Us | SRP International',
-    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, and Hong Kong.',
+    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, Hong Kong, and Guernsey.',
     pageCss: 'contact.css',
     pageJs: 'contact.js',
     jsonLd: [

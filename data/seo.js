@@ -44,6 +44,7 @@ const COUNTRY_CODE = {
   'uae': 'AE',
   'uk': 'GB',
   'hong-kong': 'HK',
+  'guernsey': 'GG',
 };
 
 /* ── Sitewide nodes (emitted on every page) ─────────── */
@@ -61,7 +62,7 @@ export function organizationLd(base) {
     },
     image: `${base}/images/og/share.png`,
     description:
-      'SRP International is a professional corporate services firm providing company incorporation & governance, financial services, research & business planning, and human resource management across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
+      'SRP International is a professional corporate services firm providing company incorporation & governance, financial services, research & business planning, and human resource management across Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey.',
     slogan: 'Your trusted partner for outsourced corporate services and business support.',
     foundingDate: '2017',
     email: HQ.email,
