@@ -103,16 +103,6 @@
 /* UK — baseline (uses default --fx-overlay). No override. */
 /* Hong Kong (child 5) — baseline. No override. */
 
-/* Guernsey (child 6) — the St Peter Port photo is bright and sunny, so it
-   needs a heavier navy tint than the baseline to read with the same mood as
-   the darker slides (matched to Hong Kong). */
-.fx-bgs .fx-bg:nth-child(6) .fx-bg-overlay {
-  background: linear-gradient(150deg,
-    rgba(3,  16, 63,  0.85) 0%,
-    rgba(6,  30, 117, 0.75) 50%,
-    rgba(14, 42, 159, 0.79) 100%);
-}
-
 /* Soft vignette across the whole hero */
 .fx-bgs::after {
   content: '';

@@ -15,9 +15,6 @@
     '144': { name: 'Sri Lanka',            code: 'LK', iso2: 'lk', role: 'Head Office',     geo: [ 80.7,   7.9 ], desc: 'Corporate services across Sri Lanka and the South Asia region',     tag: 'Operational Hub' },
     '702': { name: 'Singapore',            code: 'SG', iso2: 'sg', role: 'South-East Asia', geo: [103.8,   1.4 ], desc: 'Corporate services across Singapore and the South-East Asia region', tag: 'Regional Office' },
     '344': { name: 'Hong Kong',            code: 'HK', iso2: 'hk', role: 'East Asia',       geo: [114.2,  22.3 ], desc: 'Corporate services across Hong Kong and the Greater China region',   tag: 'Regional Office' },
-    /* geo nudged SW into open water so the badge clears the UK badge (Guernsey
-       sits right against the UK at world scale; the tooltip still reads Guernsey). */
-    '831': { name: 'Guernsey',             code: 'GG', iso2: 'gg', role: 'Europe',          geo: [ -7.6,  47.2 ], desc: 'Corporate services in Guernsey and the wider region',              tag: 'Regional Office' },
   };
 
   /* Flag URLs — flagcdn.com w160 for rectangular flags, with a
@@ -162,7 +159,7 @@
       const flagLayer = g.append('g').attr('class', 'flag-layer');
 
       /* Stagger float delay — each flag bobs at its own phase */
-      const FLOAT_DELAYS = { '826': '0s', '784': '0.9s', '144': '1.8s', '702': '2.7s', '344': '3.6s', '831': '4.5s' };
+      const FLOAT_DELAYS = { '826': '0s', '784': '0.9s', '144': '1.8s', '702': '2.7s', '344': '3.6s' };
       const GOLD = '#CEAF71';
 
       /* Circle badge radius (SVG units) */

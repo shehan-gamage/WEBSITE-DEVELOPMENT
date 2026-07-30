@@ -713,7 +713,10 @@ const hongKong = {
 };
 
 /* ─── Export the unified catalog keyed by region slug ─── */
-/* ─── GUERNSEY ─── bespoke 4-service catalog (client-supplied scope) ─── */
+/* ─── GUERNSEY ─── HIDDEN. The office was removed from data/offices.js, so
+   this catalog is intentionally left unwired: not in the `services` export,
+   no /guernsey route, no region chips. Kept here so Guernsey can be
+   re-enabled quickly if needed. ─── */
 const guernsey = {
   'company-formation': {
     slug: 'company-formation',
@@ -849,7 +852,6 @@ export const services = {
   'uae':       uae,
   'uk':        uk,
   'hong-kong': hongKong,
-  'guernsey':  guernsey,
 };
 
 /* ─── GLOBAL service portfolio ─────────────────────
@@ -878,7 +880,6 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'incorporation' },
       { slug: 'uk',        linkSlug: 'incorporation' },
       { slug: 'hong-kong', linkSlug: 'incorporation' },
-      { slug: 'guernsey',  linkSlug: 'company-formation' },
     ],
   },
   {
@@ -901,7 +902,6 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'accounting' },
       { slug: 'uk',        linkSlug: 'accounting' },
       { slug: 'hong-kong', linkSlug: 'accounting' },
-      { slug: 'guernsey',  linkSlug: 'bookkeeping-accounting' },
     ],
   },
   {

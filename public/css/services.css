@@ -485,7 +485,7 @@
 ═══════════════════════════════════════════════════ */
 .gp-panels {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   width: 100%;
   height: clamp(520px, 78vh, 740px);
   margin-top: 24px;
@@ -673,7 +673,7 @@
 
 .gp-panel.is-soon { opacity: .92; }
 
-/* One-row (6-up) desktop: pin the contact block to a fixed top position AND
+/* One-row (5-up) desktop: pin the contact block to a fixed top position AND
    reserve a uniform height for the address row (tall enough for the longest
    address, ~6 lines) so all four rows — address, phone, email, working hours —
    line up on a strict grid across every tile. Shorter addresses simply leave
@@ -692,8 +692,8 @@
 }
 
 /* ─── Responsive ───
-   Drop to 2 columns well before the 6-up panels get narrow enough to
-   crush the country names (6-up stays only on genuinely wide screens). */
+   Drop to 2 columns well before the 5-up panels get narrow enough to
+   crush the country names (5-up stays only on genuinely wide screens). */
 @media (max-width: 1100px) {
   .gp-panels { grid-template-columns: 1fr 1fr; height: auto; }
   .gp-panel { aspect-ratio: 3 / 4; }
