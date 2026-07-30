@@ -217,7 +217,7 @@ function buildMarketCatalog() {
     const svcMap = services[office.slug];
     if (!svcMap) continue;
     const lead = office.lead ? ` Regional lead: ${office.lead.name}, ${office.lead.role}.` : '';
-    const soon = office.comingSoon ? ' (office opening soon)' : '';
+    const soon = office.comingSoon ? ' (coming soon)' : '';
     const hours = office.hours ? ` Hours: ${office.hours}.` : '';
     out.push(`\n## ${office.label} — ${office.city}${soon}`);
     out.push(`Office: ${office.address.line1}, ${office.address.line2}. Phone: ${office.phone}. Email: ${office.email}.${hours}${lead}`);

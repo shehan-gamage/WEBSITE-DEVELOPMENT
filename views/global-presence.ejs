@@ -33,11 +33,12 @@
     <!-- Photo-panel directory — country name top-centre + office details below -->
     <div class="gp-panels">
       <% offices.forEach(function(o) { %>
-        <a href="/<%= o.slug %>" class="gp-panel<%= o.isHQ ? ' is-hq' : '' %><%= o.comingSoon ? ' is-soon' : '' %>" style="background-image: url('<%= o.cityImage %>')" aria-label="<%= o.label %>">
+        <a href="/<%= o.slug %>" class="gp-panel<%= o.isHQ ? ' is-hq' : '' %><%= o.comingSoon ? ' is-soon' : '' %>" style="background-image: url('<%= o.cityImage %>')" aria-label="<%= o.label %><%= o.comingSoon ? ' — coming soon' : '' %>">
           <span class="gp-panel-overlay" aria-hidden="true"></span>
           <div class="gp-panel-inner">
             <div class="gp-panel-headline">
               <h3 class="gp-panel-title"><%= o.label %></h3>
+              <% if (o.comingSoon) { %><span class="gp-panel-soon">Coming Soon</span><% } %>
               <div class="gp-panel-rule" aria-hidden="true"></div>
             </div>
 

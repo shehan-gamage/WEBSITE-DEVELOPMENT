@@ -17,7 +17,7 @@
     '344': { name: 'Hong Kong',            code: 'HK', iso2: 'hk', role: 'East Asia',       geo: [114.2,  22.3 ], desc: 'Corporate services across Hong Kong and the Greater China region',   tag: 'Regional Office' },
     /* geo nudged SW into open water so the badge clears the UK badge (Guernsey
        sits right against the UK at world scale; the tooltip still reads Guernsey). */
-    '831': { name: 'Guernsey',             code: 'GG', iso2: 'gg', role: 'Europe',          geo: [ -7.6,  47.2 ], desc: 'Corporate services in Guernsey and the wider region',              tag: 'Regional Office' },
+    '831': { name: 'Guernsey',             code: 'GG', iso2: 'gg', role: 'Europe',          geo: [ -7.6,  47.2 ], desc: 'Corporate services in Guernsey and the wider region',              tag: 'Coming Soon' },
   };
 
   /* Flag URLs — flagcdn.com w160 for rectangular flags, with a

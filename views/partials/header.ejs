@@ -32,6 +32,7 @@
                        data-flag-fallback="<%= o.flag.toUpperCase() %>" data-flag-fallback-class="mega-menu-flag-fallback">
                 </span>
                 <div class="mega-menu-title"><%= o.label %></div>
+                <% if (o.comingSoon) { %><span class="mega-menu-soon">Coming Soon</span><% } %>
               </a>
             <% }); %>
           </div>
@@ -60,7 +61,7 @@
   <a href="/global-presence" <% if (typeof activePage !== 'undefined' && (activePage === 'global-presence' || activePage === 'regions')) { %>class="active"<% } %>>Global Presence</a>
   <div class="mobile-mega-section">
     <% offices.forEach(function(o) { %>
-      <a href="/<%= o.slug %>"><%= o.label %><% if (o.isHQ) { %> · Hub<% } %><% if (o.comingSoon) { %> · Opening 2026<% } %></a>
+      <a href="/<%= o.slug %>"><%= o.label %><% if (o.isHQ) { %> · Hub<% } %><% if (o.comingSoon) { %> · Coming Soon<% } %></a>
     <% }); %>
   </div>
   <a href="/blog" <% if (typeof activePage !== 'undefined' && activePage === 'blog') { %>class="active"<% } %>>Insights</a>

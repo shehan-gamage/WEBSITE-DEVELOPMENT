@@ -717,6 +717,7 @@ const hongKong = {
 const guernsey = {
   'company-formation': {
     slug: 'company-formation',
+    comingSoon: true,
     title: 'Company Formation & Establishment',
     shortTitle: 'Company Formation',
     icon: 'file-text',
@@ -749,6 +750,7 @@ const guernsey = {
 
   'corporate-governance': {
     slug: 'corporate-governance',
+    comingSoon: true,
     title: 'Corporate Governance & Administration',
     shortTitle: 'Governance & Administration',
     icon: 'briefcase',
@@ -781,6 +783,7 @@ const guernsey = {
 
   'bookkeeping-accounting': {
     slug: 'bookkeeping-accounting',
+    comingSoon: true,
     title: 'Bookkeeping & Accounting Support',
     shortTitle: 'Bookkeeping & Accounting',
     icon: 'dollar-sign',
@@ -813,6 +816,7 @@ const guernsey = {
 
   'outsourced-support': {
     slug: 'outsourced-support',
+    comingSoon: true,
     title: 'Outsourced Business Support',
     shortTitle: 'Outsourced Support',
     icon: 'users',
@@ -878,7 +882,7 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'incorporation' },
       { slug: 'uk',        linkSlug: 'incorporation' },
       { slug: 'hong-kong', linkSlug: 'incorporation' },
-      { slug: 'guernsey',  linkSlug: 'company-formation' },
+      { slug: 'guernsey',  linkSlug: 'company-formation', comingSoon: true },
     ],
   },
   {
@@ -901,7 +905,7 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'accounting' },
       { slug: 'uk',        linkSlug: 'accounting' },
       { slug: 'hong-kong', linkSlug: 'accounting' },
-      { slug: 'guernsey',  linkSlug: 'bookkeeping-accounting' },
+      { slug: 'guernsey',  linkSlug: 'bookkeeping-accounting', comingSoon: true },
     ],
   },
   {

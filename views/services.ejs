@@ -83,7 +83,7 @@
                       ? `https://cdn.jsdelivr.net/gh/hatscripts/circle-flags@latest/flags/${office.flag}.svg`
                       : `https://flagcdn.com/${office.flag}.svg`;
                   %>
-                  <a href="/<%= r.slug %>/<%= r.linkSlug %>" class="gs-chip<%= r.comingSoon ? ' is-soon' : '' %>" aria-label="<%= office.label %><%= r.comingSoon ? ' (opening 2026)' : '' %>">
+                  <a href="/<%= r.slug %>/<%= r.linkSlug %>" class="gs-chip<%= r.comingSoon ? ' is-soon' : '' %>" aria-label="<%= office.label %><%= r.comingSoon ? ' (coming soon)' : '' %>">
                     <img class="gs-chip-flag"
                          src="<%= flagSrc %>"
                          alt=""

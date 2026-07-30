@@ -673,6 +673,23 @@
 
 .gp-panel.is-soon { opacity: .92; }
 
+/* "Coming Soon" pill on a not-yet-open market tile — solid gold so it
+   reads on any cityscape photo, centred under the country name. */
+.gp-panel-soon {
+  display: inline-block;
+  padding: 4px 13px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: #1c1500;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.40);
+  white-space: nowrap;
+}
+
 /* One-row (6-up) desktop: pin the contact block to a fixed top position AND
    reserve a uniform height for the address row (tall enough for the longest
    address, ~6 lines) so all four rows — address, phone, email, working hours —

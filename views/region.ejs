@@ -16,7 +16,7 @@
         <span><%= office.label %></span>
       </div>
       <h1>SRP International in <%= office.label %></h1>
-      <p>Corporate services tailored to <%= office.label %>'s regulations — backed by the strength and experience of SRP's wider regional group.<% if (office.comingSoon) { %> Our <%= office.city %> office opens in 2026; existing SRP clients can register interest now for priority onboarding.<% } %></p>
+      <p>Corporate services tailored to <%= office.label %>'s regulations — backed by the strength and experience of SRP's wider regional group.<% if (office.comingSoon) { %> Our <%= office.city %> office is coming soon; existing SRP clients can register interest now for priority onboarding.<% } %></p>
       <div style="margin-top:28px; display:flex; justify-content:center;">
         <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
@@ -48,7 +48,7 @@
                 <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
               <% } %>
             </div>
-            <h3 class="svc-title"><%= svc.title %><% if (svc.comingSoon) { %> <span class="svc-pill">Opening 2026</span><% } %></h3>
+            <h3 class="svc-title"><%= svc.title %><% if (svc.comingSoon) { %> <span class="svc-pill">Coming Soon</span><% } %></h3>
             <p class="svc-body"><%= firstSentence(svc.overview) %></p>
             <span class="svc-link">
               Learn More
@@ -93,7 +93,7 @@
             <div class="region-office-country"><%= office.label %></div>
           </div>
           <% if (office.isHQ) { %><span class="office-pill office-pill--hq">Operational Hub</span><% } %>
-          <% if (office.comingSoon) { %><span class="office-pill office-pill--soon">Opening 2026</span><% } %>
+          <% if (office.comingSoon) { %><span class="office-pill office-pill--soon">Coming Soon</span><% } %>
         </div>
         <div class="region-office-grid">
           <div class="region-office-block">

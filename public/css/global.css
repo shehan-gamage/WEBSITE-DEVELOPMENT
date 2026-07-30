@@ -626,6 +626,23 @@ nav.scrolled {
 }
 .mega-menu-item:hover .mega-menu-title { color: var(--navy); }
 
+/* "Coming Soon" micro-pill for a not-yet-open office in the mega-menu */
+.mega-menu-soon {
+  flex-shrink: 0;
+  margin-left: 8px;
+  font-size: 9px;
+  font-weight: var(--fw-bold, 700);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #8a6d1f;
+  background: #f6edd6;
+  border: 1px solid #e6d5a5;
+  border-radius: 999px;
+  padding: 2px 7px;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
 /* Circular flag image — replaces the old SVG icon tile / 2-letter chip.
    34×34 perfect circle, soft hairline, scales on hover.               */
 .mega-menu-flag-img {
