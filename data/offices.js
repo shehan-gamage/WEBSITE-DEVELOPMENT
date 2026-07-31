@@ -127,8 +127,6 @@ export const offices = [
     tagline: 'Regional Office',
     flag:    'gg',
     isHQ:    false,
-    comingSoon: true,
-    hideServices: true,
     address: {
       line1: '3rd Floor, 10 Le Pollet',
       line2: 'St. Peter Port, Guernsey, GY1 1WH',

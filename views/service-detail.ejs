@@ -139,6 +139,18 @@
     </div>
   </section>
 
+  <!-- ══ REGULATORY NOTICE ═══════════════════════════ -->
+  <% if (service.regulatoryNotice) { %>
+  <section class="section">
+    <div class="container">
+      <div class="sd-reg-notice reveal">
+        <div class="sd-reg-notice-label">Regulatory Notice</div>
+        <p><%= service.regulatoryNotice %></p>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
   <!-- ══ FINAL CTA ═══════════════════════════════════ -->
   <section class="cta-band">
     <h2>Need Support With <%= service.shortTitle %>?</h2>
