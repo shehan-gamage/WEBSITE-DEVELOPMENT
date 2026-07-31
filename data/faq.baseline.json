@@ -34,6 +34,38 @@
           {
             "q": "What is the process for changing my company's registered address?",
             "a": "A registered address change usually requires a company resolution, updated forms, approval or filing with the relevant authority, and updates to bank and company records. The effective date of the address change stated in the form will be set five working days after the filing date. If there are any outstanding Annual Return filings, the address change cannot be completed until all backlog Annual Returns and updates have been brought up to date, as the change is processed in real time (e.g., in a file transfer, the previous company secretary has not filed ARs)."
+          },
+          {
+            "q": "What is an Ultimate Beneficial Owner (UBO) in Sri Lanka?",
+            "a": "A beneficial owner is a natural person who ultimately owns or controls 10% or more of a company, directly or indirectly, through shares, voting rights, or other effective control, such as influence over strategic decisions or the appointment and removal of directors."
+          },
+          {
+            "q": "When did Sri Lanka's beneficial ownership rules take effect?",
+            "a": "They took effect on 30 March 2026, under the Companies (Amendment) Act No. 12 of 2025 and the Companies (Beneficial Ownership) Regulations No. 01 of 2026."
+          },
+          {
+            "q": "What must my company do to comply with the UBO rules?",
+            "a": "You must identify and verify your beneficial owners, maintain a beneficial ownership register, and appoint a natural person resident in Sri Lanka as the authorised person responsible for safeguarding the records."
+          },
+          {
+            "q": "When am I required to file beneficial ownership information?",
+            "a": "Filings are required at incorporation, after an issue or transfer of shares, with the annual return, and when the authorised person or the location of the register changes."
+          },
+          {
+            "q": "What are the UBO filing deadlines?",
+            "a": "Changes to beneficial-owner information must generally be notified within 14 working days, while filings following an issue or transfer of shares are required within 20 working days."
+          },
+          {
+            "q": "How do I identify the UBO if my shareholder is another company?",
+            "a": "You trace through corporate shareholders, nominees, trusts, and layered ownership structures until you reach the natural person who ultimately owns or controls 10% or more, or who exercises effective control by other means."
+          },
+          {
+            "q": "What happens if our UBO records are inaccurate or not filed?",
+            "a": "Inaccurate, incomplete, or misleading information may expose both the company and its responsible officers to statutory penalties, and because certain beneficial-ownership details may be publicly accessible, errors can carry reputational risk too."
+          },
+          {
+            "q": "Can SRP help us with UBO compliance?",
+            "a": "Yes. We help you identify and verify beneficial owners, prepare the ownership chart, maintain the beneficial ownership register, meet the authorised-person requirement, and complete the prescribed filings with the Registrar of Companies."
           }
         ]
       },
@@ -103,7 +135,7 @@
           },
           {
             "q": "What is the VAT registration threshold?",
-            "a": "Current threshold is 60mn per annum and 15 per quarter, whichever occurs first. As of the 1st of July 2026, this will be reduced to 36 million per annum and 9 million per quarter."
+            "a": "The current threshold is 60mn per annum and 15 per quarter, whichever occurs first."
           },
           {
             "q": "Do you visit client premises?",
@@ -146,8 +178,8 @@
             "a": "You are expected to make the CIT return filing no later than 30 November of each year."
           },
           {
-            "q": "My company is not an operational business, do I still have to conduct the annual Audit?",
-            "a": "If the CIT return is opened, we highly recommend that you conduct the annual audit and then file the return."
+            "q": "My company is not an operational business. Do I still have to conduct an annual audit?",
+            "a": "If the CIT return filing for a given financial year appears as open in your RAMIS portal and you have a registered TIN certificate, we highly recommend conducting the annual audit before filing the return. This helps ensure that the information reported in the tax return is properly supported by the company's financial records."
           }
         ]
       },
@@ -156,7 +188,7 @@
         "questions": [
           {
             "q": "What types of feasibility studies do you offer?",
-            "a": "financial, market, and operational feasibility for new ventures, product launches, and expansion plans."
+            "a": "Financial, market, and operational feasibility for new ventures, product launches, and expansion plans."
           },
           {
             "q": "Can you help with investor presentations?",
@@ -307,7 +339,7 @@
           },
           {
             "q": "What happens if I miss a filing deadline?",
-            "a": "Missing deadlines can result in penalties from ACRA and IRAS. We maintain a filing calendar and send reminders to keep you compliant. If a deadline is at risk, we'll alert you immediately and work to file late if necessary. It's better to file late than not at all we can help manage late filing penalties. --"
+            "a": "Missing deadlines can result in penalties from ACRA and IRAS. We maintain a filing calendar and send reminders to keep you compliant. If a deadline is at risk, we'll alert you immediately and work to file late if necessary. It's better to file late than not at all; we can help manage late filing penalties. --"
           }
         ]
       }
@@ -323,7 +355,7 @@
         "questions": [
           {
             "q": "Which Free Zone should I choose?",
-            "a": "Depends on activity, residency needs, and budget, IFZA, RAKEZ, Ajman Free Zone, and each has strengths; we advise on your use case."
+            "a": "Depends on activity, residency needs, and budget: IFZA, RAKEZ, Ajman Free Zone, and each has strengths; we advise on your use case."
           },
           {
             "q": "Can you handle the residence visa as part of the setup?",
@@ -331,7 +363,7 @@
           },
           {
             "q": "Is incorporation assistance really free of charge?",
-            "a": "Free when bundled with governance \\+ accounting; standalone, it carries a premium."
+            "a": "Free when bundled with governance + accounting; standalone, it carries a premium."
           },
           {
             "q": "What's the difference between a Free Zone and a Mainland setup?",
@@ -433,7 +465,7 @@
           },
           {
             "q": "Do you provide Tax Consultation services?",
-            "a": "We help set up hourly tax consultation services with a third-party tax consultation, and if you wish to reserve a session, please let us know. Our team will reach out to you."
+            "a": "We help set up hourly tax consultation services with a third-party tax consultant, and if you wish to reserve a session, please let us know. Our team will reach out to you."
           },
           {
             "q": "How can I learn more about your bookkeeping services?",
@@ -441,11 +473,11 @@
           },
           {
             "q": "What is the current corporate tax rate in the UAE?",
-            "a": "The UAE implemented Corporate Income Tax (CIT) effective January 1, 2023\\. The structure is: Taxable income up to AED 375,000: 0% (tax exemption). Taxable income above AED 375,000: 9%."
+            "a": "The UAE implemented Corporate Income Tax (CIT) effective January 1, 2023. The structure is: Taxable income up to AED 375,000: 0% (tax exemption). Taxable income above AED 375,000: 9%."
           },
           {
             "q": "Do you help compute the Annual Corporate Income Tax?",
-            "a": "If you subscribe to our annual audit coordination services, in such circumstances, our auditors will help us accurately compute the Annual Corporate Income tax. If you are interested, just let us know, and one of our team members will reach out to you soon."
+            "a": "If you subscribe to our annual audit coordination services, in such circumstances, our auditors will help us accurately compute the Annual Corporate Income Tax. If you are interested, just let us know, and one of our team members will reach out to you soon."
           },
           {
             "q": "Can you support free zone audit requirements?",
@@ -465,7 +497,7 @@
         "questions": [
           {
             "q": "Where is SRP UK based?",
-            "a": "International House, 64 Nile Street, London, England N1 7SR · \\+44 7807 854544\\."
+            "a": "International House, 64 Nile Street, London, England N1 7SR · +44 7807 854544."
           },
           {
             "q": "How long does UK incorporation take?",
@@ -535,7 +567,7 @@
           },
           {
             "q": "Do I need a statutory audit?",
-            "a": "Most small companies are exempt from audit if they meet the small company exemption thresholds Turnover ≤ £10.2 million Balance sheet total ≤ £5.1 million Employees ≤ 50 WIO Bank and Mashreq Bank"
+            "a": "Most small companies are exempt from audit if they meet the small company exemption thresholds Turnover ≤ £10.2 million Balance sheet total ≤ £5.1 million Employees ≤ 50 WIO Bank and Mashreq Bank --"
           }
         ]
       }
