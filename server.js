@@ -303,7 +303,7 @@ const team = [
   { firstName:'Arkam',    name:'Arkam Aroos',           role:'Chief Financial Officer',                        photo:'/images/team/Arkam.jpg',    linkedin:'https://www.linkedin.com/in/mohamed-aroos-mohamed-arkam' },
   { firstName:'Jonathan', name:'Jonathan Kitcat',       role:'Managing Director — United Kingdom',             photo:'/images/team/Jonathan.jpg', linkedin:'https://www.linkedin.com/in/jo-kitcat' },
   { firstName:'Greg',     name:'Greg Brutus',           role:'Managing Director — Hong Kong',                  photo:'/images/team/Greg.jpg',     linkedin:'https://www.linkedin.com/in/gregbrutushk/' },
-  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director',                   photo:'/images/team/Rupert.png',   linkedin:'https://www.linkedin.com/in/rupert-pleasant-5113a29/' },
+  { firstName:'Rupert',   name:'Rupert Pleasant',       role:'Managing Director — Guernsey',                   photo:'/images/team/Rupert.png',   linkedin:'https://www.linkedin.com/in/rupert-pleasant-5113a29/' },
 ];
 
 /* Cache-busting version for team portraits. Bump whenever a photo file is
