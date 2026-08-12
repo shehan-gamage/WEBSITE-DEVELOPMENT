@@ -139,7 +139,10 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.locals.offices = offices;
+  /* Offices in `holding` are withdrawn from public surfaces (nav, footer,
+     Global Presence, /services chips) while under review. The full `offices`
+     array still drives routing, so their URL serves a holding page.          */
+  res.locals.offices = offices.filter(o => !o.holding);
   res.locals.whatsapp = WHATSAPP;
   res.locals.firstSentence = firstSentence;
   /* Absolute URLs for canonical + Open Graph tags. Host-derived so they
@@ -214,6 +217,7 @@ const LOCATIONS = offices
 function buildMarketCatalog() {
   const out = [];
   for (const office of offices) {
+    if (office.holding) continue;   // withdrawn for legal review — omit from the assistant's catalog
     const svcMap = services[office.slug];
     if (!svcMap) continue;
     const lead = office.lead ? ` Regional lead: ${office.lead.name}, ${office.lead.role}.` : '';
@@ -284,7 +288,7 @@ app.get('/', (req, res) => {
   res.render('home', {
     activePage: 'home',
     title: 'SRP International | Corporate Services Built for the Long Term',
-    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across six markets.',
+    description: 'SRP International helps companies, founders, and investors incorporate, operate, grow, and stay compliant — with dependable corporate services across five markets.',
     pageCss: 'home.css',
     pageJs: 'home.js',
     /* Preload the first cinematic hero frame (the LCP element) — see views/home.ejs */
@@ -353,7 +357,7 @@ app.get('/blog', (req, res) => {
     title: active
       ? `${categoryName(active)} | SRP Insights`
       : 'SRP Insights | Corporate Services Articles & Guidance',
-    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey — from the SRP International team.',
+    description: 'Practical guidance on incorporation, tax, accounting, and doing business across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — from the SRP International team.',
     pageCss: 'blog.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
@@ -553,7 +557,7 @@ app.get('/services', (req, res) => {
       { name: 'Services', path: '/services' },
     ]),
     globalServices,
-    offices,
+    offices: res.locals.offices,   // filtered: chips skip withdrawn (holding) offices
   });
 });
 
@@ -562,7 +566,7 @@ app.get('/global-presence', (req, res) => {
   res.render('global-presence', {
     activePage: 'global-presence',
     title: 'Global Presence | SRP International',
-    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, Hong Kong, and Guernsey — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
+    description: 'SRP International operates from offices in Sri Lanka, Singapore, the United Arab Emirates, the United Kingdom, and Hong Kong — supporting clients across South Asia, South-East Asia, the Middle East, Europe, and East Asia.',
     pageCss: 'services.css',
     pageJs: null,
     jsonLd: breadcrumbLd(res.locals.siteBase, [
@@ -577,7 +581,7 @@ app.get('/privacy', (req, res) => {
   res.render('privacy', {
     activePage: '',
     title: 'Privacy Policy | SRP International',
-    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey.',
+    description: 'How SRP International collects, uses, and protects your personal information across our offices in Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
     pageCss: null,
     pageJs: null,
   });
@@ -600,6 +604,17 @@ app.get('/:region', (req, res, next) => {
   const { region } = req.params;
   if (!KNOWN_REGIONS.has(region)) return next();
   const office          = offices.find(o => o.slug === region);
+  /* Withdrawn for legal review — serve a holding page instead of the hub. */
+  if (office && office.holding) {
+    return res.render('holding', {
+      activePage: '', activeRegion: region,
+      title: `${office.label} | SRP International`,
+      description: `Our ${office.label} page is being updated and will be back shortly.`,
+      robots: 'noindex, follow',
+      pageCss: null, pageJs: null,
+      office,
+    });
+  }
   const regionServices  = office.hideServices ? [] : getRegionServices(region);
   res.render('region', {
     activePage: 'regions',
@@ -628,6 +643,17 @@ app.get('/:region/:slug', (req, res, next) => {
   const { region, slug } = req.params;
   if (!KNOWN_REGIONS.has(region)) return next();
   const office          = offices.find(o => o.slug === region);
+  /* Withdrawn for legal review — every service URL serves the holding page. */
+  if (office && office.holding) {
+    return res.render('holding', {
+      activePage: '', activeRegion: region,
+      title: `${office.label} | SRP International`,
+      description: `Our ${office.label} page is being updated and will be back shortly.`,
+      robots: 'noindex, follow',
+      pageCss: null, pageJs: null,
+      office,
+    });
+  }
   /* Region marked coming-soon with an undecided service list — its service
      detail pages stay hidden (404) until the catalog is confirmed.        */
   if (office && office.hideServices) return res.status(404).render('404', { activePage: '', title: 'Page Not Found | SRP International', robots: 'noindex, follow', pageCss: null, pageJs: null });
@@ -662,7 +688,7 @@ app.get('/contact', (req, res) => {
   res.render('contact', {
     activePage: 'contact',
     title: 'Contact Us | SRP International',
-    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, Hong Kong, and Guernsey.',
+    description: 'Contact SRP International for corporate services, compliance, finance, HR, and business planning support. Offices in Sri Lanka, Singapore, Dubai, the UK, and Hong Kong.',
     pageCss: 'contact.css',
     pageJs: 'contact.js',
     jsonLd: [
@@ -988,6 +1014,7 @@ app.get('/sitemap.xml', (req, res) => {
 
   // Regional hubs + region-scoped service detail pages.
   for (const o of offices) {
+    if (o.holding) continue;   // withdrawn for legal review — keep its holding page out of the sitemap
     items.push(entry(`/${o.slug}`, { priority: '0.8' }));
     if (o.hideServices) continue;   // service pages hidden until the catalog is confirmed
     for (const s of Object.keys(services[o.slug] || {})) {

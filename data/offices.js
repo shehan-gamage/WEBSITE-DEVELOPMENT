@@ -127,6 +127,9 @@ export const offices = [
     tagline: 'Regional Office',
     flag:    'gg',
     isHQ:    false,
+    /* Temporarily withdrawn for legal review — serves a holding page and is
+       hidden from nav/footer/directory. Remove this flag to restore.        */
+    holding: true,
     address: {
       line1: '3rd Floor, 10 Le Pollet',
       line2: 'St. Peter Port, Guernsey, GY1 1WH',

@@ -14,6 +14,8 @@
 import { offices } from './offices.js';
 
 const HQ = offices.find(o => o.isHQ) || offices[0];
+/* Offices withdrawn for review (`holding`) are omitted from public structured data. */
+const PUBLIC_OFFICES = offices.filter(o => !o.holding);
 
 /* Public social profiles (mirror partials/footer.ejs). */
 const SAME_AS = [
@@ -44,7 +46,6 @@ const COUNTRY_CODE = {
   'uae': 'AE',
   'uk': 'GB',
   'hong-kong': 'HK',
-  'guernsey': 'GG',
 };
 
 /* ── Sitewide nodes (emitted on every page) ─────────── */
@@ -62,15 +63,15 @@ export function organizationLd(base) {
     },
     image: `${base}/images/og/share.png`,
     description:
-      'SRP International is a professional corporate services firm providing company incorporation & governance, financial services, research & business planning, and human resource management across Sri Lanka, Singapore, the UAE, the UK, Hong Kong, and Guernsey.',
+      'SRP International is a professional corporate services firm providing company incorporation & governance, financial services, research & business planning, and human resource management across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong.',
     slogan: 'Your trusted partner for outsourced corporate services and business support.',
     foundingDate: '2017',
     email: HQ.email,
     telephone: HQ.phone,
     address: postalAddress(HQ),
     sameAs: SAME_AS,
-    areaServed: offices.map(o => ({ '@type': 'Country', name: o.label })),
-    contactPoint: offices.map(o => ({
+    areaServed: PUBLIC_OFFICES.map(o => ({ '@type': 'Country', name: o.label })),
+    contactPoint: PUBLIC_OFFICES.map(o => ({
       '@type': 'ContactPoint',
       contactType: 'customer service',
       telephone: o.phone,
