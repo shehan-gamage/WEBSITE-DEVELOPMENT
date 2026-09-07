@@ -224,4 +224,36 @@ describe('routing hardening', () => {
     const res = await request(app).get('/not-a-region');
     expect(res.status).toBe(404);
   });
+
+  /* Legacy Hostinger/WordPress URLs (sourced from the Wayback archive of the
+     pre-June-2026 site) must 301 to their current equivalents, covering the
+     trailing slashes, mixed case, and encoded spaces the old site used. */
+  it('301-redirects legacy Hostinger URLs to their current pages', async () => {
+    const cases = [
+      ['/about-us/',                   '/about'],   // trailing slash
+      ['/whoWeAre',                    '/about'],   // mixed case
+      ['/contact-us/',                 '/contact'],
+      ['/contactUs',                   '/contact'],
+      ['/our-services/',               '/services'],
+      ['/index',                       '/'],
+      ['/latest%20news',               '/blog'],    // percent-encoded space
+      ['/OurReports',                  '/blog'],
+      ['/company-secretarial/',        '/sri-lanka/company-secretarial'],
+      ['/financial-services/',         '/sri-lanka/financial-services'],
+      ['/human-resource-management/',  '/sri-lanka/hr-management'],
+      ['/research-business-planning/', '/sri-lanka/research-planning'],
+    ];
+    for (const [from, to] of cases) {
+      const res = await request(app).get(from);
+      expect(res.status, from).toBe(301);
+      expect(res.headers.location, from).toBe(to);
+    }
+  });
+
+  it('keeps WordPress endpoints 404ing rather than redirecting them', async () => {
+    for (const p of ['/wp-login.php', '/xmlrpc.php', '/wp-json/']) {
+      const res = await request(app).get(p);
+      expect(res.status, p).toBe(404);
+    }
+  });
 });

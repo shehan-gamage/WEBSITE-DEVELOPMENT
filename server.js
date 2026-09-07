@@ -138,6 +138,39 @@ app.use((req, res, next) => {
   next();
 });
 
+/* Legacy URL redirects — the pre-June-2026 Hostinger/WordPress site.
+   These paths still appear in Google's index and in old inbound links, so
+   they were landing on the 404 page. 301 them to the closest current page.
+   Keys are normalised: percent-decoded, lowercased, trailing slash stripped
+   (the old site used trailing slashes and mixed case, e.g. /whoWeAre).
+   WordPress endpoints (/wp-json, /wp-login.php, /xmlrpc.php) are deliberately
+   NOT listed — they are not content and should keep 404ing.                 */
+const LEGACY_REDIRECTS = {
+  '/about-us':                   '/about',
+  '/whoweare':                   '/about',
+  '/contact-us':                 '/contact',
+  '/contactus':                  '/contact',
+  '/our-services':               '/services',
+  '/index':                      '/',
+  '/index.html':                 '/',
+  '/index.php':                  '/',
+  '/latest news':                '/blog',
+  '/ourreports':                 '/blog',
+  '/company-secretarial':        '/sri-lanka/company-secretarial',
+  '/financial-services':         '/sri-lanka/financial-services',
+  '/human-resource-management':  '/sri-lanka/hr-management',
+  '/research-business-planning': '/sri-lanka/research-planning',
+};
+
+app.use((req, res, next) => {
+  let p;
+  try { p = decodeURIComponent(req.path); } catch { return next(); }  // malformed %-escape
+  p = p.replace(/\/+$/, '').toLowerCase() || '/';
+  const target = LEGACY_REDIRECTS[p];
+  if (target) return res.redirect(301, target);
+  next();
+});
+
 app.use((req, res, next) => {
   /* Offices in `holding` are withdrawn from public surfaces (nav, footer,
      Global Presence, /services chips) while under review. The full `offices`
