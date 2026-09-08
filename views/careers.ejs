@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <!-- ══ PAGE HERO ═══════════════════════════════════ -->
+  <section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+        <span>Careers</span>
+      </div>
+      <h1>Build Your Career With SRP International</h1>
+      <p>We support more than 650 companies across five markets. If you value precise, well-run professional work, we would be glad to hear from you.</p>
+    </div>
+  </section>
+
+  <!-- ══ WHY JOIN ════════════════════════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Why SRP International</div>
+        <h2 class="heading">What You Can Expect Here</h2>
+        <p class="subheading">We are a corporate services group, which means the work is detailed, regulated, and client-facing. These are the things our people tell us make it worth doing.</p>
+      </div>
+
+      <div class="grid-2">
+        <% whyJoin.forEach(function(item, i) { %>
+          <div class="card reveal <%= i > 0 ? 'reveal-delay-' + Math.min(i, 3) : '' %>">
+            <div class="svc-icon">
+              <% if (item.icon === 'globe') { %>
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <% } else if (item.icon === 'briefcase') { %>
+                <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <% } else if (item.icon === 'monitor') { %>
+                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <% } else { %>
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+              <% } %>
+            </div>
+            <h3 class="svc-title"><%= item.title %></h3>
+            <p class="svc-body"><%= item.desc %></p>
+          </div>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ WHAT WE LOOK FOR + WHERE YOU COULD WORK ════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="careers-split">
+        <div class="reveal">
+          <div class="kicker">What We Look For</div>
+          <h2 class="heading" style="text-align:left;">The Qualities That Matter Most</h2>
+          <ul class="careers-criteria">
+            <% whatWeLookFor.forEach(function(point) { %>
+              <li>
+                <span class="careers-tick" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span><%= point %></span>
+              </li>
+            <% }); %>
+          </ul>
+        </div>
+
+        <div class="reveal reveal-delay-1">
+          <div class="kicker">Where You Could Work</div>
+          <h2 class="heading" style="text-align:left;">Our Offices</h2>
+          <p class="careers-office-lead">Roles are based in one of our regional offices, with day-to-day collaboration across the wider group.</p>
+          <div class="careers-offices">
+            <% offices.forEach(function(o) { %>
+              <a class="careers-office" href="/<%= o.slug %>">
+                <span class="careers-office-city"><%= o.city %></span>
+                <span class="careers-office-country"><%= o.label %></span>
+              </a>
+            <% }); %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CURRENT OPPORTUNITIES ══════════════════════ -->
+  <section class="section" id="openings">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Current Opportunities</div>
+        <h2 class="heading">Open Positions</h2>
+      </div>
+
+      <% if (openings && openings.length) { %>
+        <div class="careers-openings reveal">
+          <% openings.forEach(function(job) { %>
+            <article class="careers-opening" id="<%= job.id %>">
+              <div class="careers-opening-head">
+                <h3 class="careers-opening-title"><%= job.title %></h3>
+                <div class="careers-opening-meta">
+                  <% if (job.location) { %><span class="careers-tag"><%= job.location %></span><% } %>
+                  <% if (job.type) { %><span class="careers-tag"><%= job.type %></span><% } %>
+                </div>
+              </div>
+              <% if (job.summary) { %><p class="careers-opening-summary"><%= job.summary %></p><% } %>
+
+              <% if (job.responsibilities && job.responsibilities.length) { %>
+                <div class="careers-opening-block">
+                  <h4>Key Responsibilities</h4>
+                  <ul>
+                    <% job.responsibilities.forEach(function(r) { %><li><%= r %></li><% }); %>
+                  </ul>
+                </div>
+              <% } %>
+
+              <% if (job.requirements && job.requirements.length) { %>
+                <div class="careers-opening-block">
+                  <h4>What We Are Looking For</h4>
+                  <ul>
+                    <% job.requirements.forEach(function(r) { %><li><%= r %></li><% }); %>
+                  </ul>
+                </div>
+              <% } %>
+
+              <a class="btn btn-primary careers-apply"
+                 href="mailto:<%= careersEmail %>?subject=<%= encodeURIComponent('Application — ' + job.title) %>">
+                Apply for This Role
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </article>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <div class="careers-empty reveal">
+          <div class="careers-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          </div>
+          <h3>No Advertised Vacancies at Present</h3>
+          <p>We do not have any open positions listed right now. We are always glad to hear from experienced professionals, and speculative applications are kept on file and reviewed as roles arise.</p>
+          <a class="btn btn-primary"
+             href="mailto:<%= careersEmail %>?subject=<%= encodeURIComponent('Speculative Application') %>">
+            Send a Speculative Application
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- ══ HOW TO APPLY ═══════════════════════════════ -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">How to Apply</div>
+        <h2 class="heading">Making an Application</h2>
+        <p class="subheading">Please send your curriculum vitae and a short covering note to <a href="mailto:<%= careersEmail %>"><%= careersEmail %></a>. Kindly state the role you are applying for, or indicate that your application is speculative.</p>
+      </div>
+
+      <ol class="careers-steps reveal">
+        <li>
+          <span class="careers-step-num" aria-hidden="true">1</span>
+          <div>
+            <h4>Submit Your Application</h4>
+            <p>Send your curriculum vitae, a covering note, and the office or market that interests you.</p>
+          </div>
+        </li>
+        <li>
+          <span class="careers-step-num" aria-hidden="true">2</span>
+          <div>
+            <h4>Initial Review</h4>
+            <p>Our team reviews every application. If your experience matches a current or upcoming requirement, we will contact you to arrange an introductory conversation.</p>
+          </div>
+        </li>
+        <li>
+          <span class="careers-step-num" aria-hidden="true">3</span>
+          <div>
+            <h4>Interview</h4>
+            <p>You will meet the team you would be working with, including the director responsible for the service line.</p>
+          </div>
+        </li>
+        <li>
+          <span class="careers-step-num" aria-hidden="true">4</span>
+          <div>
+            <h4>Offer and Onboarding</h4>
+            <p>Successful candidates receive a written offer, followed by a structured onboarding into the team and our systems.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ══ FINAL CTA ══════════════════════════════════ -->
+  <section class="cta-band">
+    <h2>Interested in Joining Us?</h2>
+    <p>Please send your curriculum vitae and a short covering note, and our team will be in touch if a suitable opportunity arises.</p>
+    <div class="cta-band-btns">
+      <a href="mailto:<%= careersEmail %>?subject=<%= encodeURIComponent('Career Enquiry') %>" class="btn btn-white">
+        Email Your Application
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="/about" class="btn btn-ghost">About SRP International</a>
+    </div>
+  </section>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/chatbot') %>
+  <%- include('partials/scripts') %>
+</body>
+</html>

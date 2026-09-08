@@ -11,6 +11,7 @@ import { services, getService, getRegionServices, globalServices } from './data/
 import { posts, categories, getPost, categoryName, readingTime, categoryCounts } from './data/posts.js';
 import { FAQ_KNOWLEDGE, faqTreeForClient } from './data/faq.js';
 import { reportsByYear, getEdition, reportView, latestEdition, activeEditions } from './data/reports.js';
+import { openings, whyJoin, whatWeLookFor, CAREERS_EMAIL } from './data/careers.js';
 import {
   organizationLd, websiteLd, breadcrumbLd, blogPostingLd,
   reportArticleLd, faqPageLd, professionalServiceLd, serviceLd, teamPersonsLd,
@@ -610,6 +611,26 @@ app.get('/global-presence', (req, res) => {
 });
 
 /* /privacy & /terms — legal pages. */
+/* /careers — recruitment hub. Vacancies come from data/careers.js; an empty
+   list renders the speculative-application state instead of a stale page. */
+app.get('/careers', (req, res) => {
+  res.render('careers', {
+    activePage: 'careers',
+    title: 'Careers | SRP International',
+    description: 'Careers at SRP International. Join a corporate services group operating across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — current opportunities and how to apply.',
+    pageCss: 'careers.css',
+    pageJs: null,
+    jsonLd: breadcrumbLd(res.locals.siteBase, [
+      { name: 'Home', path: '/' },
+      { name: 'Careers', path: '/careers' },
+    ]),
+    openings,
+    whyJoin,
+    whatWeLookFor,
+    careersEmail: CAREERS_EMAIL,
+  });
+});
+
 app.get('/privacy', (req, res) => {
   res.render('privacy', {
     activePage: '',
@@ -1039,6 +1060,7 @@ app.get('/sitemap.xml', (req, res) => {
     entry('/global-presence', { priority: '0.8' }),
     entry('/faq',             { changefreq: 'weekly',  priority: '0.8' }),
     entry('/contact',         { priority: '0.7' }),
+    entry('/careers',         { changefreq: 'weekly',  priority: '0.6' }),
     entry('/blog',            { changefreq: 'weekly',  priority: '0.7' }),
     entry('/portal',          { changefreq: 'yearly',  priority: '0.3' }),
     entry('/privacy',         { changefreq: 'yearly',  priority: '0.3' }),
