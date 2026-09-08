@@ -765,7 +765,7 @@ app.get('/thank-you', (req, res) => {
   res.render('thank-you', {
     activePage: 'contact',
     title: 'Thank You | SRP International',
-    description: 'Thank you for reaching out to SRP International. We have received your inquiry and a member of our team will respond within 24 hours.',
+    description: 'Thank you for reaching out to SRP International.',
     /* Utility confirmation page — keep it out of the index (thin content). */
     robots: 'noindex, follow',
     pageCss: 'thank-you.css',
@@ -1036,7 +1036,6 @@ app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
   const email    = clip(req.body?.email, EMAIL_MAX);
   const phone    = clip(req.body?.phone, 40);
   const position = clip(req.body?.position, 160);
-  const location = clip(req.body?.location, 120);
   const cvLink   = clip(req.body?.cvLink, 500);
   const message  = clip(req.body?.message, 5000);
 
@@ -1047,7 +1046,7 @@ app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
     return res.status(400).json({ error: 'A valid email is required.' });
   }
 
-  const submission = { name, email, phone, position, location, cvLink, message };
+  const submission = { name, email, phone, position, cvLink, message };
   const ok = () => res.json({
     success: true,
     redirect: '/thank-you',
@@ -1060,7 +1059,7 @@ app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
       return ok();
     }
     const present = [name && 'name', email && 'email', phone && 'phone', position && 'position',
-                     location && 'location', cvLink && 'cvLink', message && 'message'].filter(Boolean).join(',');
+                     cvLink && 'cvLink', message && 'message'].filter(Boolean).join(',');
     console.warn(`[careers] Email not configured, no fallback sink — accepted, not logged (PII). tag=${piiTag(email)} fields=${present}`);
     return ok();
   }
@@ -1069,8 +1068,7 @@ app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
     `Name:      ${name}`,
     `Email:     ${email}`,
     phone    ? `Phone:     ${phone}`    : null,
-    position ? `Position:  ${position}` : null,
-    location ? `Location:  ${location}` : null,
+    position ? `Role:      ${position}` : null,
     cvLink   ? `CV link:   ${cvLink}`   : null,
     '',
     'Covering note:',
@@ -1084,8 +1082,7 @@ app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
       <tr><td><strong>Name</strong></td><td>${esc(name)}</td></tr>
       <tr><td><strong>Email</strong></td><td>${esc(email)}</td></tr>
       ${phone    ? `<tr><td><strong>Phone</strong></td><td>${esc(phone)}</td></tr>` : ''}
-      ${position ? `<tr><td><strong>Position</strong></td><td>${esc(position)}</td></tr>` : ''}
-      ${location ? `<tr><td><strong>Location</strong></td><td>${esc(location)}</td></tr>` : ''}
+      ${position ? `<tr><td><strong>Role</strong></td><td>${esc(position)}</td></tr>` : ''}
       ${cvLink   ? `<tr><td><strong>CV link</strong></td><td>${esc(cvLink)}</td></tr>` : ''}
     </table>
     <p style="font-family:Arial,sans-serif;font-size:14px;white-space:pre-wrap;margin-top:16px"><strong>Covering note:</strong><br>${esc(message)}</p>`;

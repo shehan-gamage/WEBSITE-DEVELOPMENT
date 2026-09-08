@@ -220,26 +220,14 @@
               <input type="tel" id="cPhone" name="phone" placeholder="+94 XX XXX XXXX" autocomplete="tel" maxlength="40">
             </div>
             <div class="form-group">
-              <label for="cPosition">Position of Interest</label>
-              <input type="text" id="cPosition" name="position" placeholder="Role or area of work" maxlength="160">
+              <label for="cPosition">Role Applying For</label>
+              <input type="text" id="cPosition" name="position" placeholder="Role you are applying for, or Speculative" maxlength="160">
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="cLocation">Preferred Office</label>
-              <select id="cLocation" name="location">
-                <option value="">Select an office...</option>
-                <% offices.forEach(function(o) { %>
-                  <option><%= o.city %>, <%= o.label %></option>
-                <% }); %>
-                <option>No preference</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="cCvLink">Link to Your CV</label>
-              <input type="url" id="cCvLink" name="cvLink" placeholder="https://..." maxlength="500">
-            </div>
+          <div class="form-group">
+            <label for="cCvLink">Link to Your CV</label>
+            <input type="url" id="cCvLink" name="cvLink" placeholder="https://..." maxlength="500">
           </div>
 
           <div class="form-group">

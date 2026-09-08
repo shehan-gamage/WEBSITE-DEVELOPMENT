@@ -74,7 +74,6 @@ const validApplication = {
   email: 'candidate@example.com',
   phone: '+94 11 234 5678',
   position: 'Corporate Secretarial Executive',
-  location: 'Colombo, Sri Lanka',
   cvLink: 'https://example.com/cv.pdf',
   message: 'I have five years of company secretarial experience.',
 };

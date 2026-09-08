@@ -41,7 +41,6 @@ if (careersForm) {
       email:    document.getElementById('cEmail').value.trim(),
       phone:    document.getElementById('cPhone').value.trim(),
       position: document.getElementById('cPosition').value.trim(),
-      location: document.getElementById('cLocation').value,
       cvLink:   document.getElementById('cCvLink').value.trim(),
       message:  document.getElementById('cMsg').value.trim(),
     };
