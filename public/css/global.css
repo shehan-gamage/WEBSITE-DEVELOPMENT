@@ -357,7 +357,7 @@ nav.scrolled {
 /* Nav links → white, with a soft pill on active/hover */
 .nav-center a {
   color: rgba(255, 255, 255, 0.82);
-  padding: 9px 18px;
+  padding: 9px 14px;
   border-radius: var(--radius-full, 100px);
   transition:
     color var(--dur-fast) var(--ease-out),
@@ -439,9 +439,10 @@ nav.scrolled {
 .nav-center {
   display: flex;
   align-items: center;
-  /* Tuned so brand + 6 links + 2 CTAs fit the 1340 container with ~20px
-     slack; below 1340 the nav collapses to the hamburger (see breakpoint). */
-  gap: 20px;
+  /* Tuned so brand + 7 links + 2 CTAs fit a 1366 laptop. Link padding was
+     18px and this gap 20px when there were 6 links; both were tightened when
+     Careers was added so the second CTA survives on 1366-wide screens. */
+  gap: 14px;
   list-style: none;
 }
 /* Structural only — colour, padding, pill + active state are set by the
@@ -1716,15 +1717,14 @@ footer {
 }
 
 /* ─── RESPONSIVE — P5: breakpoints ───────────── */
-/* Below 1440 the second CTA (Schedule a Consultation) is dropped so the
+/* Below ~1340 the second CTA (Schedule a Consultation) is dropped so the
    brand + 7 links + Client Portal still fit on one row — keeping the full
    nav on laptops instead of collapsing to a near-empty hamburger bar.
    (Schedule a Consultation stays in the mobile menu and the hero/footer.)
-   Raised from 1340 when Careers was added as a seventh link: with both CTAs
-   showing, the Client Portal button clipped the viewport edge on 1366-wide
-   laptops. Both CTAs return at 1440+, the narrowest width verified to hold
-   the full set without clipping. */
-@media (max-width: 1439px) {
+   Careers made this a seven-link nav; rather than drop the second CTA on
+   1366-wide laptops, the link gap and padding above were tightened instead,
+   which keeps the full set fitting down to this original breakpoint. */
+@media (max-width: 1340px) {
   .nav-cta-group .btn-outline { display: none; }
 }
 

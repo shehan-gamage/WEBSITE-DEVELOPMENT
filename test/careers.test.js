@@ -62,3 +62,62 @@ describe('careers page', () => {
     expect(res.text).toMatch(/<loc>https?:\/\/[^<]*\/careers<\/loc>/);
   });
 });
+
+/* /api/careers — same hardening as /api/contact. SMTP is blank in tests, so the
+   handler takes the mailer-null path and reports success without sending mail.
+   `trust proxy` is 1, so req.ip is the LAST X-Forwarded-For entry; each test
+   uses its own last hop so the shared rate-limit buckets never bleed. */
+const xff = (ip) => `198.51.100.99, ${ip}`;
+
+const validApplication = {
+  name: 'Test Candidate',
+  email: 'candidate@example.com',
+  phone: '+94 11 234 5678',
+  position: 'Corporate Secretarial Executive',
+  location: 'Colombo, Sri Lanka',
+  cvLink: 'https://example.com/cv.pdf',
+  message: 'I have five years of company secretarial experience.',
+};
+
+describe('POST /api/careers', () => {
+  it('accepts a complete application', async () => {
+    const { default: app } = await import('../server.js');
+    const res = await request(app)
+      .post('/api/careers')
+      .set('X-Forwarded-For', xff('203.0.113.41'))
+      .send(validApplication);
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.redirect).toBe('/thank-you');
+  });
+
+  it('rejects an application with no covering note', async () => {
+    const { default: app } = await import('../server.js');
+    const res = await request(app)
+      .post('/api/careers')
+      .set('X-Forwarded-For', xff('203.0.113.42'))
+      .send({ ...validApplication, message: '' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/required/i);
+  });
+
+  it('rejects a malformed email address', async () => {
+    const { default: app } = await import('../server.js');
+    const res = await request(app)
+      .post('/api/careers')
+      .set('X-Forwarded-For', xff('203.0.113.43'))
+      .send({ ...validApplication, email: 'not-an-email' });
+    expect(res.status).toBe(400);
+    expect(res.body.error).toMatch(/valid email/i);
+  });
+
+  it('rate-limits repeated submissions from one IP', async () => {
+    const { default: app } = await import('../server.js');
+    const ip = xff('203.0.113.44');
+    let last;
+    for (let i = 0; i < 7; i++) {
+      last = await request(app).post('/api/careers').set('X-Forwarded-For', ip).send(validApplication);
+    }
+    expect(last.status).toBe(429);
+  });
+});

@@ -126,8 +126,7 @@
                 </div>
               <% } %>
 
-              <a class="btn btn-primary careers-apply"
-                 href="mailto:<%= careersEmail %>?subject=<%= encodeURIComponent('Application — ' + job.title) %>">
+              <a class="btn btn-primary careers-apply" href="#apply" data-apply-role="<%= job.title %>">
                 Apply for This Role
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </a>
@@ -141,8 +140,7 @@
           </div>
           <h3>No Advertised Vacancies at Present</h3>
           <p>We do not have any open positions listed right now. We are always glad to hear from experienced professionals, and speculative applications are kept on file and reviewed as roles arise.</p>
-          <a class="btn btn-primary"
-             href="mailto:<%= careersEmail %>?subject=<%= encodeURIComponent('Speculative Application') %>">
+          <a class="btn btn-primary" href="#apply">
             Send a Speculative Application
             <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
@@ -193,13 +191,85 @@
     </div>
   </section>
 
+  <!-- ══ APPLICATION FORM ═══════════════════════════ -->
+  <section class="section" id="apply">
+    <div class="container">
+      <div class="section-head">
+        <div class="kicker">Application Form</div>
+        <h2 class="heading">Send Us Your Details</h2>
+        <p class="subheading">Complete the form below and our team will review your application. Fields marked with an asterisk are required.</p>
+      </div>
+
+      <div class="careers-form-card reveal">
+        <form id="careersForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cName">Full Name *</label>
+              <!-- maxlength values mirror the server-side caps in /api/careers -->
+              <input type="text" id="cName" name="name" placeholder="Your full name" required autocomplete="name" maxlength="120">
+            </div>
+            <div class="form-group">
+              <label for="cEmail">Email Address *</label>
+              <input type="email" id="cEmail" name="email" placeholder="you@example.com" required autocomplete="email" maxlength="254">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cPhone">Contact Number</label>
+              <input type="tel" id="cPhone" name="phone" placeholder="+94 XX XXX XXXX" autocomplete="tel" maxlength="40">
+            </div>
+            <div class="form-group">
+              <label for="cPosition">Position of Interest</label>
+              <input type="text" id="cPosition" name="position" placeholder="Role or area of work" maxlength="160">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cLocation">Preferred Office</label>
+              <select id="cLocation" name="location">
+                <option value="">Select an office...</option>
+                <% offices.forEach(function(o) { %>
+                  <option><%= o.city %>, <%= o.label %></option>
+                <% }); %>
+                <option>No preference</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cCvLink">Link to Your CV</label>
+              <input type="url" id="cCvLink" name="cvLink" placeholder="https://..." maxlength="500">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cMsg">Covering Note *</label>
+            <textarea id="cMsg" name="message" placeholder="Tell us about your experience and what you are looking for..." required maxlength="5000"></textarea>
+          </div>
+
+          <p class="careers-form-note">
+            If you would prefer to send your curriculum vitae as an attachment, please submit this form and email your document to
+            <a href="mailto:<%= careersEmail %>"><%= careersEmail %></a>.
+          </p>
+
+          <p class="form-msg" id="careersMsg" role="status" aria-live="polite" hidden></p>
+
+          <button type="submit" class="btn btn-primary" id="careersBtn">
+            Submit Application
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- ══ FINAL CTA ══════════════════════════════════ -->
   <section class="cta-band">
     <h2>Interested in Joining Us?</h2>
     <p>Please send your curriculum vitae and a short covering note, and our team will be in touch if a suitable opportunity arises.</p>
     <div class="cta-band-btns">
-      <a href="mailto:<%= careersEmail %>?subject=<%= encodeURIComponent('Career Enquiry') %>" class="btn btn-white">
-        Email Your Application
+      <a href="#apply" class="btn btn-white">
+        Start Your Application
         <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
       <a href="/about" class="btn btn-ghost">About SRP International</a>

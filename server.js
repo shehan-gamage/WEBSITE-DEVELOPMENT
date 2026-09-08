@@ -619,7 +619,7 @@ app.get('/careers', (req, res) => {
     title: 'Careers | SRP International',
     description: 'Careers at SRP International. Join a corporate services group operating across Sri Lanka, Singapore, the UAE, the UK, and Hong Kong — current opportunities and how to apply.',
     pageCss: 'careers.css',
-    pageJs: null,
+    pageJs: 'careers.js',
     jsonLd: breadcrumbLd(res.locals.siteBase, [
       { name: 'Home', path: '/' },
       { name: 'Careers', path: '/careers' },
@@ -1020,6 +1020,93 @@ app.post('/api/contact', rateLimit('contact', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
       return ok();
     }
     res.status(502).json({ error: 'Sorry, we could not send your inquiry right now. Please email clientrelations@srpitl.com directly.' });
+  }
+});
+
+/* ── Applications from /careers ──
+   Same hardening as /api/contact: per-IP rate limit, bounded fields, email
+   validation, and the durable fallback sink so an application is never lost
+   when SMTP is unavailable. Delivery goes to the address shown on the page,
+   so the form and the published inbox can never disagree; set CAREERS_TO to
+   point applications at a dedicated recruitment mailbox instead.          */
+const CAREERS_TO = process.env.CAREERS_TO || CAREERS_EMAIL;
+
+app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW), async (req, res) => {
+  const name     = clip(req.body?.name, 120);
+  const email    = clip(req.body?.email, EMAIL_MAX);
+  const phone    = clip(req.body?.phone, 40);
+  const position = clip(req.body?.position, 160);
+  const location = clip(req.body?.location, 120);
+  const cvLink   = clip(req.body?.cvLink, 500);
+  const message  = clip(req.body?.message, 5000);
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Name, email, and a short covering note are required.' });
+  }
+  if (!EMAIL_RE.test(email)) {
+    return res.status(400).json({ error: 'A valid email is required.' });
+  }
+
+  const submission = { name, email, phone, position, location, cvLink, message };
+  const ok = () => res.json({
+    success: true,
+    redirect: '/thank-you',
+    message: 'Thank you for your application. We will be in touch if a suitable opportunity arises.',
+  });
+
+  if (!mailer) {
+    if (await captureEnquiry('careers', submission)) {
+      console.warn(`[careers] SMTP unconfigured — captured via fallback webhook. tag=${piiTag(email)}`);
+      return ok();
+    }
+    const present = [name && 'name', email && 'email', phone && 'phone', position && 'position',
+                     location && 'location', cvLink && 'cvLink', message && 'message'].filter(Boolean).join(',');
+    console.warn(`[careers] Email not configured, no fallback sink — accepted, not logged (PII). tag=${piiTag(email)} fields=${present}`);
+    return ok();
+  }
+
+  const lines = [
+    `Name:      ${name}`,
+    `Email:     ${email}`,
+    phone    ? `Phone:     ${phone}`    : null,
+    position ? `Position:  ${position}` : null,
+    location ? `Location:  ${location}` : null,
+    cvLink   ? `CV link:   ${cvLink}`   : null,
+    '',
+    'Covering note:',
+    message,
+  ].filter(Boolean);
+
+  const esc = (s) => String(s ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[c]));
+  const html = `
+    <h2 style="margin:0 0 12px">New career application</h2>
+    <table cellpadding="6" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">
+      <tr><td><strong>Name</strong></td><td>${esc(name)}</td></tr>
+      <tr><td><strong>Email</strong></td><td>${esc(email)}</td></tr>
+      ${phone    ? `<tr><td><strong>Phone</strong></td><td>${esc(phone)}</td></tr>` : ''}
+      ${position ? `<tr><td><strong>Position</strong></td><td>${esc(position)}</td></tr>` : ''}
+      ${location ? `<tr><td><strong>Location</strong></td><td>${esc(location)}</td></tr>` : ''}
+      ${cvLink   ? `<tr><td><strong>CV link</strong></td><td>${esc(cvLink)}</td></tr>` : ''}
+    </table>
+    <p style="font-family:Arial,sans-serif;font-size:14px;white-space:pre-wrap;margin-top:16px"><strong>Covering note:</strong><br>${esc(message)}</p>`;
+
+  try {
+    await mailer.sendMail({
+      from:    `"SRP International Website" <${MAIL_FROM}>`,
+      to:      CAREERS_TO,
+      replyTo: { name, address: email },
+      subject: position ? `Application: ${position} — ${name}` : `Speculative application from ${name}`,
+      text:    lines.join('\n'),
+      html,
+    });
+    ok();
+  } catch (err) {
+    console.error('[careers] Failed to send application email:', err?.message);
+    if (await captureEnquiry('careers', submission)) {
+      console.warn(`[careers] SMTP send failed — captured via fallback webhook. tag=${piiTag(email)}`);
+      return ok();
+    }
+    res.status(502).json({ error: `Sorry, we could not submit your application right now. Please email your details to ${CAREERS_TO} directly.` });
   }
 });
 

@@ -265,3 +265,52 @@
   .careers-empty { padding: 36px 22px; }
   .careers-opening-head { flex-direction: column; align-items: flex-start; }
 }
+
+/* ── Application form ──
+   .form-group / .form-row come from global.css; the card and the inline
+   status message mirror the contact form so both pages feel identical. */
+.careers-form-card {
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-2xl, 20px);
+  padding: 44px;
+}
+.careers-form-note {
+  margin: 18px 0 0;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text-mid);
+}
+.careers-form-note a { color: var(--navy); font-weight: 600; }
+
+/* Inline form status message — renders in-page rather than a blocking alert(). */
+.form-msg {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md, 10px);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.form-msg[hidden] { display: none; }
+.form-msg--error {
+  background: rgba(217, 45, 32, .08);
+  color: #b42318;
+  border: 1px solid rgba(217, 45, 32, .25);
+}
+.form-msg--success {
+  background: rgba(22, 163, 74, .10);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, .30);
+}
+.form-msg a { color: inherit; text-decoration: underline; }
+
+#careersForm .btn { margin-top: 22px; }
+
+@media (max-width: 560px) {
+  .careers-form-card { padding: 28px 20px; }
+}
