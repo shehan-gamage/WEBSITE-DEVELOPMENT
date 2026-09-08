@@ -212,43 +212,62 @@
   max-width: 52ch;
 }
 
-/* ── Application process ── */
-.careers-steps {
-  list-style: none;
-  counter-reset: none;
-  margin: 8px auto 0;
-  padding: 0;
-  max-width: 900px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 28px;
-}
-.careers-steps li {
+/* ── Application process map ──
+   Mirrors the connected step flow used on the service detail pages: a rail
+   running behind evenly spaced numbered nodes. Four equal columns, so no
+   step is ever stranded alone on a second row the way a wrapping grid did. */
+.careers-process {
+  position: relative;
   display: flex;
-  gap: 16px;
-  align-items: flex-start;
+  gap: 20px;
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
 }
-.careers-step-num {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: grid;
-  place-items: center;
+/* The rail is inset by roughly half a node so it starts and ends beneath the
+   first and last circles instead of running past them into empty space. */
+.careers-process::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 36px;
+  right: 36px;
+  height: 2px;
+  background: var(--gray-200);
+  z-index: 0;
+}
+.careers-process-step {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+.careers-process-num {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: var(--navy);
   color: var(--white);
   font-family: var(--font-family);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
+  /* White ring + navy outline lifts each node clear of the rail behind it. */
+  border: 3px solid var(--white);
+  outline: 2px solid var(--navy);
+  box-shadow: 0 4px 14px rgba(6, 30, 117, .3);
 }
-.careers-steps h4 {
+.careers-process-step h4 {
   font-family: var(--font-family);
   font-size: 16px;
   font-weight: 700;
   color: var(--navy);
-  margin: 6px 0 8px;
+  margin: 0 0 8px;
 }
-.careers-steps p {
+.careers-process-step p {
   font-family: var(--font-body);
   font-size: 14.5px;
   line-height: 1.7;
@@ -313,4 +332,22 @@
 
 @media (max-width: 560px) {
   .careers-form-card { padding: 28px 20px; }
+}
+
+/* Narrow screens: the map turns on its side into a vertical timeline, the
+   rail moving to run down through the centre of the nodes. */
+@media (max-width: 860px) {
+  .careers-process { flex-direction: column; gap: 26px; }
+  .careers-process::before {
+    top: 0; bottom: 0; left: 27px; right: auto;
+    width: 2px; height: auto;
+  }
+  .careers-process-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .careers-process-num { margin: 0; flex-shrink: 0; }
+  .careers-process-body { padding-top: 12px; }
 }
