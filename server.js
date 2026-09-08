@@ -953,7 +953,7 @@ app.post('/api/contact', rateLimit('contact', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
   }
 
   const submission = { name, email, phone, company, service, subject, message };
-  const ok = () => res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will respond within 24 hours.' });
+  const ok = () => res.json({ success: true, redirect: '/thank-you', message: 'Thank you for your inquiry. We will be in touch.' });
 
   // No SMTP credentials → keep the form working. Try the durable fallback sink
   // first so the lead is captured; if there's no sink, fall back to a PII-free
