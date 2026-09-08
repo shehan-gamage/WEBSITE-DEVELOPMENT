@@ -6,9 +6,11 @@
    instead, so the page is never stale or misleading.
 ═══════════════════════════════════════════════════ */
 
-/* Where applications are received. Kept here so it is changed in one
-   place if a dedicated recruitment mailbox is introduced later. */
-export const CAREERS_EMAIL = 'info@srpitl.com';
+/* Where applications are received. Single source of truth: this address is
+   both shown on the page and used as the delivery target for /api/careers,
+   so the published inbox and the form can never disagree. (Set CAREERS_TO
+   in the environment to override delivery without changing the page.) */
+export const CAREERS_EMAIL = 'hrservices@srpitl.com';
 
 /* Current vacancies. Shape:
      {

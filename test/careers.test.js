@@ -22,7 +22,7 @@ describe('careers page', () => {
     expect(res.status).toBe(200);
     expect(res.text).toContain('Build Your Career With SRP International');
     expect(res.text).toContain('No Advertised Vacancies at Present');
-    expect(res.text).toContain('info@srpitl.com');
+    expect(res.text).toContain('hrservices@srpitl.com');
   });
 
   it('lists the vacancy and hides the empty state when a role is published', async () => {

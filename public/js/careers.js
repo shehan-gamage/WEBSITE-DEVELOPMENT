@@ -82,8 +82,11 @@ if (careersForm) {
       showCareersMsg('error', (el) => {
         el.appendChild(document.createTextNode('Something went wrong. Please try again, or email your application to '));
         const a = document.createElement('a');
-        a.href = 'mailto:info@srpitl.com';
-        a.textContent = 'info@srpitl.com';
+        /* Read from the form so this address stays in step with data/careers.js
+           rather than drifting as a second hardcoded copy. */
+        const to = careersForm.dataset.careersEmail || 'info@srpitl.com';
+        a.href = `mailto:${to}`;
+        a.textContent = to;
         el.appendChild(a);
         el.appendChild(document.createTextNode('.'));
       });
