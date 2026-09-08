@@ -1716,11 +1716,15 @@ footer {
 }
 
 /* ─── RESPONSIVE — P5: breakpoints ───────────── */
-/* Below ~1340 the second CTA (Schedule a Consultation) is dropped so the
-   brand + 6 links + Client Portal still fit on one row — keeping the full
+/* Below 1440 the second CTA (Schedule a Consultation) is dropped so the
+   brand + 7 links + Client Portal still fit on one row — keeping the full
    nav on laptops instead of collapsing to a near-empty hamburger bar.
-   (Schedule a Consultation stays in the mobile menu and the hero/footer.) */
-@media (max-width: 1340px) {
+   (Schedule a Consultation stays in the mobile menu and the hero/footer.)
+   Raised from 1340 when Careers was added as a seventh link: with both CTAs
+   showing, the Client Portal button clipped the viewport edge on 1366-wide
+   laptops. Both CTAs return at 1440+, the narrowest width verified to hold
+   the full set without clipping. */
+@media (max-width: 1439px) {
   .nav-cta-group .btn-outline { display: none; }
 }
 
