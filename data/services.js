@@ -717,100 +717,18 @@ const hongKong = {
 const guernsey = {
   'company-formation': {
     slug: 'company-formation',
-    title: 'Company Formation & Establishment',
+    title: 'Support With Company Formation & Establishment',
     shortTitle: 'Company Formation',
     icon: 'file-text',
-    overview: 'SRP International helps businesses and investors establish their presence in Guernsey. Working in partnership with locally licensed fiduciaries and corporate service providers, we coordinate entity setup, the preparation of incorporation documentation and statutory registrations. Our end-to-end coordination ensures your company framework is aligned with local legal and regulatory standards from day one.',
-    benefits: [
-      { title: 'Compliant Setup', desc: 'Your entity is established correctly from the outset, strictly aligned with Guernsey regulatory standards to mitigate structural risks.' },
-      { title: 'Licensed Local Coordination', desc: 'We seamlessly bridge communication between your existing advisers, Guernsey regulated corporate service providers, and the relevant statutory registries.' },
-      { title: 'Streamlined Documentation', desc: 'Incorporation paperwork, registry filings, and statutory applications are efficiently compiled and processed via authorised local providers.' },
-      { title: 'Centralised Coordination', desc: 'A single dedicated team manages the project lifecycle, smoothing out the administrative complexities of cross-border establishment.' },
-    ],
-    included: [
-      'Entity establishment coordination and local service bridging',
-      'Compilation and administrative processing of incorporation documentation',
-      'Facilitation of statutory registrations and onboarding requirements',
-      'Structural alignment support in tandem with legal counsel',
-      'Coordination with GFSC-regulated fiduciaries and corporate service providers',
-    ],
-    process: [
-      { step: 1, title: 'Onboarding & AML/CFT Compliance', desc: 'We initiate mandatory verification and Customer Due Diligence (CDD) procedures required under Guernsey regulations.' },
-      { step: 2, title: 'Framework Planning & Documentation', desc: 'Our team assists in drafting the structural framework and compiling the requisite registration files alongside your legal advisers.' },
-      { step: 3, title: 'Authorised Registry Submission', desc: 'We coordinate with licensed local corporate service providers to execute formal filings with the Guernsey Registry and fulfill local Resident Agent requirements.' },
-      { step: 4, title: 'Governance Handover', desc: 'We deliver a clean administrative handover to your team, ready to support your ongoing corporate governance and accounting needs.' },
-    ],
-    faqs: [
-      { q: 'Can you work alongside our existing advisers in Guernsey?', a: 'Yes. We actively coordinate with your local legal, tax, and professional advisers to ensure the establishment process remains fully integrated and legally compliant.' },
-      { q: 'Do you support businesses expanding into Guernsey as well as new entities?', a: 'Yes. We support international corporate groups establishing a fresh regional presence as well as standalone incorporations, provided all standard jurisdiction-specific onboarding checks are cleared.' },
-    ],
-    regulatoryNotice: 'SRP International provides corporate coordination, administrative project management, and structural facilitation services. All formal company formations, resident agent appointments, and regulated fiduciary activities are executed strictly through appropriately licensed and authorised Guernsey Financial Services Commission (GFSC) fiduciary licensees.',
-    relatedSlugs: ['corporate-governance', 'bookkeeping-accounting', 'outsourced-support'],
-  },
-
-  'corporate-governance': {
-    slug: 'corporate-governance',
-    title: 'Corporate Governance & Administration Support',
-    shortTitle: 'Governance & Administration',
-    icon: 'briefcase',
-    overview: 'We assist businesses by providing administrative coordination and support for their ongoing corporate governance and workflows. Working in tandem with your team and locally licensed corporate service providers, we facilitate document preparation, assistance with record-keeping, and compliance data coordination. Our support ensures your records are organised and structured systematically for formal review.',
-    benefits: [
-      { title: 'Administrative Alignment', desc: 'Routine corporate tracking and administrative documentation are kept systematically organised to support continuous entity compliance.' },
-      { title: 'Meticulous Drafting Support', desc: 'Draft board minutes, internal resolutions, and supporting corporate templates are prepared to a rigorous, consistent standard.' },
-      { title: 'Clear Data Oversight', desc: 'Administrative compliance tracking and internal data reporting keep management fully informed of upcoming requirements.' },
-      { title: 'Reliable Liaison', desc: 'We act as an efficient operational link, smoothing communication between directors, shareholders, and your appointed professional advisers.' },
-    ],
-    included: [
-      'Administrative project management and secretarial drafting support',
-      'Organisation and digital maintenance of internal corporate files',
-      'Drafting of board templates, minutes, and resolutions',
-      'Compliance tracking and reporting facilitation',
-      'Operational liaison between internal teams, directors, and advisers',
-    ],
-    process: [
-      { step: 1, title: 'Administrative Review', desc: 'We assist your team in reviewing current corporate files to identify missing or disorganised non-statutory data.' },
-      { step: 2, title: 'File Organisation', desc: 'We organise historical administrative logs and draft updated documentation templates for legal sign-off.' },
-      { step: 3, title: 'Ongoing Coordination', desc: 'Our team compiles draft resolutions, coordinates calendar dates, and handles back-office workflows on a rolling basis.' },
-      { step: 4, title: 'Reporting Framework', desc: 'We track key governance dates, flag actions ahead of statutory deadlines, and compile administrative report packets for management.' },
-    ],
-    faqs: [
-      { q: 'Can you take over governance and administration from another provider?', a: 'We can manage the administrative migration process, reviewing current operational records and working alongside your newly appointed, licensed Guernsey corporate service provider to ensure a seamless workflow transition.' },
-      { q: 'Do you prepare board resolutions and corporate documentation?', a: 'Yes. We provide secretarial drafting support for board resolutions, meeting minutes, and corporate tracking files, which are then passed to your authorised officers for formal approval.' },
-    ],
-    regulatoryNotice: 'SRP International provides non-regulated corporate coordination, administrative project management, and secretarial drafting assistance. We do not provide regulated fiduciary services, hold company secretarial appointments, or maintain statutory registers, all of which are strictly managed through appropriately licensed Guernsey Financial Services Commission (GFSC) fiduciary licensees.',
-    relatedSlugs: ['company-formation', 'bookkeeping-accounting', 'outsourced-support'],
-  },
-
-  'bookkeeping-accounting': {
-    slug: 'bookkeeping-accounting',
-    title: 'Bookkeeping & Accounting Support',
-    shortTitle: 'Bookkeeping & Accounting',
-    icon: 'dollar-sign',
-    overview: 'Our accounting support helps businesses maintain accurate financial records and fulfill ongoing reporting obligations. Utilising modern, cloud-based accounting systems, we coordinate day-to-day bookkeeping, bank reconciliations, management reporting frameworks, and year-end financial statement preparation support. We ensure your baseline financial data is structured systematically for review by your appointed accountants or auditors.',
-    benefits: [
-      { title: 'Accurate Data Frameworks', desc: 'Clean, systematically verified ledgers give management a precise, reliable financial picture.' },
-      { title: 'Scheduled Reporting Workflows', desc: 'Management report frameworks and bank reconciliations are processed to a strict, agreed-upon timeline.' },
-      { title: 'Streamlined Audit Readiness', desc: 'Meticulously organised ledgers make statutory financial statement preparation and formal third-party reviews significantly smoother.' },
-      { title: 'Optimised Systems Integration', desc: 'We interface with your digital ledger systems, adapting workflows to scale with your corporate infrastructure.' },
-    ],
-    included: [
-      'Day-to-day administrative bookkeeping and ledger tracking',
-      'Scheduled bank account and digital wallet reconciliations',
-      'Compilation of periodic internal management reporting packets',
-      'Year-end ledger balancing and financial statement preparation support',
-      'Digital accounting system configuration and process optimization',
-    ],
-    process: [
-      { step: 1, title: 'Ledger Structuring', desc: 'Our team maps your chart of accounts, aligns data feeds, and establishes the precise reporting cadence required by your stakeholders.' },
-      { step: 2, title: 'Ongoing Reconciliations', desc: 'We systematically record financial transactions, classify expenses, and reconcile accounts on a rolling, ongoing basis.' },
-      { step: 3, title: 'Year-End Compilation Support', desc: 'We organise, balance, and package financial records to give your locally authorised tax advisers and/or statutory auditors a clean data handover.' },
-    ],
-    faqs: [
-      { q: 'Can you work with our existing accounting software?', a: 'Yes. We interface with widely recognised, secure cloud accounting systems and can assist your team in optimising your digital ledger setup.' },
-      { q: 'How often will we receive management reports?', a: 'A structural reporting schedule is established during our regulatory onboarding phase—typically on a monthly basis, with specialised administrative data reports compiled upon request.' },
-    ],
-    regulatoryNotice: 'SRP International provides administrative accountancy support and bookkeeping services. Where required by the Criminal Justice (Proceeds of Crime) (Bailiwick of Guernsey) Law, these services are facilitated in strict compliance with Prescribed Business registration mandates, or executed in coordination with locally qualified, registered Guernsey tax professionals and statutory auditors.',
-    relatedSlugs: ['company-formation', 'corporate-governance', 'outsourced-support'],
+    /* Positioning only. SRP does not perform Guernsey formations; it introduces
+       clients to appropriately regulated local providers. Deliberately has no
+       benefits/included/process/FAQ blocks - the approved script supplies none,
+       and none may be invented for a regulated jurisdiction. */
+    overview: 'With offices in Hong Kong, Singapore, Sri Lanka, the UAE and the UK, SRP International supports international corporate groups looking to establish a fresh regional presence, and can work with appropriately regulated Guernsey corporate service providers to facilitate an introduction.',
+    /* The default CTA would read "dependable company formation services" - a
+       claim the approved Guernsey script does not make. Neutral line instead. */
+    ctaLine: 'Talk to SRP International about how we can support your business.',
+    relatedSlugs: ['outsourced-support'],
   },
 
   'outsourced-support': {
@@ -818,32 +736,36 @@ const guernsey = {
     title: 'Outsourced Business Support',
     shortTitle: 'Outsourced Support',
     icon: 'users',
-    overview: 'Flexible operational and administrative support to help businesses manage day-to-day requirements. We provide high-level administrative assistance, internal document management, and process coordination, working alongside your existing legal, tax, and professional advisers. Our support handles your routine back-office workflows so your team can stay focused on core strategic priorities.',
+    overview: 'SRP International is not a GFSC regulated corporate services provider (CSP), but we can work with existing Guernsey regulated service providers to provide certain outsourced business support.',
+    overviewParas: [
+      'SRP International is not a GFSC regulated corporate services provider (CSP), but we can work with existing Guernsey regulated service providers to provide certain outsourced business support.',
+      'Working in tandem with appropriately regulated local CSPs we can offer flexible operational and administrative support to help businesses handle day-to-day requirements. We provide high-level administrative assistance, internal document management and process coordination. Our support handles your routine back-office workflows so your team can stay focused on core strategic priorities.',
+    ],
     benefits: [
       { title: 'Capacity When You Need It', desc: 'Flexible back-office support that scales with your day-to-day operational demands.' },
-      { title: 'Organized Documentation', desc: 'Systematic document management and internal process coordination keep your day-to-day operations smooth.' },
-      { title: 'Joined-Up Communication', desc: 'We coordinate between your team and your appointed legal, tax, and professional advisers.' },
-      { title: 'Focus Retained', desc: 'We manage the routine administrative load so your team stays entirely dedicated to core priorities.' },
+      { title: 'Organised Documentation', desc: 'Systematic document management and internal process coordination keep your day-to-day operations smooth.' },
+      { title: 'Joined-Up Communication', desc: 'We coordinate between your team and your appointed legal and tax advisers, and your appropriately regulated CSPs.' },
+      { title: 'Focus Retained', desc: 'We handle the routine administrative load so your team stays entirely dedicated to core priorities.' },
     ],
     included: [
       'General administrative assistance and office support',
       'Internal document organisation and data management',
       'Operational process coordination and workflow tracking',
-      'Administrative facilitation alongside your appointed professional advisers',
+      'Administrative facilitation alongside appropriately regulated service providers',
       'Flexible operational resource allocation',
     ],
     process: [
-      { step: 1, title: 'Discovery & Scope', desc: 'We evaluate your current back-office demands and define the administrative boundaries of our support.' },
-      { step: 2, title: 'System Alignment', desc: 'Our team securely integrates into your internal communication and document-sharing platforms.' },
-      { step: 3, title: 'Routine Support', desc: 'We manage day-to-day administrative tasks, file organisation, and operational data coordination.' },
+      { step: 1, title: 'Discovery & Scope', desc: 'As SRP International is not a GFSC regulated corporate services provider, we will assess your current back-office demands and then discuss where we can assist within the boundaries of regulation.' },
+      { step: 2, title: 'System Alignment', desc: 'Where appropriate, our team securely integrates into your internal communication and document-sharing platforms.' },
+      { step: 3, title: 'Routine Support', desc: 'We handle day-to-day administrative tasks, file organisation, and operational data coordination.' },
       { step: 4, title: 'Periodic Review', desc: 'We touch base regularly to assess support volumes and adjust operational capacity as your business needs evolve.' },
     ],
     faqs: [
       { q: 'Is the support flexible month to month?', a: 'Yes. We scope our administrative support directly to your active business needs and can adapt the workflow allocation as your operational requirements pivot.' },
       { q: 'Will you liaise with our other advisers?', a: 'Yes. We provide administrative coordination alongside your legal, tax, and professional advisers to ensure your internal operations remain efficiently joined up.' },
     ],
-    regulatoryNotice: 'SRP International provides purely commercial, non-regulated administrative and operational support. These services explicitly exclude any activities reserved for licensed fiduciaries under the Regulation of Fiduciaries (Bailiwick of Guernsey) Law, such as company management, secretarial duties, registry filings, or acting as an officer of the company.',
-    relatedSlugs: ['company-formation', 'corporate-governance', 'bookkeeping-accounting'],
+    regulatoryNotice: 'At all times we will be working at the direction of appropriately regulated Guernsey CSPs and within the boundaries of local regulation.',
+    relatedSlugs: ['company-formation'],
   },
 };
 
@@ -905,7 +827,6 @@ export const globalServices = [
       { slug: 'uae',       linkSlug: 'accounting' },
       { slug: 'uk',        linkSlug: 'accounting' },
       { slug: 'hong-kong', linkSlug: 'accounting' },
-      { slug: 'guernsey',  linkSlug: 'bookkeeping-accounting' },
     ],
   },
   {

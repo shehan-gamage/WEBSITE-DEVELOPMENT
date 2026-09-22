@@ -31,11 +31,18 @@
       <div class="sd-overview reveal">
         <div class="kicker">Overview</div>
         <h2 class="heading" style="text-align:left;"><%= service.title %></h2>
-        <p class="sd-overview-text"><%= service.overview %></p>
+        <% if (service.overviewParas && service.overviewParas.length) { %>
+          <% service.overviewParas.forEach(function(para) { %>
+            <p class="sd-overview-text"><%= para %></p>
+          <% }); %>
+        <% } else { %>
+          <p class="sd-overview-text"><%= service.overview %></p>
+        <% } %>
       </div>
     </div>
   </section>
 
+  <% if (service.benefits && service.benefits.length) { %>
   <!-- ══ KEY BENEFITS ════════════════════════════════ -->
   <section class="section section-alt">
     <div class="container">
@@ -57,6 +64,8 @@
     </div>
   </section>
 
+  <% } %>
+  <% if (service.included && service.included.length) { %>
   <!-- ══ WHAT'S INCLUDED ═════════════════════════════ -->
   <section class="section">
     <div class="container">
@@ -80,6 +89,8 @@
     </div>
   </section>
 
+  <% } %>
+  <% if (service.process && service.process.length) { %>
   <!-- ══ PROCESS ═════════════════════════════════════ -->
   <section class="section section-alt">
     <div class="container">
@@ -99,6 +110,8 @@
     </div>
   </section>
 
+  <% } %>
+  <% if (relatedServices && relatedServices.length) { %>
   <!-- ══ RELATED SERVICES ════════════════════════════ -->
   <section class="section">
     <div class="container">
@@ -118,6 +131,8 @@
     </div>
   </section>
 
+  <% } %>
+  <% if (service.faqs && service.faqs.length) { %>
   <!-- ══ FAQS ════════════════════════════════════════ -->
   <section class="section section-alt">
     <div class="container">
@@ -139,6 +154,7 @@
     </div>
   </section>
 
+  <% } %>
   <!-- ══ REGULATORY NOTICE ═══════════════════════════ -->
   <% if (service.regulatoryNotice) { %>
   <section class="section">
@@ -154,7 +170,7 @@
   <!-- ══ FINAL CTA ═══════════════════════════════════ -->
   <section class="cta-band">
     <h2>Need Support With <%= service.shortTitle %>?</h2>
-    <p>Talk to SRP International about how we can support your business with dependable <%= service.shortTitle.toLowerCase() %> services.</p>
+    <p><%= service.ctaLine || `Talk to SRP International about how we can support your business with dependable ${service.shortTitle.toLowerCase()} services.` %></p>
     <div class="cta-band-btns">
       <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       <a href="/services" class="btn btn-ghost">View All Services</a>
