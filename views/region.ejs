@@ -16,7 +16,7 @@
         <span><%= office.label %></span>
       </div>
       <h1>SRP International in <%= office.label %></h1>
-      <p>Corporate services tailored to <%= office.label %>'s regulations — backed by the strength and experience of SRP's wider regional group.<% if (office.comingSoon) { %> Our <%= office.city %> office is coming soon; existing SRP clients can register interest now for priority onboarding.<% } %></p>
+      <p><%= (office.copy && office.copy.heroLead) || `Corporate services tailored to ${office.label}'s regulations — backed by the strength and experience of SRP's wider regional group.` %><% if (office.comingSoon) { %> Our <%= office.city %> office is coming soon; existing SRP clients can register interest now for priority onboarding.<% } %></p>
       <div style="margin-top:28px; display:flex; justify-content:center;">
         <a href="/contact" class="btn btn-white">Talk to Our Team <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
@@ -30,7 +30,7 @@
       <div class="section-head reveal">
         <div class="kicker">Services in <%= office.label %></div>
         <h2 class="heading">What We Deliver Here</h2>
-        <p class="subheading">A focused set of services, matched to <%= office.label %>'s regulatory environment. Pricing available on request.</p>
+        <p class="subheading"><%= (office.copy && office.copy.servicesLead) || `A focused set of services, matched to ${office.label}'s regulatory environment. Pricing available on request.` %></p>
       </div>
 
       <div class="grid-2 services-hub-grid">
@@ -68,16 +68,21 @@
         <div class="region-pricing-copy">
           <div class="kicker">Pricing</div>
           <h2>Transparent pricing, tailored to your scope</h2>
-          <p>SRP <%= office.label %> uses a clear, tiered pricing framework — incorporation, ongoing governance, and accounting are priced separately, so you only pay for what you actually need. Final scope, client profile, and authority charges apply; we'll send a full breakdown after a short scoping call.</p>
+          <p><%= (office.copy && office.copy.pricingLead) || `SRP ${office.label} uses a clear, tiered pricing framework — incorporation, ongoing governance, and accounting are priced separately, so you only pay for what you actually need. Final scope, client profile, and authority charges apply; we'll send a full breakdown after a short scoping call.` %></p>
           <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
             <a class="btn btn-primary" href="/contact">Speak to an Advisor <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
           </div>
         </div>
+        <% const pricingBullets = (office.copy && office.copy.pricingBullets) || [
+             'One-time + annual fees clearly separated',
+             'Tiered bookkeeping by transaction volume',
+             'Add-ons charged only when used',
+             'USD-denominated, transparent terms',
+           ]; %>
         <ul class="region-pricing-bullets" aria-label="Pricing principles">
-          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>One-time + annual fees clearly separated</li>
-          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Tiered bookkeeping by transaction volume</li>
-          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>Add-ons charged only when used</li>
-          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>USD-denominated, transparent terms</li>
+          <% pricingBullets.forEach(function(bullet) { %>
+          <li><span class="check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span><%= bullet %></li>
+          <% }); %>
         </ul>
       </div>
     </div>
@@ -129,8 +134,8 @@
     <h2>Interested in SRP <%= office.label %>?</h2>
     <p>Our <%= office.city %> office is coming soon. Register your interest and our team will be in touch as we open.</p>
     <% } else { %>
-    <h2>Ready to set up in <%= office.label %>?</h2>
-    <p>Talk to our <%= office.city %> team about incorporation, governance, and accounting — calibrated to your scope.</p>
+    <h2><%= (office.copy && office.copy.ctaHeading) || `Ready to set up in ${office.label}?` %></h2>
+    <p><%= (office.copy && office.copy.ctaLead) || `Talk to our ${office.city} team about incorporation, governance, and accounting — calibrated to your scope.` %></p>
     <% } %>
     <div class="cta-band-btns" style="justify-content:center;">
       <a href="/contact" class="btn btn-white">Contact SRP <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>

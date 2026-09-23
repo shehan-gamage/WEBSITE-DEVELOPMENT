@@ -139,5 +139,21 @@ export const offices = [
       name: 'Rupert Pleasant',
       role: 'Managing Director, SRP International Guernsey',
     },
+    /* Per-office copy overrides for the shared region template. Guernsey's
+       offering is an introduction/support model rather than a full service
+       book, so its region page wording differs from the other markets.
+       Any office without `copy` keeps the template defaults. */
+    copy: {
+      heroLead: "Business support tailored to demanding requirements — backed by the strength and experience of SRP's wider regional group.",
+      servicesLead: 'Flexible operational and administrative support to help businesses stay focused on core strategic priorities.',
+      pricingLead: 'Our services from Guernsey are all bespoke in nature. We would be pleased to arrange a scoping call, following which we will send a full breakdown of our service offering and fees.',
+      pricingBullets: [
+        'One-time + annual fees clearly separated',
+        'Add-ons charged only when used',
+        'GBP-denominated, transparent terms',
+      ],
+      ctaHeading: 'Ready to connect in Guernsey?',
+      ctaLead: 'Talk to our St Peter Port team about how we can help your business.',
+    },
   },
 ];
