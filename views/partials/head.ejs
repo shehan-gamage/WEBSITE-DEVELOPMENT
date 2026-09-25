@@ -51,7 +51,10 @@
 <script type="application/ld+json" nonce="<%= cspNonce %>"><%- JSON.stringify({ '@context': 'https://schema.org', '@graph': _graph }).replace(/</g, '\\u003c') %></script>
 <% } %>
 
-<!-- Vercel Web Analytics (no-op until enabled in the Vercel dashboard) -->
+<!-- Vercel Web Analytics (@vercel/analytics package) -->
+<script nonce="<%= cspNonce %>">
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
