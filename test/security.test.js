@@ -257,3 +257,26 @@ describe('routing hardening', () => {
     }
   });
 });
+
+/* The uptime-check endpoint makes the deployment fetch its own public origin,
+   so it must never be openly callable. With no CRON_SECRET configured it stays
+   closed entirely; with one set, only Vercel's cron Authorization header opens
+   it. Both paths are locked in here. */
+describe('GET /api/uptime-check', () => {
+  it('stays closed when CRON_SECRET is not configured', async () => {
+    const { default: app } = await import('../server.js');
+    const res = await request(app).get('/api/uptime-check');
+    expect(res.status).toBe(503);
+    expect(res.body.error).toMatch(/not configured/i);
+  });
+
+  it('rejects a request carrying the wrong bearer token', async () => {
+    vi.resetModules();
+    process.env.CRON_SECRET = 'test-secret-value';
+    const { default: app } = await import('../server.js');
+    const res = await request(app).get('/api/uptime-check').set('Authorization', 'Bearer wrong');
+    expect(res.status).toBe(401);
+    delete process.env.CRON_SECRET;
+    vi.resetModules();
+  });
+});

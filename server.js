@@ -1107,6 +1107,123 @@ app.post('/api/careers', rateLimit('careers', MAIL_RATE_LIMIT, MAIL_RATE_WINDOW)
   }
 });
 
+/* ── Uptime monitor (Vercel Cron → this endpoint) ──
+   Runs every 15 minutes and checks the PUBLIC canonical origin, not
+   localhost, so it exercises DNS, TLS and the domain-level redirect chain.
+   That matters: the September 2026 outage was an apex→www→apex redirect
+   loop while the deployment itself was perfectly healthy, so any check
+   that only hit the app internally would have reported all clear.
+
+   Caveat worth knowing: this runs inside the very deployment it watches,
+   so it cannot report a total platform failure (if Vercel is down, the
+   cron does not fire either). It does catch the realistic cases — redirect
+   loops, 5xx, a route starting to 404, and the homepage rendering without
+   its expected content.
+
+   Alert emails deliberately reuse ONE fixed subject so a sustained outage
+   threads into a single conversation in Gmail rather than flooding the
+   inbox with hundreds of separate messages.                              */
+const MONITOR_PATHS = ['/', '/about', '/services', '/global-presence', '/contact', '/careers'];
+const MONITOR_MARKER = 'SRP International';     // must appear in the homepage HTML
+const MONITOR_ORIGIN = process.env.MONITOR_ORIGIN || 'https://srpitl.com';
+const ALERT_TO = process.env.ALERT_TO || MAIL_FROM;
+const MAX_HOPS = 3;
+
+/* Follow redirects by hand so a loop is reported as a loop rather than
+   surfacing as an opaque fetch error after N automatic hops. */
+async function probe(url) {
+  let current = url;
+  const chain = [];
+  for (let hop = 0; hop <= MAX_HOPS; hop++) {
+    let res;
+    try {
+      res = await fetch(current, { redirect: 'manual' });
+    } catch (err) {
+      return { url, ok: false, reason: `request failed: ${err?.message || 'unknown error'}`, chain };
+    }
+    if (res.status >= 300 && res.status < 400 && res.headers.get('location')) {
+      const next = new URL(res.headers.get('location'), current).toString();
+      chain.push(`${res.status} → ${next}`);
+      if (chain.length > MAX_HOPS) {
+        return { url, ok: false, reason: `redirect loop (more than ${MAX_HOPS} hops)`, chain };
+      }
+      current = next;
+      continue;
+    }
+    if (res.status !== 200) {
+      return { url, ok: false, reason: `HTTP ${res.status}`, chain };
+    }
+    if (url.endsWith('/') || url === MONITOR_ORIGIN) {
+      const body = await res.text();
+      if (!body.includes(MONITOR_MARKER)) {
+        return { url, ok: false, reason: 'homepage rendered without expected content', chain };
+      }
+    }
+    return { url, ok: true, chain };
+  }
+  return { url, ok: false, reason: `redirect loop (more than ${MAX_HOPS} hops)`, chain };
+}
+
+app.get('/api/uptime-check', async (req, res) => {
+  /* Vercel sends `Authorization: Bearer $CRON_SECRET` on cron invocations.
+     Without the secret configured the endpoint stays closed rather than
+     becoming a public way to make the site fetch itself in a loop. */
+  const secret = process.env.CRON_SECRET;
+  if (!secret) {
+    return res.status(503).json({ error: 'Uptime monitoring is not configured.' });
+  }
+  if (req.headers.authorization !== `Bearer ${secret}`) {
+    return res.status(401).json({ error: 'Unauthorized.' });
+  }
+
+  const results = [];
+  for (const path of MONITOR_PATHS) {
+    results.push(await probe(MONITOR_ORIGIN + path));
+  }
+  const failures = results.filter(r => !r.ok);
+
+  if (failures.length && mailer) {
+    const lines = failures.map(f =>
+      [`${f.url}`, `  Problem: ${f.reason}`, ...(f.chain.length ? [`  Redirects: ${f.chain.join(' | ')}`] : [])].join('\n')
+    );
+    try {
+      await mailer.sendMail({
+        from: `"SRP International Website" <${MAIL_FROM}>`,
+        to: ALERT_TO,
+        /* Fixed subject on purpose — see the note above. */
+        subject: 'Website alert: srpitl.com is not responding correctly',
+        text: [
+          'Dear Shehan,',
+          '',
+          `The automated check found ${failures.length} of ${results.length} monitored pages not responding correctly on ${MONITOR_ORIGIN}.`,
+          '',
+          ...lines,
+          '',
+          'Pages checked successfully:',
+          ...results.filter(r => r.ok).map(r => `  ${r.url}`),
+          '',
+          'This message repeats every 15 minutes until the site responds correctly again.',
+        ].join('\n'),
+      });
+    } catch (err) {
+      console.error('[uptime] Alert email failed:', err?.message);
+    }
+  }
+
+  if (failures.length) {
+    console.error(`[uptime] ${failures.length}/${results.length} checks failed:`,
+      failures.map(f => `${f.url} (${f.reason})`).join('; '));
+  }
+
+  res.status(failures.length ? 500 : 200).json({
+    origin: MONITOR_ORIGIN,
+    checked: results.length,
+    failed: failures.length,
+    alerted: Boolean(failures.length && mailer),
+    results,
+  });
+});
+
 // ── SEO: robots.txt + sitemap.xml ─────────────────
 /* Both are host-derived (no hardcoded domain) so they automatically follow
    the move from the vercel.app URL to the custom domain. */
