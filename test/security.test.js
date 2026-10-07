@@ -280,3 +280,36 @@ describe('GET /api/uptime-check', () => {
     vi.resetModules();
   });
 });
+
+/* Duplicate-URL hygiene. Express matches routes case-insensitively and ignores
+   a trailing slash, so /About and /about/ both serve the page with a 200. The
+   canonical tag must point every one of those spellings at the single URL that
+   appears in the sitemap, or Google is free to index them as separate pages
+   (this is what produced a Search Console indexing report in October 2026).
+   Both paths are covered: a variant is normalised, a clean URL is untouched. */
+describe('canonical URL normalisation', () => {
+  const canonicalOf = (html) => (html.match(/<link rel="canonical" href="([^"]+)"/) || [])[1];
+
+  it('points case and trailing-slash variants at the one canonical spelling', async () => {
+    for (const p of ['/about/', '/About', '/ABOUT/']) {
+      const res = await request(app).get(p);
+      expect(res.status, p).toBe(200);
+      expect(canonicalOf(res.text), p).toMatch(/\/about$/);
+    }
+  });
+
+  it('leaves an already-canonical URL exactly as requested', async () => {
+    for (const p of ['/about', '/guernsey/outsourced-support', '/']) {
+      const res = await request(app).get(p);
+      expect(res.status, p).toBe(200);
+      expect(canonicalOf(res.text), p).toMatch(new RegExp(`${p === '/' ? '/' : p}$`));
+    }
+  });
+
+  it('does not lowercase a path that carries a file extension', async () => {
+    /* Asset filenames are case-sensitive on the CDN, so the normaliser must
+       leave them alone even when the page itself 404s. */
+    const res = await request(app).get('/images/Team-Photo.JPG');
+    expect(canonicalOf(res.text) || '').not.toMatch(/team-photo\.jpg/);
+  });
+});

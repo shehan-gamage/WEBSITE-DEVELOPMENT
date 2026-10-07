@@ -182,7 +182,17 @@ app.use((req, res, next) => {
   /* Absolute URLs for canonical + Open Graph tags. Host-derived so they
      follow the domain automatically (vercel.app now, custom domain later). */
   res.locals.siteBase = `${req.protocol}://${req.get('host')}`;
-  res.locals.pageUrl = res.locals.siteBase + (req.originalUrl || '/').split('?')[0];
+  /* The canonical path is normalised, not echoed back. Express matches routes
+     case-insensitively and ignores a trailing slash, so /About, /about/ and
+     /ABOUT/ all serve the same page with a 200. Echoing the request URL made
+     each variant declare ITSELF canonical, which invites Google to index them
+     as separate duplicate pages. Lowercasing and dropping the trailing slash
+     points every variant at the one spelling that appears in the sitemap.
+     A path carrying a file extension is left as-is — asset filenames are
+     case-sensitive on the CDN.                                               */
+  const reqPath = (req.originalUrl || '/').split('?')[0];
+  res.locals.pageUrl = res.locals.siteBase +
+    (/\.[a-z0-9]+$/i.test(reqPath) ? reqPath : (reqPath.replace(/\/+$/, '') || '/').toLowerCase());
   /* Sitewide structured data emitted on every page (partials/head.ejs merges any
      per-route `jsonLd` into this @graph). Host-derived so the @id URLs follow the
      domain. Routes add page-specific nodes (BlogPosting, FAQPage, breadcrumbs, …). */
